@@ -1,9 +1,30 @@
-/*
- * Base structure
- */
 
-/* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
     padding-top: 3.5rem;
+}
+
+.mainsidebar {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.nav-link {
+    color: #fff;
+}
+
+.nav-link.active{
+    background-color: #161616;
+}
+
+.nav-link:hover {
+    color: #fff;
+    background-color: #161616;
+}
+
+
+@media (min-width: 768px) {
+    .mainsidebar {
+        margin: 20px;
+    }
 }
 

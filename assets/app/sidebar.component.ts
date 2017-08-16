@@ -5,4 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
+  navMobileCollapse = true;
 }
