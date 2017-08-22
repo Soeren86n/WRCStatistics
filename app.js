@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 var appRoutes = require('./routes/app');
+var userRoutes = require('./routes/user');
+var vehicleRoutes = require('./routes/vehicles');
+var rallyRoutes = require('./routes/rallys');
 
 var app = express();
 mongoose.connect('localhost:27017/wrcstats');
@@ -30,6 +33,9 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use('/user', userRoutes);
+app.use('/rally', rallyRoutes);
+app.use('/vehicle', vehicleRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

@@ -7,7 +7,7 @@ var schema = new Schema({
   day: { type: Number, required: true },
   date: { type: String, required: true },
   cancelled: { type: Boolean, required: true },
-  number: { type: Number, required: true },
+  stagenumber: { type: Number, required: true },
   meter: { type: Number, required: true },
   rally: { type: Schema.Types.ObjectId, ref: 'Rally' },
   stagetimes: [{ type: Schema.Types.ObjectId, ref: 'Stagetimes' }]
