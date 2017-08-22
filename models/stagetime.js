@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var mongooseUniqueValidator = require('mongoose-unique-validator');
 
 var schema = new Schema({
   stage: { type: Schema.Types.ObjectId, ref: 'Stage' },
@@ -11,6 +10,5 @@ var schema = new Schema({
   codriver: { type: Schema.Types.ObjectId, ref: 'Codriver' }
 });
 
-schema.plugin(mongooseUniqueValidator);
 
 module.exports = mongoose.model('Stagetimes', schema);

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var mongooseUniqueValidator = require('mongoose-unique-validator');
 
 var schema = new Schema({
   name: { type: String, required: true },
@@ -12,7 +11,5 @@ var schema = new Schema({
   rally: { type: Schema.Types.ObjectId, ref: 'Rally' },
   stagetimes: [{ type: Schema.Types.ObjectId, ref: 'Stagetimes' }]
 });
-
-schema.plugin(mongooseUniqueValidator);
 
 module.exports = mongoose.model('Stage', schema);
