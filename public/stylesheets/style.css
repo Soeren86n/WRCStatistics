@@ -1,7 +1,11 @@
 
 body {
-    padding-top: 3.5rem;
+    padding-top: 3.8rem;
     background-color: #eee;
+}
+
+.navbar {
+    z-index: 999;
 }
 
 .mainsidebar {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
+import { NotificationService } from '../shared/notification.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { User } from '../models/user.model';
 export class SignupComponent implements OnInit {
   myForm: FormGroup;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private notificationService: NotificationService) {
   }
 
   onSubmit() {
@@ -21,7 +22,7 @@ export class SignupComponent implements OnInit {
     );
     this.authService.signup(user)
       .subscribe(
-        data => console.log(data),
+        data => this.notificationService.handleError(data.notification),
         error => console.error(error),
       );
     this.myForm.reset();

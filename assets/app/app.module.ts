@@ -9,7 +9,9 @@ import { AuthenticationComponent } from './auth/authentication.component';
 import { routing } from './app.routing';
 import { HttpModule } from '@angular/http';
 import { AuthService } from './auth/auth.service';
-import { ErrorService } from './shared/error.service';
+import { NotificationService } from './shared/notification.service';
+import { GrowlModule } from 'primeng/primeng';
+import { ErrorComponent } from './shared/error.component';
 
 @NgModule({
   declarations: [
@@ -17,16 +19,18 @@ import { ErrorService } from './shared/error.service';
     NavbarComponent,
     SidebarComponent,
     AuthenticationComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     routing,
     HttpModule,
+    GrowlModule,
   ],
   providers: [
     AuthService,
-    ErrorService,
+    NotificationService,
   ],
   bootstrap: [AppComponent],
 })

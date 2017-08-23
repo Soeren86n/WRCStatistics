@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
+import { NotificationService } from '../shared/notification.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { User } from '../models/user.model';
 export class SigninComponent implements OnInit {
   myForm: FormGroup;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private notificationService: NotificationService) {
   }
 
   onSubmit() {
@@ -21,7 +22,11 @@ export class SigninComponent implements OnInit {
     );
     this.authService.signin(user)
       .subscribe(
-        data => console.log(data),
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('userId', data.userId);
+        },
         error => console.error(error),
       );
     this.myForm.reset();
@@ -32,10 +37,9 @@ export class SigninComponent implements OnInit {
       email: new FormControl(null, [
         Validators.required,
         // tslint:disable-next-line
-        Validators.pattern("[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-        ),
+        Validators.pattern("[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
       ]),
-      password: new FormControl(null, Validators.required),
+      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
     });
   }
 }
