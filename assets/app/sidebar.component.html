@@ -4,16 +4,15 @@
             <i class="fa fa-bars" aria-hidden="true"></i> Show Menu
         </a>
     </li>
-    <li class="nav-item active" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
-        <a class="nav-link active" href="#">Active</a>
+    <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['/']">Home</a>
     </li>
-    <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}" *ngIf="authService.isLoggedIn()">
-        <a class="nav-link" href="#">Admin</a>
+</ul>
+<ul class="nav flex-column mainsidebar bg-dark" *ngIf="authService.isLoggedIn()">
+    <li class="nav-item"[ngClass]="{'d-none d-md-block': navMobileCollapse}">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['admin/logout']">Logout</a>
     </li>
     <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
-        <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
-        <a class="nav-link disabled" href="#">Disabled</a>
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['admin/insertcountry']">Insert Country</a>
     </li>
 </ul>

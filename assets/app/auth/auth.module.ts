@@ -6,6 +6,7 @@ import { authRouting } from './auth.routing';
 import { SigninComponent } from './signin.component';
 import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
+import { InsertService } from './insertdata/insert-service';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,9 @@ import { InsertCountryComponent } from './insertdata/insert-country.component';
     CommonModule,
     ReactiveFormsModule,
     authRouting,
+  ],
+  providers: [
+    InsertService,
   ],
 })
 export class AuthModule {
