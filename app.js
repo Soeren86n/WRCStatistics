@@ -8,8 +8,8 @@ var mongoose = require('mongoose');
 
 var appRoutes = require('./routes/app');
 var userRoutes = require('./routes/user');
-var vehicleRoutes = require('./routes/vehicles');
-var rallyRoutes = require('./routes/rallys');
+var adminRoutes = require('./routes/admin');
+var dataRoutes = require('./routes/data');
 
 var app = express();
 mongoose.connect('localhost:27017/wrcstats');
@@ -34,8 +34,8 @@ app.use(function (req, res, next) {
 });
 
 app.use('/user', userRoutes);
-//app.use('/rally', rallyRoutes);
-//app.use('/vehicle', vehicleRoutes);
+app.use('/admin', adminRoutes);
+app.use('/data', dataRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

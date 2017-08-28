@@ -3,7 +3,7 @@ import { InsertService } from './insert-service';
 import { Country } from '../../models/country.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../../shared/notification.service';
-import { AllCountrys, CountryCode } from '../../models/countrycode.model';
+import { AllCountrys } from '../../models/countrycode.model';
 
 @Component({
   selector: 'app-insertCountry',
@@ -11,21 +11,41 @@ import { AllCountrys, CountryCode } from '../../models/countrycode.model';
 })
 export class InsertCountryComponent implements OnInit {
   myForm: FormGroup;
+  countrys: Country[] = [];
+  CountrytoEdit: Country;
 
   constructor(private insertService: InsertService, private notificationService: NotificationService) {
   }
 
   onSubmit() {
-    const country = new Country(
-      this.myForm.value.name,
-      this.myForm.value.shortname,
-    );
-    this.insertService.insertcountry(country)
-      .subscribe(
-        data => this.notificationService.handleError(data.notification),
+    if (this.CountrytoEdit.countryID === '') {
+      const country = new Country(
+        this.myForm.value.name,
+        this.myForm.value.shortname,
+      );
+      this.insertService.insertcountry(country)
+        .subscribe(
+          (data) => {
+            this.notificationService.handleError(data.notification);
+            this.getCountrys();
+            this.myForm.reset();
+          },
+          error => console.error(error),
+        );
+    } else {
+      this.CountrytoEdit.name = this.myForm.value.name;
+      this.CountrytoEdit.shortname = this.myForm.value.shortname;
+      this.insertService.updatecountry(this.CountrytoEdit).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getCountrys();
+          this.myForm.reset();
+          this.CountrytoEdit = null;
+        },
         error => console.error(error),
       );
-    this.myForm.reset();
+    }
+
   }
 
   ngOnInit() {
@@ -35,6 +55,25 @@ export class InsertCountryComponent implements OnInit {
         null,
         [Validators.required, Validators.minLength(2), Validators.maxLength(2), this.countryValidator],
       ),
+    });
+    this.getCountrys();
+  }
+
+  getCountrys() {
+    this.insertService.getCountrys()
+      .subscribe(
+        (countrys: Country[]) => {
+          this.countrys = countrys;
+        },
+      );
+  }
+
+  editCountry(country: Country) {
+    this.myForm.reset();
+    this.CountrytoEdit = country;
+    this.myForm.setValue({
+      name: country.name,
+      shortname: country.shortname,
     });
   }
 
@@ -46,7 +85,6 @@ export class InsertCountryComponent implements OnInit {
         inArray = true;
       }
     }
-    console.log(inArray);
     if (inArray) {
       return null;
     } else {

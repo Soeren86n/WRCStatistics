@@ -1,4 +1,4 @@
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space">
     <div class="form-group">
         <label for="name">Name</label>
         <input
@@ -25,3 +25,17 @@
             [disabled]="!myForm.valid">Submit
     </button>
 </form>
+
+<p-dataList [value]="countrys" [paginator]="false">
+    <p-header>
+        List of Countrys
+    </p-header>
+    <ul class="list-group">
+        <ng-template let-country pTemplate="item">
+            <li class="list-group-item" (click)="editCountry(country)">
+                <span class="flag-icon flag-icon-{{country.shortname.toLowerCase()}}"></span>
+                {{country.name}}
+            </li>
+        </ng-template>
+    </ul>
+</p-dataList>

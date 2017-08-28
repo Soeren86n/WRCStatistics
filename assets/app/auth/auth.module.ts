@@ -7,6 +7,7 @@ import { SigninComponent } from './signin.component';
 import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
 import { InsertService } from './insertdata/insert-service';
+import { DataListModule } from 'primeng/primeng';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { InsertService } from './insertdata/insert-service';
     CommonModule,
     ReactiveFormsModule,
     authRouting,
+    DataListModule,
   ],
   providers: [
     InsertService,

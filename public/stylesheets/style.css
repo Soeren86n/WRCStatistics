@@ -27,6 +27,9 @@ body {
     background-color: #161616;
 }
 
+.form--space {
+    margin-bottom: 20px;
+}
 
 @media (min-width: 768px) {
     .mainsidebar {
