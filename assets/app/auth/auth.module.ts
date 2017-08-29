@@ -7,7 +7,8 @@ import { SigninComponent } from './signin.component';
 import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
 import { InsertService } from './insertdata/insert-service';
-import { DataListModule } from 'primeng/primeng';
+import { DataListModule, DropdownModule } from 'primeng/primeng';
+import { InsertRallyComponent } from './insertdata/insert-rally.component';
 
 @NgModule({
   declarations: [
@@ -15,12 +16,14 @@ import { DataListModule } from 'primeng/primeng';
     SigninComponent,
     LogoutComponent,
     InsertCountryComponent,
+    InsertRallyComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     authRouting,
     DataListModule,
+    DropdownModule,
   ],
   providers: [
     InsertService,

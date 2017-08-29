@@ -12,6 +12,7 @@ import { AuthService } from './auth/auth.service';
 import { NotificationService } from './shared/notification.service';
 import { GrowlModule } from 'primeng/primeng';
 import { ErrorComponent } from './shared/error.component';
+import { GetdataService } from './shared/getdata.service';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ErrorComponent } from './shared/error.component';
   providers: [
     AuthService,
     NotificationService,
+    GetdataService,
   ],
   bootstrap: [AppComponent],
 })

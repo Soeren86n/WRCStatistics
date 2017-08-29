@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 
 var Country = require('../models/country');
 var User = require('../models/user');
+var Rally = require('../models/rally');
 
 router.use('/', function (req, res, next) {
   jwt.verify(req.query.token, 'secret', function (err, decoded) {
@@ -19,6 +20,41 @@ router.use('/', function (req, res, next) {
   });
 });
 
+router.post('/insertcountry', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    var country = new Country({
+      shortname: req.body.shortname,
+      name: req.body.name
+    });
+    country.save(function (err, result) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An Error occurred',
+          detail: err.message,
+          severity: 'error'
+        });
+      }
+      res.status(201).json({
+        message: 'Country created',
+        obj: result,
+        notification: {
+          summary: 'Country created',
+          detail: 'Country ' + result.name + ' successfully created!',
+          severity: 'success'
+        }
+      });
+    })
+
+  });
+});
 
 router.patch('/updatecountry/:id', function (req, res, next) {
   var decoded = jwt.decode(req.query.token);
@@ -69,8 +105,7 @@ router.patch('/updatecountry/:id', function (req, res, next) {
   });
 });
 
-
-router.post('/insertcountry', function (req, res, next) {
+router.post('/insertrally', function (req, res, next) {
   var decoded = jwt.decode(req.query.token);
   User.findById(decoded.user._id, function (err, user) {
     if (!user.admin) {
@@ -80,30 +115,41 @@ router.post('/insertcountry', function (req, res, next) {
         severity: 'error'
       });
     }
-    var country = new Country({
-      shortname: req.body.shortname,
-      name: req.body.name
-    });
-    country.save(function (err, result) {
-      if (err) {
+    Country.findById(req.body.country, function (err, country) {
+      if (!country) {
         return res.status(500).json({
-          summary: 'An Error occurred',
-          detail: err.message,
+          summary: 'No Country Found!',
+          detail: 'Country not found',
           severity: 'error'
         });
       }
-      res.status(201).json({
-        message: 'Country created',
-        obj: result,
-        notification: {
-          summary: 'Country created',
-          detail: 'Country ' + result.name + ' successfully created!',
-          severity: 'success'
-        }
+      var rally = new Rally({
+        name: req.body.name,
+        country: country,
+        startdate: req.body.startdate,
+        enddate: req.body.enddate
       });
-    })
-
+      rally.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(201).json({
+          message: 'Rally created',
+          obj: result,
+          notification: {
+            summary: 'Rally created',
+            detail: 'Rally ' + result.name + ' successfully created!',
+            severity: 'success'
+          }
+        });
+      })
+    });
   });
 });
+
 
 module.exports = router;

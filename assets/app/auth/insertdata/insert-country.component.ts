@@ -4,6 +4,7 @@ import { Country } from '../../models/country.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../../shared/notification.service';
 import { AllCountrys } from '../../models/countrycode.model';
+import { GetdataService } from '../../shared/getdata.service';
 
 @Component({
   selector: 'app-insertCountry',
@@ -14,7 +15,7 @@ export class InsertCountryComponent implements OnInit {
   countrys: Country[] = [];
   CountrytoEdit: Country = new Country('', '', '');
 
-  constructor(private insertService: InsertService, private notificationService: NotificationService) {
+  constructor(private insertService: InsertService, private notificationService: NotificationService, private getService: GetdataService) {
   }
 
   onSubmit() {
@@ -45,7 +46,6 @@ export class InsertCountryComponent implements OnInit {
         error => console.error(error),
       );
     }
-
   }
 
   ngOnInit() {
@@ -60,7 +60,7 @@ export class InsertCountryComponent implements OnInit {
   }
 
   getCountrys() {
-    this.insertService.getCountrys()
+    this.getService.getCountrys()
       .subscribe(
         (countrys: Country[]) => {
           this.countrys = countrys;
