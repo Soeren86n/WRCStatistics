@@ -32,9 +32,13 @@
     </p-header>
     <ul class="list-group">
         <ng-template let-country pTemplate="item">
-            <li class="list-group-item" (click)="editCountry(country)">
+            <li class="list-group-item d-flex justify-content-between align-items-center" [class.list-group-item-primary]="CountrytoEdit.name === country.name">
                 <span class="flag-icon flag-icon-{{country.shortname.toLowerCase()}}"></span>
                 {{country.name}}
+                <button class="btn btn-outline-primary" (click)="editCountry(country)">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <span class="sr-only">Edit {{country.name}}</span>
+                </button>
             </li>
         </ng-template>
     </ul>

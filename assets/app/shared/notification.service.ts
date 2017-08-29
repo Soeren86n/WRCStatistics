@@ -5,7 +5,7 @@ export class NotificationService {
   errorOccurred = new EventEmitter<Message>();
 
   handleError(error: any) {
-    const errorData =  <Message>error;
+    const errorData: Message = <Message>error;
     this.errorOccurred.emit(errorData);
   }
 }

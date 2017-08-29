@@ -12,7 +12,7 @@ import { AllCountrys } from '../../models/countrycode.model';
 export class InsertCountryComponent implements OnInit {
   myForm: FormGroup;
   countrys: Country[] = [];
-  CountrytoEdit: Country;
+  CountrytoEdit: Country = new Country('', '', '');
 
   constructor(private insertService: InsertService, private notificationService: NotificationService) {
   }
@@ -40,7 +40,7 @@ export class InsertCountryComponent implements OnInit {
           this.notificationService.handleError(data.notification);
           this.getCountrys();
           this.myForm.reset();
-          this.CountrytoEdit = null;
+          this.CountrytoEdit = new Country('', '', '');
         },
         error => console.error(error),
       );
