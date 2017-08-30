@@ -77,6 +77,11 @@ export class InsertCountryComponent implements OnInit {
     });
   }
 
+  resetWholeForm() {
+    this.myForm.reset();
+    this.CountrytoEdit = new Country('', '', '');
+  }
+
 
   countryValidator(control: FormControl): { [s: string]: boolean } {
     let inArray = false;

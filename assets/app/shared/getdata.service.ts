@@ -36,7 +36,6 @@ export class GetdataService {
     return this.http.get('http://localhost:3000/data/rally')
       .map((response: Response) => {
         const rallys = response.json().obj;
-        console.log(rallys);
         const RallyObjs: Rally[] = [];
         for (const rally of rallys) {
           RallyObjs.push(new Rally(
@@ -44,6 +43,8 @@ export class GetdataService {
             rally.country.name,
             rally.startdate,
             rally.enddate,
+            rally._id,
+            rally.country,
             ),
           );
         }

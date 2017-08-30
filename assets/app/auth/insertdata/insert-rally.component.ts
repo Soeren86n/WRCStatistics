@@ -16,6 +16,7 @@ export class InsertRallyComponent implements OnInit {
   rallys: Rally[] = [];
   countrys: Country[] = [];
   selcountrys: SelectItem[] = [];
+  RallytoEdit: Rally = new Rally('', '', '', '', '');
 
   constructor(private insertService: InsertService, private getService: GetdataService, private notificationService: NotificationService) {
   }
@@ -48,27 +49,69 @@ export class InsertRallyComponent implements OnInit {
       .subscribe(
         (rallys: Rally[]) => {
           this.rallys = rallys;
-          console.log(rallys);
         },
       );
   }
 
-  onSubmit() {
-    const rally = new Rally(
-      this.myForm.value.name,
-      this.myForm.value.country,
-      this.myForm.value.startdate,
-      this.myForm.value.enddate,
-    );
-    this.insertService.insertrally(rally)
+  editRally(rally: Rally) {
+    this.myForm.reset();
+    this.RallytoEdit = rally;
+    this.myForm.setValue({
+      name: rally.name,
+      startdate: rally.startdate,
+      enddate: rally.enddate,
+      country: rally.countryObj.countryID,
+    });
+  }
+
+  deleteRally(rally: Rally) {
+    this.insertService.deleteRally(rally)
       .subscribe(
         (data) => {
           this.notificationService.handleError(data.notification);
           this.getCountrys();
-          this.myForm.reset();
+          this.getRallys();
         },
         error => console.error(error),
       );
+  }
+
+  onSubmit() {
+    if (this.RallytoEdit.rallyID === '') {
+      console.log(this.RallytoEdit);
+      const rally = new Rally(
+        this.myForm.value.name,
+        this.myForm.value.country,
+        this.myForm.value.startdate,
+        this.myForm.value.enddate,
+      );
+      this.insertService.insertrally(rally)
+        .subscribe(
+          (data) => {
+            this.notificationService.handleError(data.notification);
+            this.getRallys();
+            this.getCountrys();
+            this.myForm.reset();
+          },
+          error => console.error(error),
+        );
+    } else {
+      console.log(this.RallytoEdit);
+      this.RallytoEdit.name = this.myForm.value.name;
+      this.RallytoEdit.startdate = this.myForm.value.startdate;
+      this.RallytoEdit.enddate = this.myForm.value.enddate;
+      this.RallytoEdit.country = this.myForm.value.country;
+      this.insertService.updaterally(this.RallytoEdit).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getCountrys();
+          this.getRallys();
+          this.myForm.reset();
+          this.RallytoEdit = new Rally('', '', '', '');
+        },
+        error => console.error(error),
+      );
+    }
   }
 
   getFlagCode(countryid: string) {
@@ -78,5 +121,13 @@ export class InsertRallyComponent implements OnInit {
       }
     }
   }
+
+  resetWholeForm() {
+    this.myForm.reset();
+    this.RallytoEdit = new Rally('', '', '', '');
+  }
+
+
+
 }
 
