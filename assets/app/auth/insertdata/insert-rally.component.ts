@@ -54,6 +54,7 @@ export class InsertRallyComponent implements OnInit {
   }
 
   editRally(rally: Rally) {
+    console.log(rally);
     this.myForm.reset();
     this.RallytoEdit = rally;
     this.myForm.setValue({
@@ -78,7 +79,6 @@ export class InsertRallyComponent implements OnInit {
 
   onSubmit() {
     if (this.RallytoEdit.rallyID === '') {
-      console.log(this.RallytoEdit);
       const rally = new Rally(
         this.myForm.value.name,
         this.myForm.value.country,
@@ -96,7 +96,6 @@ export class InsertRallyComponent implements OnInit {
           error => console.error(error),
         );
     } else {
-      console.log(this.RallytoEdit);
       this.RallytoEdit.name = this.myForm.value.name;
       this.RallytoEdit.startdate = this.myForm.value.startdate;
       this.RallytoEdit.enddate = this.myForm.value.enddate;
@@ -126,7 +125,6 @@ export class InsertRallyComponent implements OnInit {
     this.myForm.reset();
     this.RallytoEdit = new Rally('', '', '', '');
   }
-
 
 
 }

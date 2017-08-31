@@ -38,15 +38,17 @@ export class GetdataService {
         const rallys = response.json().obj;
         const RallyObjs: Rally[] = [];
         for (const rally of rallys) {
+          const countryobj = new Country(rally.country.name, rally.country.shortname, rally.country._id);
           RallyObjs.push(new Rally(
             rally.name,
             rally.country.name,
             rally.startdate,
             rally.enddate,
             rally._id,
-            rally.country,
+            countryobj,
             ),
-          );
+          )
+          ;
         }
         return RallyObjs;
       })
