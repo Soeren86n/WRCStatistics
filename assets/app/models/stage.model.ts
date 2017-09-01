@@ -1,3 +1,5 @@
+import { Rally } from './rally.model';
+
 export class Stage {
   constructor(public name: string,
               public day: number,
@@ -5,6 +7,8 @@ export class Stage {
               public cancelled: boolean,
               public stagenumber: number,
               public meter: number,
-              public rally: string) {
+              public rally: string,
+              public StageID?: string,
+              public RallyObj?: Rally) {
   }
 }

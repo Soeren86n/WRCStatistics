@@ -37,6 +37,7 @@ export class InsertRallyComponent implements OnInit {
       .subscribe(
         (countrys: Country[]) => {
           this.countrys = countrys;
+          this.selcountrys = [];
           for (const country of this.countrys) {
             this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
           }
@@ -54,7 +55,6 @@ export class InsertRallyComponent implements OnInit {
   }
 
   editRally(rally: Rally) {
-    console.log(rally);
     this.myForm.reset();
     this.RallytoEdit = rally;
     this.myForm.setValue({

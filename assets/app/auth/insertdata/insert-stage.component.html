@@ -1,0 +1,101 @@
+<div class="form-group">
+    <label for="rally">Rally</label>
+    <div class="input-group">
+        <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
+                    [style]="{'width':'100%', 'height':'100%'}">
+            <ng-template let-rally pTemplate="item">
+                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                    <span class="flag-icon flag-icon-{{getFlagCode(rally.value)}}"></span>
+                    <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+</div>
+
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input
+                id="name"
+                class="form-control"
+                formControlName="name">
+    </div>
+    <div class="form-group">
+        <label for="day">Day</label>
+        <div class="input-group">
+            <input
+                    type="number"
+                    id="day"
+                    class="form-control"
+                    min="1"
+                    max="4"
+                    step="1"
+                    formControlName="day">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="date">Date</label>
+        <div class="input-group">
+            <input
+                    type="date"
+                    id="date"
+                    class="form-control"
+                    formControlName="date">
+        </div>
+    </div>
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-legend col-sm-2">Stage cancelled</legend>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="cancelled" id="gridRadios1" value="0"
+                               formControlName="cancelled" checked>
+                        No
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="cancelled" id="gridRadios2" value="1"
+                               formControlName="cancelled">
+                        Yes
+                    </label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <div class="form-group">
+        <label for="stagenumber">Stagenumber</label>
+        <div class="input-group">
+            <input
+                    type="number"
+                    id="stagenumber"
+                    class="form-control"
+                    min="1"
+                    max="30"
+                    step="1"
+                    formControlName="stagenumber">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="meter">Meter</label>
+        <div class="input-group">
+            <input
+                    type="number"
+                    id="meter"
+                    class="form-control"
+                    min="1000"
+                    max="80000"
+                    formControlName="meter">
+        </div>
+    </div>
+    <button
+            class="btn btn-primary"
+            [disabled]="!myForm.valid">Submit
+    </button>
+    <button class="btn btn-danger" (click)="resetWholeForm()" type="reset">
+        Reset
+    </button>
+</form>
+

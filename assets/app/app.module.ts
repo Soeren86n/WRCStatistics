@@ -13,6 +13,7 @@ import { NotificationService } from './shared/notification.service';
 import { GrowlModule } from 'primeng/primeng';
 import { ErrorComponent } from './shared/error.component';
 import { GetdataService } from './shared/getdata.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { GetdataService } from './shared/getdata.service';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     BrowserAnimationsModule,
     routing,
     HttpModule,

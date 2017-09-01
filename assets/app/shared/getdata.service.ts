@@ -4,6 +4,7 @@ import { Http, Response } from '@angular/http';
 import { NotificationService } from './notification.service';
 import { Observable } from 'rxjs/Observable';
 import { Rally } from '../models/rally.model';
+import { Stage } from '../models/stage.model';
 
 @Injectable()
 export class GetdataService {
@@ -51,6 +52,34 @@ export class GetdataService {
           ;
         }
         return RallyObjs;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getStages() {
+    return this.http.get('http://localhost:3000/data/stage')
+      .map((response: Response) => {
+        const stages = response.json().obj;
+        const StageObjs: Stage[] = [];
+        for (const stage of stages) {
+          const rallyobj = new Rally(stage.rally.name, stage.rally.country, stage.rally.startdate, stage.rally.enddate, stage.rally._id);
+          StageObjs.push(
+            new Stage(
+              stage.name,
+              stage.day,
+              stage.date,
+              stage.cancelled,
+              stage.stagenumber,
+              stage.meter,
+              stage.rally.name,
+              stage._id,
+              rallyobj,
+            ));
+        }
+        return StageObjs;
       })
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var Country = require('../models/country');
 var User = require('../models/user');
 var Rally = require('../models/rally');
+var Stage = require('../models/stage');
 
 router.use('/', function (req, res, next) {
   jwt.verify(req.query.token, 'secret', function (err, decoded) {
@@ -259,6 +260,57 @@ router.delete('/deleterally/:id', function (req, res, next) {
           }
         });
       });
+    });
+  });
+});
+
+router.post('/insertstage', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Rally.findById(req.body.rally, function (err, rally) {
+      if (!rally) {
+        return res.status(500).json({
+          summary: 'No Rally Found!',
+          detail: 'Rally not found',
+          severity: 'error'
+        });
+      }
+      var stage = new Stage({
+        name: req.body.name,
+        day: req.body.day,
+        date: req.body.date,
+        cancelled: req.body.cancelled,
+        stagenumber: req.body.stagenumber,
+        meter: req.body.meter,
+        rally: rally
+      });
+      stage.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        rally.stages.push(result);
+        rally.save();
+        res.status(201).json({
+          message: 'Stage created',
+          obj: result,
+          notification: {
+            summary: 'Stage created',
+            detail: 'Stage ' + result.name + ' successfully created!',
+            severity: 'success'
+          }
+        });
+      })
     });
   });
 });
