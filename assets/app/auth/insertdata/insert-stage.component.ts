@@ -17,7 +17,7 @@ export class InsertStageComponent implements OnInit {
   stages: Stage[] = [];
   selrallys: SelectItem[] = [];
   rallyselected = '';
-  StagetoEdit: Stage = new Stage('', 0, '', false, 0, 0, '', '');
+  StagetoEdit: Stage = new Stage('', 0, '', false, false, 0, 0, '', '');
 
   constructor(private insertService: InsertService, private getService: GetdataService, private notificationService: NotificationService) {
   }
@@ -28,6 +28,7 @@ export class InsertStageComponent implements OnInit {
       day: new FormControl(null, Validators.required),
       date: new FormControl(null, Validators.required),
       cancelled: new FormControl('0', Validators.required),
+      powerstage: new FormControl('0', Validators.required),
       stagenumber: new FormControl(null, Validators.required),
       meter: new FormControl(null, Validators.required),
     });
@@ -76,6 +77,7 @@ export class InsertStageComponent implements OnInit {
         this.myForm.value.day,
         this.myForm.value.date,
         this.myForm.value.cancelled,
+        this.myForm.value.powerstage,
         this.myForm.value.stagenumber,
         this.myForm.value.meter,
         this.rallyselected,
@@ -88,6 +90,7 @@ export class InsertStageComponent implements OnInit {
             this.getStages();
             this.myForm.reset();
             this.myForm.controls['cancelled'].setValue('0');
+            this.myForm.controls['powerstage'].setValue('0');
           },
           error => console.error(error),
         );
@@ -96,6 +99,7 @@ export class InsertStageComponent implements OnInit {
       this.StagetoEdit.day = this.myForm.value.day;
       this.StagetoEdit.date = this.myForm.value.date;
       this.StagetoEdit.cancelled = this.myForm.value.cancelled;
+      this.StagetoEdit.powerstage = this.myForm.value.powerstage;
       this.StagetoEdit.stagenumber = this.myForm.value.stagenumber;
       this.StagetoEdit.meter = this.myForm.value.meter;
       this.StagetoEdit.rally = this.rallyselected;
@@ -106,7 +110,8 @@ export class InsertStageComponent implements OnInit {
           this.getStages();
           this.myForm.reset();
           this.myForm.controls['cancelled'].setValue('0');
-          this.StagetoEdit = new Stage('', 0, '', false, 0, 0, '', '');
+          this.myForm.controls['powerstage'].setValue('0');
+          this.StagetoEdit = new Stage('', 0, '', false, false, 0, 0, '', '');
         },
         error => console.error(error),
       );

@@ -5,6 +5,7 @@ export class Stage {
               public day: number,
               public date: string,
               public cancelled: boolean,
+              public powerstage: boolean,
               public stagenumber: number,
               public meter: number,
               public rally: string,

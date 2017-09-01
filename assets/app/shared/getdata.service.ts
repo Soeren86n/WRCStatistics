@@ -72,6 +72,7 @@ export class GetdataService {
               stage.day,
               stage.date,
               stage.cancelled,
+              stage.powerstage,
               stage.stagenumber,
               stage.meter,
               stage.rally.name,
