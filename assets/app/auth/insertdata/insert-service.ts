@@ -94,13 +94,13 @@ export class InsertService {
       });
   }
 
-  updatestage(rally: Stage) {
-    const body = JSON.stringify(rally);
+  updatestage(stage: Stage) {
+    const body = JSON.stringify(stage);
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const token = localStorage.getItem('token')
       ? '?token=' + localStorage.getItem('token')
       : '';
-    return this.http.patch('http://localhost:3000/admin/updatestage/' + rally.StageID + token, body, { headers })
+    return this.http.patch('http://localhost:3000/admin/updatestage/' + stage.StageID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

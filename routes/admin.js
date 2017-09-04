@@ -314,6 +314,74 @@ router.post('/insertstage', function (req, res, next) {
     });
   });
 });
-
+router.patch('/updatestage/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Stage.findById(req.params.id, function (err, stage) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An error occurred',
+          detail: err,
+          severity: 'error'
+        });
+      }
+      if (!stage) {
+        return res.status(500).json({
+          summary: 'No Stage Found!',
+          detail: 'Stage not found',
+          severity: 'error'
+        });
+      }
+      Rally.findById(stage.rally, function (err, stagerally) {
+        stagerally.stages.pull(stage);
+        stagerally.save();
+      });
+      Rally.findById(req.body.rally, function (err, stagerally) {
+        if (!stagerally) {
+          return res.status(500).json({
+            summary: 'No Rally for Stage Found!',
+            detail: 'Stage Rally not found',
+            severity: 'error'
+          });
+        }
+        stagerally.stages.push(stage);
+        stagerally.save();
+      });
+      stage.rally = req.body.rally;
+      stage.name = req.body.name;
+      stage.date = req.body.date;
+      stage.day = req.body.day;
+      stage.cancelled = req.body.cancelled;
+      stage.powerstage = req.body.powerstage;
+      stage.stagenumber = req.body.stagenumber;
+      stage.meter = req.body.meter;
+      stage.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An error occurred',
+            detail: err,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Updated Stage',
+          obj: result,
+          notification: {
+            summary: 'Stage Sucessfully updated',
+            detail: 'Stage ' + stage.name + ' successfully updated!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
 
 module.exports = router;

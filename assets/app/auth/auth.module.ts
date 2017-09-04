@@ -7,10 +7,9 @@ import { SigninComponent } from './signin.component';
 import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
 import { InsertService } from './insertdata/insert-service';
-import { DataListModule, DropdownModule } from 'primeng/primeng';
+import { DataListModule, DataTableModule, DropdownModule, SharedModule } from 'primeng/primeng';
 import { InsertRallyComponent } from './insertdata/insert-rally.component';
 import { InsertStageComponent } from './insertdata/insert-stage.component';
-import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -28,6 +27,8 @@ import { BrowserModule } from '@angular/platform-browser';
     authRouting,
     DataListModule,
     DropdownModule,
+    DataTableModule,
+    SharedModule,
   ],
   providers: [
     InsertService,

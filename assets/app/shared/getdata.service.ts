@@ -87,5 +87,32 @@ export class GetdataService {
         return Observable.throw(error.json());
       });
   }
-
+  getRallyStages(id: string) {
+    return this.http.get('http://localhost:3000/data/rally/stage/' + id)
+      .map((response: Response) => {
+        const stages = response.json().obj;
+        const StageObjs: Stage[] = [];
+        for (const stage of stages) {
+          const rallyobj = new Rally(stage.rally.name, stage.rally.country, stage.rally.startdate, stage.rally.enddate, stage.rally._id);
+          StageObjs.push(
+            new Stage(
+              stage.name,
+              stage.day,
+              stage.date,
+              stage.cancelled,
+              stage.powerstage,
+              stage.stagenumber,
+              stage.meter,
+              stage.rally.name,
+              stage._id,
+              rallyobj,
+            ));
+        }
+        return StageObjs;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
 }

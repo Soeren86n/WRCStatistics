@@ -33,7 +33,6 @@ export class InsertStageComponent implements OnInit {
       meter: new FormControl(null, Validators.required),
     });
     this.getRallys();
-    this.getStages();
   }
 
   getRallys() {
@@ -56,18 +55,34 @@ export class InsertStageComponent implements OnInit {
             });
             this.rallyselected = rally.rallyID;
           }
+          this.getStages();
         },
       );
   }
 
+
   getStages() {
-    this.getService.getStages()
+    this.getService.getRallyStages(this.rallyselected)
       .subscribe(
         (stages: Stage[]) => {
           this.stages = stages;
-          console.log(this.stages);
         },
       );
+  }
+
+  editStage(stage: Stage) {
+    this.myForm.reset();
+    this.StagetoEdit = stage;
+    this.rallyselected = stage.RallyObj.rallyID;
+    this.myForm.setValue({
+      name: stage.name,
+      day: stage.day,
+      date: stage.date,
+      cancelled: stage.cancelled ? '1' : '0',
+      powerstage: stage.powerstage ? '1' : '0',
+      stagenumber: stage.stagenumber,
+      meter: stage.meter,
+    });
   }
 
   onSubmit() {
@@ -87,7 +102,6 @@ export class InsertStageComponent implements OnInit {
           (data) => {
             this.notificationService.handleError(data.notification);
             this.getRallys();
-            this.getStages();
             this.myForm.reset();
             this.myForm.controls['cancelled'].setValue('0');
             this.myForm.controls['powerstage'].setValue('0');
@@ -107,7 +121,6 @@ export class InsertStageComponent implements OnInit {
         (data) => {
           this.notificationService.handleError(data.notification);
           this.getRallys();
-          this.getStages();
           this.myForm.reset();
           this.myForm.controls['cancelled'].setValue('0');
           this.myForm.controls['powerstage'].setValue('0');
@@ -125,5 +138,6 @@ export class InsertStageComponent implements OnInit {
       }
     }
   }
+
 
 }

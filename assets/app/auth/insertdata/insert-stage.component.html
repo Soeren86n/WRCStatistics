@@ -10,6 +10,12 @@
                 </div>
             </ng-template>
         </p-dropdown>
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" (click)="getStages()">
+            <i class="fa fa-refresh"></i>
+           <span class="sr-only">Refresh</span>
+        </button>
+      </span>
     </div>
 </div>
 
@@ -119,4 +125,29 @@
         Reset
     </button>
 </form>
+<p-dataTable [value]="stages">
+    <p-column field="cancelled" header="Cancelled" [sortable]="true" [style]="{'width':'14%'}">
+        <ng-template let-stage="rowData" pTemplate="body">
+            <span class="badge badge-pill badge-secondary" *ngIf="stage.cancelled">Cancelled</span>
+        </ng-template>
+    </p-column>
+    <p-column field="name" header="Name"></p-column>
+    <p-column field="day" header="Day" [sortable]="true"></p-column>
+    <p-column field="stagenumber" header="Stage" [sortable]="true"></p-column>
+    <p-column field="meter" header="Length" [sortable]="true">
+        <ng-template let-stage="rowData" pTemplate="body">
+            <span class="badge badge-pill badge-secondary" *ngIf="stage.cancelled">Cancelled</span>
+            {{stage.meter/1000}} km
+        </ng-template>
+    </p-column>
+    <p-column>
+        <ng-template let-stage="rowData" pTemplate="body">
+            <button class="btn btn-outline-primary" (click)="editStage(stage)">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <span class="sr-only">Edit {{stage.name}}</span>
+            </button>
+        </ng-template>
+    </p-column>
+</p-dataTable>
+
 

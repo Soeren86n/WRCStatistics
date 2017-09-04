@@ -55,6 +55,22 @@ router.get('/stage', function (req, res, next) {
         });
       });
 });
-
+router.get('/rally/stage/:id', function (req, res, next) {
+  // Hier weitermachen!
+  Stage.find({ rally: req.params.id })
+      .populate('rally')
+      .exec(function (err, stage) {
+        if (err) {
+          return res.status(500).json({
+            title: 'An error occurred',
+            error: err
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: stage
+        });
+      });
+});
 
 module.exports = router;
