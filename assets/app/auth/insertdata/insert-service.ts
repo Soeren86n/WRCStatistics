@@ -107,5 +107,17 @@ export class InsertService {
         return Observable.throw(error.json());
       });
   }
+
+  deleteStage(stage: Stage) {
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.delete('http://localhost:3000/admin/deletestage/' + stage.StageID + token)
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
 }
 

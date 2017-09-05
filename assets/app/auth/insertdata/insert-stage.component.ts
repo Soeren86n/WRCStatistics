@@ -4,7 +4,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { GetdataService } from '../../shared/getdata.service';
 import { InsertService } from './insert-service';
 import { Rally } from '../../models/rally.model';
-import { SelectItem } from 'primeng/primeng';
+import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { Stage } from '../../models/stage.model';
 
 @Component({
@@ -19,7 +19,10 @@ export class InsertStageComponent implements OnInit {
   rallyselected = '';
   StagetoEdit: Stage = new Stage('', 0, '', false, false, 0, 0, '', '');
 
-  constructor(private insertService: InsertService, private getService: GetdataService, private notificationService: NotificationService) {
+  constructor(private confirmationService: ConfirmationService,
+              private insertService: InsertService,
+              private getService: GetdataService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -83,6 +86,26 @@ export class InsertStageComponent implements OnInit {
       stagenumber: stage.stagenumber,
       meter: stage.meter,
     });
+  }
+
+  confirmDel(stage: Stage) {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete Stage ' + stage.name + ' ?',
+      accept: () => {
+        this.deleteStage(stage);
+      },
+    });
+  }
+
+  deleteStage(stage: Stage) {
+    this.insertService.deleteStage(stage)
+      .subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getRallys();
+        },
+        error => console.error(error),
+      );
   }
 
   onSubmit() {

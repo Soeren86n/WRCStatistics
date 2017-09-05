@@ -142,12 +142,19 @@
     </p-column>
     <p-column>
         <ng-template let-stage="rowData" pTemplate="body">
-            <button class="btn btn-outline-primary" (click)="editStage(stage)">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-                <span class="sr-only">Edit {{stage.name}}</span>
-            </button>
+            <div class="btn-group" role="group">
+                <button class="btn btn-outline-primary" (click)="editStage(stage)">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <span class="sr-only">Edit {{stage.name}}</span>
+                </button>
+                <button class="btn btn-outline-danger" (click)="confirmDel(stage)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <span class="sr-only">Delete {{stage.name}}</span>
+                </button>
+            </div>
         </ng-template>
     </p-column>
 </p-dataTable>
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle"></p-confirmDialog>
 
 

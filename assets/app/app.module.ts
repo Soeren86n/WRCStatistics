@@ -10,7 +10,7 @@ import { routing } from './app.routing';
 import { HttpModule } from '@angular/http';
 import { AuthService } from './auth/auth.service';
 import { NotificationService } from './shared/notification.service';
-import { GrowlModule } from 'primeng/primeng';
+import { ConfirmationService, ConfirmDialogModule, GrowlModule } from 'primeng/primeng';
 import { ErrorComponent } from './shared/error.component';
 import { GetdataService } from './shared/getdata.service';
 import { FormsModule } from '@angular/forms';
@@ -30,11 +30,13 @@ import { FormsModule } from '@angular/forms';
     routing,
     HttpModule,
     GrowlModule,
+    ConfirmDialogModule,
   ],
   providers: [
     AuthService,
     NotificationService,
     GetdataService,
+    ConfirmationService,
   ],
   bootstrap: [AppComponent],
 })

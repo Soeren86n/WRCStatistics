@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../../shared/notification.service';
 import { InsertService } from './insert-service';
 import { Country } from '../../models/country.model';
-import { SelectItem } from 'primeng/primeng';
+import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { GetdataService } from '../../shared/getdata.service';
 
 @Component({
@@ -18,7 +18,10 @@ export class InsertRallyComponent implements OnInit {
   selcountrys: SelectItem[] = [];
   RallytoEdit: Rally = new Rally('', '', '', '', '');
 
-  constructor(private insertService: InsertService, private getService: GetdataService, private notificationService: NotificationService) {
+  constructor(private confirmationService: ConfirmationService,
+              private insertService: InsertService,
+              private getService: GetdataService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -62,6 +65,15 @@ export class InsertRallyComponent implements OnInit {
       startdate: rally.startdate,
       enddate: rally.enddate,
       country: rally.countryObj.countryID,
+    });
+  }
+
+  confirmDel(rally: Rally) {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete Rally ' + rally.name + ' ?',
+      accept: () => {
+        this.deleteRally(rally);
+      },
     });
   }
 

@@ -7,7 +7,7 @@ import { SigninComponent } from './signin.component';
 import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
 import { InsertService } from './insertdata/insert-service';
-import { DataListModule, DataTableModule, DropdownModule, SharedModule } from 'primeng/primeng';
+import { ConfirmDialogModule, DataListModule, DataTableModule, DropdownModule, SharedModule } from 'primeng/primeng';
 import { InsertRallyComponent } from './insertdata/insert-rally.component';
 import { InsertStageComponent } from './insertdata/insert-stage.component';
 
@@ -28,6 +28,7 @@ import { InsertStageComponent } from './insertdata/insert-stage.component';
     DataListModule,
     DropdownModule,
     DataTableModule,
+    ConfirmDialogModule,
     SharedModule,
   ],
   providers: [

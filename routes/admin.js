@@ -383,5 +383,51 @@ router.patch('/updatestage/:id', function (req, res, next) {
     });
   });
 });
+router.delete('/deletestage/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Stage.findById(req.params.id, function (err, stage) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An Error occurred',
+          detail: err.message,
+          severity: 'error'
+        });
+      }
+      if (!stage) {
+        return res.status(500).json({
+          summary: 'No Stage Found!',
+          detail: 'Stage not found',
+          severity: 'error'
+        });
+      }
+      stage.remove(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Stage deleted',
+          obj: result,
+          notification: {
+            summary: 'Stage deleted',
+            detail: 'Stage ' + result.name + ' successfully deleted!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
 
 module.exports = router;
