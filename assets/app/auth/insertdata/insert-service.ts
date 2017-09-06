@@ -5,6 +5,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { Headers, Http, Response } from '@angular/http';
 import { Rally } from '../../models/rally.model';
 import { Stage } from '../../models/stage.model';
+import { Manufacturer } from '../../models/manufacturer.model';
 
 @Injectable()
 export class InsertService {
@@ -113,6 +114,20 @@ export class InsertService {
       ? '?token=' + localStorage.getItem('token')
       : '';
     return this.http.delete('http://localhost:3000/admin/deletestage/' + stage.StageID + token)
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  insertmanufacturer(manufacturer: Manufacturer) {
+    const body = JSON.stringify(manufacturer);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertmanufacturer/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

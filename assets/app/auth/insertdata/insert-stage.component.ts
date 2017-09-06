@@ -58,7 +58,16 @@ export class InsertStageComponent implements OnInit {
             });
             this.rallyselected = rally.rallyID;
           }
-          this.getStages();
+          if (this.rallys.length > 0) {
+            this.getStages();
+          } else {
+            const msg = {
+              summary: 'No Rally created',
+              detail: 'Please create at first a Rally',
+              severity: 'error',
+            };
+            this.notificationService.handleError(msg);
+          }
         },
       );
   }

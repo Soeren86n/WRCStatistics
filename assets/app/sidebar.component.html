@@ -7,6 +7,9 @@
     <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
         <a class="nav-link" routerLinkActive="active"  [routerLink]="['/']">Home</a>
     </li>
+    <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['admin/signin']">Admin</a>
+    </li>
 </ul>
 <ul class="nav flex-column mainsidebar bg-dark" *ngIf="authService.isLoggedIn()">
     <li class="nav-item"[ngClass]="{'d-none d-md-block': navMobileCollapse}">
@@ -20,5 +23,8 @@
     </li>
     <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
         <a class="nav-link" routerLinkActive="active"  [routerLink]="['admin/insertstage']">Insert Stage</a>
+    </li>
+    <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['admin/insertmanufacturer']">Insert Manufacturer</a>
     </li>
 </ul>

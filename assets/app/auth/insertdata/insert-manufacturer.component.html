@@ -1,0 +1,55 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space" *ngIf="this.countrys.length > 0">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input
+                id="name"
+                class="form-control"
+                formControlName="name">
+    </div>
+    <div class="form-group">
+        <label for="country">Country</label>
+        <div class="input-group">
+            <p-dropdown [options]="selcountrys" formControlName="country" id="country" style="width: 100%; height: 42px"
+                        [style]="{'width':'100%', 'height':'100%'}">
+                <ng-template let-country pTemplate="item">
+                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                        <span class="flag-icon flag-icon-{{getFlagCode(country.value)}}"></span>
+                        <div style="font-size:14px;float:right;margin-top:4px">{{country.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+    <button
+            class="btn btn-primary"
+            [disabled]="!myForm.valid">Submit
+    </button>
+    <button class="btn btn-danger" (click)="resetWholeForm()" type="reset">
+        Reset
+    </button>
+</form>
+
+<!--<p-dataList [value]="rallys" [paginator]="false">-->
+    <!--<p-header>-->
+        <!--List of Rallys-->
+    <!--</p-header>-->
+    <!--<ul class="list-group">-->
+        <!--<ng-template let-rally pTemplate="item">-->
+            <!--<li class="list-group-item d-flex justify-content-between align-items-center"-->
+                <!--[class.list-group-item-primary]="RallytoEdit.name === rally.name">-->
+                <!--<span class="flag-icon flag-icon-{{rally.countryObj.shortname}}"></span>-->
+                <!--{{rally.name}}-->
+                <!--<div class="btn-group" role="group">-->
+                    <!--<button class="btn btn-outline-primary" (click)="editRally(rally)">-->
+                        <!--<i class="fa fa-pencil" aria-hidden="true"></i>-->
+                        <!--<span class="sr-only">Edit {{rally.name}}</span>-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-outline-danger" (click)="confirmDel(rally)">-->
+                        <!--<i class="fa fa-trash" aria-hidden="true"></i>-->
+                        <!--<span class="sr-only">Delete {{rally.name}}</span>-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</li>-->
+        <!--</ng-template>-->
+    <!--</ul>-->
+<!--</p-dataList>-->

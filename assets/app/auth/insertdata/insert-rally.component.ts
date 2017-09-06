@@ -44,6 +44,14 @@ export class InsertRallyComponent implements OnInit {
           for (const country of this.countrys) {
             this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
           }
+          if (this.countrys.length < 1) {
+            const msg = {
+              summary: 'No Country created',
+              detail: 'Please create at first a Country',
+              severity: 'error',
+            };
+            this.notificationService.handleError(msg);
+          }
         },
       );
   }

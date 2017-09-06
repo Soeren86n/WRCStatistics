@@ -1,4 +1,4 @@
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space">
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space" *ngIf="this.countrys.length > 0">
     <div class="form-group">
         <label for="name">Name</label>
         <input

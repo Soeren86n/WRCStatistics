@@ -7,6 +7,7 @@ var Country = require('../models/country');
 var User = require('../models/user');
 var Rally = require('../models/rally');
 var Stage = require('../models/stage');
+var Manufacturer = require('../models/manufacturer');
 
 router.use('/', function (req, res, next) {
   jwt.verify(req.query.token, 'secret', function (err, decoded) {
@@ -137,7 +138,7 @@ router.post('/insertrally', function (req, res, next) {
             severity: 'error'
           });
         }
-        country.rallys.push(result);
+        country.rallys.push(result._id);
         country.save();
         res.status(201).json({
           message: 'Rally created',
@@ -299,7 +300,7 @@ router.post('/insertstage', function (req, res, next) {
             severity: 'error'
           });
         }
-        rally.stages.push(result);
+        rally.stages.push(result._id);
         rally.save();
         res.status(201).json({
           message: 'Stage created',
@@ -426,6 +427,51 @@ router.delete('/deletestage/:id', function (req, res, next) {
           }
         });
       });
+    });
+  });
+});
+
+router.post('/insertmanufacturer', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Country.findById(req.body.country, function (err, country) {
+      if (!country) {
+        return res.status(500).json({
+          summary: 'No Country Found!',
+          detail: 'Country not found',
+          severity: 'error'
+        });
+      }
+      console.log(country);
+      var manu = new Manufacturer({
+        name: req.body.name,
+        country: country
+      });
+      manu.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(201).json({
+          message: 'Manufacturer created',
+          obj: result,
+          notification: {
+            summary: 'Manufacturer created',
+            detail: 'Manufacturer ' + result.name + ' successfully created!',
+            severity: 'success'
+          }
+        });
+      })
     });
   });
 });

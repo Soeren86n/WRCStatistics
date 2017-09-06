@@ -10,6 +10,7 @@ import { InsertService } from './insertdata/insert-service';
 import { ConfirmDialogModule, DataListModule, DataTableModule, DropdownModule, SharedModule } from 'primeng/primeng';
 import { InsertRallyComponent } from './insertdata/insert-rally.component';
 import { InsertStageComponent } from './insertdata/insert-stage.component';
+import { InsertManufacturerComponent } from './insertdata/insert-manufacturer.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { InsertStageComponent } from './insertdata/insert-stage.component';
     InsertCountryComponent,
     InsertRallyComponent,
     InsertStageComponent,
+    InsertManufacturerComponent,
   ],
   imports: [
     CommonModule,

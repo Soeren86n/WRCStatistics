@@ -5,6 +5,7 @@ import { NotificationService } from './notification.service';
 import { Observable } from 'rxjs/Observable';
 import { Rally } from '../models/rally.model';
 import { Stage } from '../models/stage.model';
+import { Manufacturer } from '../models/manufacturer.model';
 
 @Injectable()
 export class GetdataService {
@@ -87,6 +88,7 @@ export class GetdataService {
         return Observable.throw(error.json());
       });
   }
+
   getRallyStages(id: string) {
     return this.http.get('http://localhost:3000/data/rally/stage/' + id)
       .map((response: Response) => {
@@ -109,6 +111,30 @@ export class GetdataService {
             ));
         }
         return StageObjs;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getManufacturer() {
+    return this.http.get('http://localhost:3000/data/manufacturer')
+      .map((response: Response) => {
+        const manufacturers = response.json().obj;
+        const ManufacturerObjs: Manufacturer[] = [];
+        for (const manu of manufacturers) {
+          const countryobj = new Country(manu.country.name, manu.country.shortname, manu.country._id);
+          ManufacturerObjs.push(new Manufacturer(
+            manu.name,
+            manu.country.name,
+            manu._id,
+            countryobj,
+            ),
+          )
+          ;
+        }
+        return ManufacturerObjs;
       })
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

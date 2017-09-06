@@ -6,6 +6,7 @@ import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
 import { InsertRallyComponent } from './insertdata/insert-rally.component';
 import { InsertStageComponent } from './insertdata/insert-stage.component';
+import { InsertManufacturerComponent } from './insertdata/insert-manufacturer.component';
 
 const AUTH_ROUTES: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const AUTH_ROUTES: Routes = [
   { path: 'insertcountry', component: InsertCountryComponent },
   { path: 'insertrally', component: InsertRallyComponent },
   { path: 'insertstage', component: InsertStageComponent },
+  { path: 'insertmanufacturer', component: InsertManufacturerComponent },
 ];
 
 export const authRouting = RouterModule.forChild(AUTH_ROUTES);
