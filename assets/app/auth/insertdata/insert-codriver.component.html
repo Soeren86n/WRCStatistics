@@ -1,0 +1,60 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space" *ngIf="this.countrys.length > 0">
+    <div class="form-group">
+        <label for="firstname">Firstname</label>
+        <input
+                id="firstname"
+                class="form-control"
+                formControlName="firstname">
+    </div>
+    <div class="form-group">
+        <label for="lastname">Lastname</label>
+        <div class="input-group">
+            <input
+                    id="lastname"
+                    class="form-control"
+                    formControlName="lastname">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="country">Country</label>
+        <div class="input-group">
+            <p-dropdown [options]="selcountrys" formControlName="country" id="country" style="width: 100%; height: 42px"
+                        [style]="{'width':'100%', 'height':'100%'}">
+                <ng-template let-country pTemplate="item">
+                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                        <span class="flag-icon flag-icon-{{getFlagCode(country.value)}}"></span>
+                        <div style="font-size:14px;float:right;margin-top:4px">{{country.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+    <button
+            class="btn btn-primary"
+            [disabled]="!myForm.valid">Submit
+    </button>
+    <button class="btn btn-danger" (click)="resetWholeForm()" type="reset">
+        Reset
+    </button>
+</form>
+
+<p-dataList [value]="drivers" [paginator]="false">
+    <p-header>
+        List of Codriver
+    </p-header>
+    <ul class="list-group">
+        <ng-template let-driver pTemplate="item">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                [class.list-group-item-primary]="DrivertoEdit.codriverID === driver.codriverID">
+                <span class="flag-icon flag-icon-{{driver.countryObj.shortname}}"></span>
+                {{driver.firstname}} {{driver.lastname}}
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary" (click)="editDriver(driver)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        <span class="sr-only">Edit {{driver.firstname}} {{driver.lastname}}</span>
+                    </button>
+                </div>
+            </li>
+        </ng-template>
+    </ul>
+</p-dataList>

@@ -6,6 +6,8 @@ import { Observable } from 'rxjs/Observable';
 import { Rally } from '../models/rally.model';
 import { Stage } from '../models/stage.model';
 import { Manufacturer } from '../models/manufacturer.model';
+import { Driver } from '../models/driver.model';
+import { Codriver } from '../models/codriver.model';
 
 @Injectable()
 export class GetdataService {
@@ -135,6 +137,56 @@ export class GetdataService {
           ;
         }
         return ManufacturerObjs;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getDriver() {
+    return this.http.get('http://localhost:3000/data/driver')
+      .map((response: Response) => {
+        const drivers = response.json().obj;
+        const DriverObjs: Driver[] = [];
+        for (const driver of drivers) {
+          const countryobj = new Country(driver.country.name, driver.country.shortname, driver.country._id);
+          DriverObjs.push(new Driver(
+            driver.firstname,
+            driver.lastname,
+            driver.country.name,
+            driver._id,
+            countryobj,
+            ),
+          )
+          ;
+        }
+        return DriverObjs;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getCodriver() {
+    return this.http.get('http://localhost:3000/data/codriver')
+      .map((response: Response) => {
+        const drivers = response.json().obj;
+        const DriverObjs: Codriver[] = [];
+        for (const driver of drivers) {
+          const countryobj = new Country(driver.country.name, driver.country.shortname, driver.country._id);
+          DriverObjs.push(new Codriver(
+            driver.firstname,
+            driver.lastname,
+            driver.country.name,
+            driver._id,
+            countryobj,
+            ),
+          )
+          ;
+        }
+        return DriverObjs;
       })
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

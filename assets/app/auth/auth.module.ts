@@ -11,6 +11,8 @@ import { ConfirmDialogModule, DataListModule, DataTableModule, DropdownModule, S
 import { InsertRallyComponent } from './insertdata/insert-rally.component';
 import { InsertStageComponent } from './insertdata/insert-stage.component';
 import { InsertManufacturerComponent } from './insertdata/insert-manufacturer.component';
+import { InsertDriverComponent } from './insertdata/insert-driver.component';
+import { InsertCodriverComponent } from './insertdata/insert-codriver.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { InsertManufacturerComponent } from './insertdata/insert-manufacturer.co
     InsertRallyComponent,
     InsertStageComponent,
     InsertManufacturerComponent,
+    InsertDriverComponent,
+    InsertCodriverComponent,
   ],
   imports: [
     CommonModule,

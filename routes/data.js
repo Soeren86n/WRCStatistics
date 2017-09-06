@@ -8,6 +8,8 @@ var Rally = require('../models/rally');
 var Stage = require('../models/stage');
 var User = require('../models/user');
 var Manufacturer = require('../models/manufacturer');
+var Driver = require('../models/driver');
+var Codriver = require('../models/codriver');
 
 router.get('/country', function (req, res, next) {
   Country.find()
@@ -91,6 +93,42 @@ router.get('/manufacturer', function (req, res, next) {
         res.status(200).json({
           message: 'Success',
           obj: manu
+        });
+      });
+});
+router.get('/driver', function (req, res, next) {
+  Driver.find()
+      .populate('country')
+      .exec(function (err, driver) {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: driver
+        });
+      });
+});
+router.get('/codriver', function (req, res, next) {
+  Codriver.find()
+      .populate('country')
+      .exec(function (err, driver) {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: driver
         });
       });
 });

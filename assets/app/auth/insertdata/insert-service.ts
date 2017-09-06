@@ -6,6 +6,8 @@ import { Headers, Http, Response } from '@angular/http';
 import { Rally } from '../../models/rally.model';
 import { Stage } from '../../models/stage.model';
 import { Manufacturer } from '../../models/manufacturer.model';
+import { Driver } from '../../models/driver.model';
+import { Codriver } from '../../models/codriver.model';
 
 @Injectable()
 export class InsertService {
@@ -142,6 +144,62 @@ export class InsertService {
       ? '?token=' + localStorage.getItem('token')
       : '';
     return this.http.patch('http://localhost:3000/admin/updatemanufacturer/' + manufacturer.manufacturerID + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  insertdriver(driver: Driver) {
+    const body = JSON.stringify(driver);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertdriver/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  updatedriver(driver: Driver) {
+    const body = JSON.stringify(driver);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.patch('http://localhost:3000/admin/updatedriver/' + driver.driverID + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  insertcodriver(codriver: Codriver) {
+    const body = JSON.stringify(codriver);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertcodriver/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  updatecodriver(codriver: Codriver) {
+    const body = JSON.stringify(codriver);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.patch('http://localhost:3000/admin/updatecodriver/' + codriver.codriverID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

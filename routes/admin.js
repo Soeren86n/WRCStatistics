@@ -8,6 +8,8 @@ var User = require('../models/user');
 var Rally = require('../models/rally');
 var Stage = require('../models/stage');
 var Manufacturer = require('../models/manufacturer');
+var Driver = require('../models/driver');
+var Codriver = require('../models/codriver');
 
 router.use('/', function (req, res, next) {
   jwt.verify(req.query.token, 'secret', function (err, decoded) {
@@ -516,6 +518,228 @@ router.patch('/updatemanufacturer/:id', function (req, res, next) {
           notification: {
             summary: 'Manufacturer Sucessfully updated',
             detail: 'Manufacturer ' + manu.name + ' successfully updated!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
+
+router.post('/insertdriver', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Country.findById(req.body.country, function (err, country) {
+      if (!country) {
+        return res.status(500).json({
+          summary: 'No Country Found!',
+          detail: 'Country not found',
+          severity: 'error'
+        });
+      }
+      var driver = new Driver({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        country: country
+      });
+      driver.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        country.drivers.push(result._id);
+        country.save();
+        res.status(201).json({
+          message: 'Driver created',
+          obj: result,
+          notification: {
+            summary: 'Driver created',
+            detail: 'Driver ' + result.firstname + ' ' + result.lastname + ' successfully created!',
+            severity: 'success'
+          }
+        });
+      })
+    });
+  });
+});
+router.patch('/updatedriver/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Driver.findById(req.params.id, function (err, driver) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An error occurred',
+          detail: err,
+          severity: 'error'
+        });
+      }
+      if (!driver) {
+        return res.status(500).json({
+          summary: 'No Driver Found!',
+          detail: 'Driver not found',
+          severity: 'error'
+        });
+      }
+      Country.findById(driver.country, function (err, country) {
+        country.drivers.pull(driver);
+        country.save();
+      });
+      Country.findById(req.body.country, function (err, country) {
+        if (!country) {
+          return res.status(500).json({
+            summary: 'No Country for Driver Found!',
+            detail: 'Driver Country not found',
+            severity: 'error'
+          });
+        }
+        country.drivers.push(driver);
+        country.save();
+      });
+      driver.firstname = req.body.firstname;
+      driver.lastname = req.body.lastname;
+      driver.country = req.body.country;
+      driver.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An error occurred',
+            detail: err,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Updated Driver',
+          obj: result,
+          notification: {
+            summary: 'Driver Sucessfully updated',
+            detail: 'Driver ' + driver.lastname + ' successfully updated!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
+
+router.post('/insertcodriver', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Country.findById(req.body.country, function (err, country) {
+      if (!country) {
+        return res.status(500).json({
+          summary: 'No Country Found!',
+          detail: 'Country not found',
+          severity: 'error'
+        });
+      }
+      var driver = new Codriver({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        country: country
+      });
+      driver.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        country.codrivers.push(result._id);
+        country.save();
+        res.status(201).json({
+          message: 'Codriver created',
+          obj: result,
+          notification: {
+            summary: 'Codriver created',
+            detail: 'Codriver ' + result.firstname + ' ' + result.lastname + ' successfully created!',
+            severity: 'success'
+          }
+        });
+      })
+    });
+  });
+});
+router.patch('/updatecodriver/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Codriver.findById(req.params.id, function (err, driver) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An error occurred',
+          detail: err,
+          severity: 'error'
+        });
+      }
+      if (!driver) {
+        return res.status(500).json({
+          summary: 'No Codriver Found!',
+          detail: 'Codriver not found',
+          severity: 'error'
+        });
+      }
+      Country.findById(driver.country, function (err, country) {
+        country.codrivers.pull(driver);
+        country.save();
+      });
+      Country.findById(req.body.country, function (err, country) {
+        if (!country) {
+          return res.status(500).json({
+            summary: 'No Country for CoDriver Found!',
+            detail: 'Codriver Country not found',
+            severity: 'error'
+          });
+        }
+        country.codrivers.push(driver);
+        country.save();
+      });
+      driver.firstname = req.body.firstname;
+      driver.lastname = req.body.lastname;
+      driver.country = req.body.country;
+      driver.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An error occurred',
+            detail: err,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Updated Codriver',
+          obj: result,
+          notification: {
+            summary: 'Codriver Sucessfully updated',
+            detail: 'Codriver ' + driver.lastname + ' successfully updated!',
             severity: 'success'
           }
         });
