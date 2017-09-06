@@ -134,5 +134,19 @@ export class InsertService {
         return Observable.throw(error.json());
       });
   }
+
+  updatemanufacturer(manufacturer: Manufacturer) {
+    const body = JSON.stringify(manufacturer);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.patch('http://localhost:3000/admin/updatemanufacturer/' + manufacturer.manufacturerID + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
 }
 

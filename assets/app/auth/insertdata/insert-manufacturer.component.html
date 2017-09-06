@@ -29,27 +29,23 @@
     </button>
 </form>
 
-<!--<p-dataList [value]="rallys" [paginator]="false">-->
-    <!--<p-header>-->
-        <!--List of Rallys-->
-    <!--</p-header>-->
-    <!--<ul class="list-group">-->
-        <!--<ng-template let-rally pTemplate="item">-->
-            <!--<li class="list-group-item d-flex justify-content-between align-items-center"-->
-                <!--[class.list-group-item-primary]="RallytoEdit.name === rally.name">-->
-                <!--<span class="flag-icon flag-icon-{{rally.countryObj.shortname}}"></span>-->
-                <!--{{rally.name}}-->
-                <!--<div class="btn-group" role="group">-->
-                    <!--<button class="btn btn-outline-primary" (click)="editRally(rally)">-->
-                        <!--<i class="fa fa-pencil" aria-hidden="true"></i>-->
-                        <!--<span class="sr-only">Edit {{rally.name}}</span>-->
-                    <!--</button>-->
-                    <!--<button class="btn btn-outline-danger" (click)="confirmDel(rally)">-->
-                        <!--<i class="fa fa-trash" aria-hidden="true"></i>-->
-                        <!--<span class="sr-only">Delete {{rally.name}}</span>-->
-                    <!--</button>-->
-                <!--</div>-->
-            <!--</li>-->
-        <!--</ng-template>-->
-    <!--</ul>-->
-<!--</p-dataList>-->
+<p-dataList [value]="manufacturers" [paginator]="false">
+    <p-header>
+        List of Manufacturer
+    </p-header>
+    <ul class="list-group">
+        <ng-template let-manufacturer pTemplate="item">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                [class.list-group-item-primary]="ManufacturertoEdit.name === manufacturer.name">
+                <span class="flag-icon flag-icon-{{manufacturer.countryObj.shortname}}"></span>
+                {{manufacturer.name}}
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary" (click)="editManufacturer(manufacturer)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        <span class="sr-only">Edit {{manufacturer.name}}</span>
+                    </button>
+                </div>
+            </li>
+        </ng-template>
+    </ul>
+</p-dataList>

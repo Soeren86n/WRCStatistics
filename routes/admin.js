@@ -475,5 +475,53 @@ router.post('/insertmanufacturer', function (req, res, next) {
     });
   });
 });
+router.patch('/updatemanufacturer/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Manufacturer.findById(req.params.id, function (err, manu) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An error occurred',
+          detail: err,
+          severity: 'error'
+        });
+      }
+      if (!manu) {
+        return res.status(500).json({
+          summary: 'No Manufacturer Found!',
+          detail: 'Manufacturer not found',
+          severity: 'error'
+        });
+      }
+      manu.name = req.body.name;
+      manu.country = req.body.country;
+      manu.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An error occurred',
+            detail: err,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Updated Manufacturer',
+          obj: result,
+          notification: {
+            summary: 'Manufacturer Sucessfully updated',
+            detail: 'Manufacturer ' + manu.name + ' successfully updated!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
 
 module.exports = router;

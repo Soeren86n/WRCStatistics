@@ -15,6 +15,8 @@ import { Manufacturer } from '../../models/manufacturer.model';
 export class InsertManufacturerComponent implements OnInit {
   myForm: FormGroup;
   countrys: Country[] = [];
+  manufacturers: Manufacturer[] = [];
+  ManufacturertoEdit: Manufacturer = new Manufacturer('', '', '');
   selcountrys: SelectItem[] = [];
 
   constructor(private confirmationService: ConfirmationService,
@@ -47,27 +49,60 @@ export class InsertManufacturerComponent implements OnInit {
               severity: 'error',
             };
             this.notificationService.handleError(msg);
+          } else {
+            this.getManufacturer();
           }
         },
       );
   }
 
-  onSubmit() {
-    const manufacturer = new Manufacturer(
-      this.myForm.value.name,
-      this.myForm.value.country,
-    );
-    this.insertService.insertmanufacturer(manufacturer)
+  getManufacturer() {
+    this.getService.getManufacturer()
       .subscribe(
-        (data) => {
-          this.notificationService.handleError(data.notification);
-          this.getCountrys();
-          this.myForm.reset();
+        (manufacturer: Manufacturer[]) => {
+          this.manufacturers = manufacturer;
         },
-        error => console.error(error),
       );
   }
 
+  onSubmit() {
+    if (this.ManufacturertoEdit.manufacturerID === '') {
+      const manufacturer = new Manufacturer(
+        this.myForm.value.name,
+        this.myForm.value.country,
+      );
+      this.insertService.insertmanufacturer(manufacturer)
+        .subscribe(
+          (data) => {
+            this.notificationService.handleError(data.notification);
+            this.getCountrys();
+            this.myForm.reset();
+          },
+          error => console.error(error),
+        );
+    } else {
+      this.ManufacturertoEdit.name = this.myForm.value.name;
+      this.ManufacturertoEdit.country = this.myForm.value.country;
+      this.insertService.updatemanufacturer(this.ManufacturertoEdit).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.myForm.reset();
+          this.getCountrys();
+          this.ManufacturertoEdit = new Manufacturer('', '', '');
+        },
+        error => console.error(error),
+      );
+    }
+  }
+
+  editManufacturer(manufacturer: Manufacturer) {
+    this.myForm.reset();
+    this.ManufacturertoEdit = manufacturer;
+    this.myForm.setValue({
+      name: manufacturer.name,
+      country: manufacturer.countryObj.countryID,
+    });
+  }
 
   getFlagCode(countryid: string) {
     for (const country of this.countrys) {
@@ -77,7 +112,9 @@ export class InsertManufacturerComponent implements OnInit {
     }
   }
 
+
   resetWholeForm() {
+    this.ManufacturertoEdit = new Manufacturer('', '', '');
     this.myForm.reset();
   }
 }
