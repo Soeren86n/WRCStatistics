@@ -30,7 +30,7 @@
     "flag-icon-css": "^2.8.0",
     "font-awesome": "^4.7.0",
     "hbs": "^4.0.1",
-    "jsonwebtoken": "^7.4.3",
+    "jsonwebtoken": "^8.0.0",
     "mongoose": "^4.11.10",
     "mongoose-unique-validator": "^1.0.5",
     "morgan": "^1.8.2",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@types/core-js": "^0.9.43",
-    "@types/node": "^8.0.26",
+    "@types/node": "^8.0.27",
     "angular-router-loader": "^0.6.0",
     "angular2-template-loader": "^0.6.2",
     "awesome-typescript-loader": "^3.2.3",
@@ -50,11 +50,11 @@
     "del-cli": "^1.1.0",
     "html-loader": "^0.5.1",
     "raw-loader": "^0.5.1",
-    "ts-loader": "^2.3.4",
+    "ts-loader": "^2.3.5",
     "tslint": "^5.7.0",
     "tslint-config-airbnb": "^5.2.1",
     "typescript": "^2.5.2",
-    "webpack": "^3.5.5",
+    "webpack": "^3.5.6",
     "webpack-merge": "^4.1.0"
   }
 }

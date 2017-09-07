@@ -10,6 +10,7 @@ var User = require('../models/user');
 var Manufacturer = require('../models/manufacturer');
 var Driver = require('../models/driver');
 var Codriver = require('../models/codriver');
+var Car = require('../models/car');
 
 router.get('/country', function (req, res, next) {
   Country.find()
@@ -129,6 +130,25 @@ router.get('/codriver', function (req, res, next) {
         res.status(200).json({
           message: 'Success',
           obj: driver
+        });
+      });
+});
+router.get('/car', function (req, res, next) {
+  Car.find()
+      .populate('driver')
+      .populate('codriver')
+      .populate('manufacturer')
+      .exec(function (err, car) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: car
         });
       });
 });

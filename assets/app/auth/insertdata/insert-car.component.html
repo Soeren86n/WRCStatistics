@@ -1,0 +1,81 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space" *ngIf="allDataComplete()">
+    <div class="form-group">
+        <label for="startnumber">Startnumber</label>
+        <input
+                type="number"
+                step="1"
+                min="1"
+                id="startnumber"
+                class="form-control"
+                formControlName="startnumber">
+    </div>
+    <div class="form-group">
+        <label for="driver">Driver</label>
+        <div class="input-group">
+            <p-dropdown [options]="seldriver" formControlName="driver" id="driver" style="width: 100%; height: 42px"
+                        [style]="{'width':'100%', 'height':'100%'}">
+                <ng-template let-driver pTemplate="item">
+                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                        <span class="flag-icon flag-icon-{{getFlagCodebyDriver(driver.value)}}"></span>
+                        <div style="font-size:14px;float:right;margin-top:4px">{{driver.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="codriver">Codriver</label>
+        <div class="input-group">
+            <p-dropdown [options]="selcodriver" formControlName="codriver" id="codriver" style="width: 100%; height: 42px"
+                        [style]="{'width':'100%', 'height':'100%'}">
+                <ng-template let-driver pTemplate="item">
+                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                        <span class="flag-icon flag-icon-{{getFlagCodebyCodriver(driver.value)}}"></span>
+                        <div style="font-size:14px;float:right;margin-top:4px">{{driver.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="manufacturer">Manufacturer</label>
+        <div class="input-group">
+            <p-dropdown [options]="selmanufacturer" formControlName="manufacturer" id="manufacturer" style="width: 100%; height: 42px"
+                        [style]="{'width':'100%', 'height':'100%'}">
+                <ng-template let-manufacturer pTemplate="item">
+                    <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                        <span class="flag-icon flag-icon-{{getFlagCodebyManufacturer(manufacturer.value)}}"></span>
+                        <div style="font-size:14px;float:right;margin-top:4px">{{manufacturer.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+    <button
+            class="btn btn-primary"
+            [disabled]="!myForm.valid">Submit
+    </button>
+    <button class="btn btn-danger" (click)="resetWholeForm()" type="reset">
+        Reset
+    </button>
+</form>
+
+<p-dataList [value]="cars" [paginator]="false">
+    <p-header>
+        List of Cars
+    </p-header>
+    <ul class="list-group">
+        <ng-template let-car pTemplate="item">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>#{{car.startnumber}} {{car.driver}} / {{car.codriver}} </span>
+                {{car.manufacturer}}
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary" (click)="editCar(car)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        <span class="sr-only">Edit Car with Driver {{car.driver}} and Codriver {{car.codriver}}</span>
+                    </button>
+                </div>
+            </li>
+        </ng-template>
+    </ul>
+</p-dataList>

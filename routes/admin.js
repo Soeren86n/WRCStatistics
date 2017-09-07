@@ -10,6 +10,7 @@ var Stage = require('../models/stage');
 var Manufacturer = require('../models/manufacturer');
 var Driver = require('../models/driver');
 var Codriver = require('../models/codriver');
+var Car = require('../models/car');
 
 router.use('/', function (req, res, next) {
   jwt.verify(req.query.token, 'secret', function (err, decoded) {
@@ -740,6 +741,172 @@ router.patch('/updatecodriver/:id', function (req, res, next) {
           notification: {
             summary: 'Codriver Sucessfully updated',
             detail: 'Codriver ' + driver.lastname + ' successfully updated!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
+
+router.post('/insertcar', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Driver.findById(req.body.driver, function (err, driver) {
+      if (!driver) {
+        return res.status(500).json({
+          summary: 'No Driver Found!',
+          detail: 'Driver not found',
+          severity: 'error'
+        });
+      }
+      Codriver.findById(req.body.codriver, function (err, codriver) {
+        if (!codriver) {
+          return res.status(500).json({
+            summary: 'No Codriver Found!',
+            detail: 'Codriver not found',
+            severity: 'error'
+          });
+        }
+        Manufacturer.findById(req.body.manufacturer, function (err, manufacturer) {
+          if (!manufacturer) {
+            return res.status(500).json({
+              summary: 'No Manufacturer Found!',
+              detail: 'Manufacturer not found',
+              severity: 'error'
+            });
+          }
+          var car = new Car({
+            startnumber: req.body.startnumber,
+            driver: driver,
+            codriver: codriver,
+            manufacturer: manufacturer,
+          });
+          car.save(function (err, result) {
+            if (err) {
+              return res.status(500).json({
+                summary: 'An Error occurred',
+                detail: err.message,
+                severity: 'error'
+              });
+            }
+            manufacturer.cars.push(result._id);
+            manufacturer.save();
+            driver.cars.push(result._id);
+            driver.save();
+            codriver.cars.push(result._id);
+            codriver.save();
+
+            res.status(201).json({
+              message: 'Car created',
+              obj: result,
+              notification: {
+                summary: 'Car created',
+                detail: 'Car ' + manufacturer.name + ' with Startnumber ' + result.startnumber + ' successfully created!',
+                severity: 'success'
+              }
+            });
+          })
+        });
+      });
+    });
+  });
+});
+router.patch('/updatecar/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Car.findById(req.params.id, function (err, car) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An error occurred',
+          detail: err,
+          severity: 'error'
+        });
+      }
+      if (!car) {
+        return res.status(500).json({
+          summary: 'No Car Found!',
+          detail: 'Car not found',
+          severity: 'error'
+        });
+      }
+      Driver.findById(car.driver, function (err, driver) {
+        driver.cars.pull(car);
+        driver.save();
+      });
+      Driver.findById(req.body.driver, function (err, driver) {
+        if (!driver) {
+          return res.status(500).json({
+            summary: 'No Driver for Car Found!',
+            detail: 'Car Driver not found',
+            severity: 'error'
+          });
+        }
+        driver.cars.push(car);
+        driver.save();
+      });
+      Codriver.findById(car.codriver, function (err, codriver) {
+        codriver.cars.pull(car);
+        codriver.save();
+      });
+      Codriver.findById(req.body.codriver, function (err, codriver) {
+        if (!codriver) {
+          return res.status(500).json({
+            summary: 'No Codriver for Car Found!',
+            detail: 'Car Coriver not found',
+            severity: 'error'
+          });
+        }
+        codriver.cars.push(car);
+        codriver.save();
+      });
+      Manufacturer.findById(car.manufacturer, function (err, manufacturer) {
+        manufacturer.cars.pull(car);
+        manufacturer.save();
+      });
+      Manufacturer.findById(req.body.manufacturer, function (err, manufacturer) {
+        if (!manufacturer) {
+          return res.status(500).json({
+            summary: 'No Manufacturer for Car Found!',
+            detail: 'Car manufacturer not found',
+            severity: 'error'
+          });
+        }
+        manufacturer.cars.push(car);
+        manufacturer.save();
+      });
+      car.startnumber = req.body.startnumber;
+      car.driver = req.body.driver;
+      car.codriver = req.body.codriver;
+      car.manufacturer = req.body.manufacturer;
+      car.save(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An error occurred',
+            detail: err,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Updated Car',
+          obj: result,
+          notification: {
+            summary: 'Car Sucessfully updated',
+            detail: 'Car successfully updated!',
             severity: 'success'
           }
         });

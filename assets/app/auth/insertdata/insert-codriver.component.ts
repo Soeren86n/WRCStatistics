@@ -43,6 +43,7 @@ export class InsertCodriverComponent implements OnInit {
           for (const country of this.countrys) {
             this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
           }
+          this.myForm.controls['country'].setValue(this.selcountrys[0].value);
           if (this.countrys.length < 1) {
             const msg = {
               summary: 'No Country created',

@@ -8,6 +8,7 @@ import { Stage } from '../../models/stage.model';
 import { Manufacturer } from '../../models/manufacturer.model';
 import { Driver } from '../../models/driver.model';
 import { Codriver } from '../../models/codriver.model';
+import { Car } from '../../models/car.model';
 
 @Injectable()
 export class InsertService {
@@ -206,5 +207,34 @@ export class InsertService {
         return Observable.throw(error.json());
       });
   }
+
+  insertcar(car: Car) {
+    const body = JSON.stringify(car);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertcar/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  updatecar(car: Car) {
+    const body = JSON.stringify(car);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.patch('http://localhost:3000/admin/updatecar/' + car.carID + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
 }
 

@@ -8,6 +8,7 @@ import { Stage } from '../models/stage.model';
 import { Manufacturer } from '../models/manufacturer.model';
 import { Driver } from '../models/driver.model';
 import { Codriver } from '../models/codriver.model';
+import { Car } from '../models/car.model';
 
 @Injectable()
 export class GetdataService {
@@ -187,6 +188,36 @@ export class GetdataService {
           ;
         }
         return DriverObjs;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getCar() {
+    return this.http.get('http://localhost:3000/data/car')
+      .map((response: Response) => {
+        const cars = response.json().obj;
+        const CarsObj: Car[] = [];
+        for (const car of cars) {
+          const driverobj = new Driver(car.driver.firstname, car.driver.lastname, car.driver.country, car.driver._id);
+          const codriverobj = new Codriver(car.codriver.firstname, car.codriver.lastname, car.codriver.country, car.codriver._id);
+          const manufacturerobj = new Manufacturer(car.manufacturer.name, car.manufacturer.country, car.manufacturer._id);
+          CarsObj.push(new Car(
+            car.startnumber,
+            car.driver.firstname + ' ' +  car.driver.lastname,
+            car.codriver.firstname + ' ' +  car.codriver.lastname,
+            car.manufacturer.name,
+            car._id,
+            driverobj,
+            codriverobj,
+            manufacturerobj,
+            ),
+          )
+          ;
+        }
+        return CarsObj;
       })
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

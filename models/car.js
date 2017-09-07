@@ -7,7 +7,7 @@ var schema = new Schema({
   driver: { type: Schema.Types.ObjectId, ref: 'Driver' },
   codriver: { type: Schema.Types.ObjectId, ref: 'Codriver' },
   manufacturer: { type: Schema.Types.ObjectId, ref: 'Manufacturer' },
-  rally: { type: Schema.Types.ObjectId, ref: 'Rally' }
+  rallys:  [{ type: Schema.Types.ObjectId, ref: 'Rally' }]
 });
 
 

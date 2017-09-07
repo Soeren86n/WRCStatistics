@@ -13,6 +13,7 @@ import { InsertStageComponent } from './insertdata/insert-stage.component';
 import { InsertManufacturerComponent } from './insertdata/insert-manufacturer.component';
 import { InsertDriverComponent } from './insertdata/insert-driver.component';
 import { InsertCodriverComponent } from './insertdata/insert-codriver.component';
+import { InsertCarComponent } from './insertdata/insert-car.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { InsertCodriverComponent } from './insertdata/insert-codriver.component'
     InsertManufacturerComponent,
     InsertDriverComponent,
     InsertCodriverComponent,
+    InsertCarComponent,
   ],
   imports: [
     CommonModule,
