@@ -35,6 +35,10 @@ body {
     height: 100%;
 }
 
+.ui-multiselect-panel {
+    width: 100%;
+}
+
 
 @media (min-width: 768px) {
     .mainsidebar {

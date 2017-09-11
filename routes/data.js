@@ -11,6 +11,7 @@ var Manufacturer = require('../models/manufacturer');
 var Driver = require('../models/driver');
 var Codriver = require('../models/codriver');
 var Car = require('../models/car');
+var Rallycar = require('../models/rallycar');
 
 router.get('/country', function (req, res, next) {
   Country.find()
@@ -149,6 +150,27 @@ router.get('/car', function (req, res, next) {
         res.status(200).json({
           message: 'Success',
           obj: car
+        });
+      });
+});
+router.get('/rallycar/:id', function (req, res, next) {
+  Rallycar.find({ rally: req.params.id })
+      .populate('rally')
+      .populate({
+        path: 'car',
+        populate: [{ path: 'driver' }, { path: 'codriver' }, { path: 'manufacturer' }]
+      })
+      .exec(function (err, rallycar) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: rallycar
         });
       });
 });

@@ -170,27 +170,33 @@ export class InsertCarComponent implements OnInit {
 
 
   getFlagCodebyDriver(driverid: string) {
-    for (const driver of this.drivers) {
-      if (driver.driverID === driverid) {
-        return driver.countryObj.shortname.toLowerCase();
-      }
-    }
+    // for (const driver of this.drivers) {
+    //   if (driver.driverID === driverid) {
+    //     return driver.countryObj.shortname.toLowerCase();
+    //   }
+    // }
+    const tmpDriver = this.drivers.filter(driver => driver.driverID === driverid)[0];
+    return tmpDriver.countryObj.shortname.toLowerCase();
   }
 
   getFlagCodebyCodriver(driverid: string) {
-    for (const driver of this.codrivers) {
-      if (driver.codriverID === driverid) {
-        return driver.countryObj.shortname.toLowerCase();
-      }
-    }
+    // for (const driver of this.codrivers) {
+    //   if (driver.codriverID === driverid) {
+    //     return driver.countryObj.shortname.toLowerCase();
+    //   }
+    // }
+    const tmpDriver = this.codrivers.filter(driver => driver.codriverID === driverid)[0];
+    return tmpDriver.countryObj.shortname.toLowerCase();
   }
 
   getFlagCodebyManufacturer(manuid: string) {
-    for (const manufacturer of this.manufacturers) {
-      if (manufacturer.manufacturerID === manuid) {
-        return manufacturer.countryObj.shortname.toLowerCase();
-      }
-    }
+    // for (const manufacturer of this.manufacturers) {
+    //   if (manufacturer.manufacturerID === manuid) {
+    //     return manufacturer.countryObj.shortname.toLowerCase();
+    //   }
+    // }
+    const tmpManu = this.manufacturers.filter(manu => manu.manufacturerID === manuid)[0];
+    return tmpManu.countryObj.shortname.toLowerCase();
   }
 
   allDataComplete() {

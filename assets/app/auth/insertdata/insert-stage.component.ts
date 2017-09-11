@@ -164,11 +164,8 @@ export class InsertStageComponent implements OnInit {
   }
 
   getFlagCode(rallyid: string) {
-    for (const rally of this.rallys) {
-      if (rally.rallyID === rallyid) {
-        return rally.countryObj.shortname.toLowerCase();
-      }
-    }
+    const tmpRally = this.rallys.filter(rally => rally.rallyID === rallyid)[0];
+    return tmpRally.countryObj.shortname.toLowerCase();
   }
 
 

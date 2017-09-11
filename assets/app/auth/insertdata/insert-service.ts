@@ -9,6 +9,8 @@ import { Manufacturer } from '../../models/manufacturer.model';
 import { Driver } from '../../models/driver.model';
 import { Codriver } from '../../models/codriver.model';
 import { Car } from '../../models/car.model';
+import { Rallycar } from '../../models/rallycar.model';
+import { Stagetime } from '../../models/stagetime.model';
 
 @Injectable()
 export class InsertService {
@@ -236,5 +238,32 @@ export class InsertService {
       });
   }
 
+  insertrallycar(car: Rallycar[]) {
+    const body = JSON.stringify(car);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertrallycar/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  insertstagetime(stagetime: Stagetime[]) {
+    const body = JSON.stringify(stagetime);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertstagetime/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
 }
 

@@ -7,13 +7,18 @@ import { SigninComponent } from './signin.component';
 import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
 import { InsertService } from './insertdata/insert-service';
-import { ConfirmDialogModule, DataListModule, DataTableModule, DropdownModule, SharedModule } from 'primeng/primeng';
+import {
+  ConfirmDialogModule, DataListModule, DataTableModule, DropdownModule, MultiSelectModule,
+  SharedModule
+} from 'primeng/primeng';
 import { InsertRallyComponent } from './insertdata/insert-rally.component';
 import { InsertStageComponent } from './insertdata/insert-stage.component';
 import { InsertManufacturerComponent } from './insertdata/insert-manufacturer.component';
 import { InsertDriverComponent } from './insertdata/insert-driver.component';
 import { InsertCodriverComponent } from './insertdata/insert-codriver.component';
 import { InsertCarComponent } from './insertdata/insert-car.component';
+import { InsertStagetimeComponent } from './insertdata/insert-stagetime.component';
+import { InsertRallycarsComponent } from './insertdata/insert-rallycars.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +32,8 @@ import { InsertCarComponent } from './insertdata/insert-car.component';
     InsertDriverComponent,
     InsertCodriverComponent,
     InsertCarComponent,
+    InsertStagetimeComponent,
+    InsertRallycarsComponent,
   ],
   imports: [
     CommonModule,
@@ -38,6 +45,7 @@ import { InsertCarComponent } from './insertdata/insert-car.component';
     DataTableModule,
     ConfirmDialogModule,
     SharedModule,
+    MultiSelectModule,
   ],
   providers: [
     InsertService,

@@ -9,6 +9,7 @@ import { Manufacturer } from '../models/manufacturer.model';
 import { Driver } from '../models/driver.model';
 import { Codriver } from '../models/codriver.model';
 import { Car } from '../models/car.model';
+import { Rallycar } from '../models/rallycar.model';
 
 @Injectable()
 export class GetdataService {
@@ -206,13 +207,57 @@ export class GetdataService {
           const manufacturerobj = new Manufacturer(car.manufacturer.name, car.manufacturer.country, car.manufacturer._id);
           CarsObj.push(new Car(
             car.startnumber,
-            car.driver.firstname + ' ' +  car.driver.lastname,
-            car.codriver.firstname + ' ' +  car.codriver.lastname,
+            car.driver.firstname + ' ' + car.driver.lastname,
+            car.codriver.firstname + ' ' + car.codriver.lastname,
             car.manufacturer.name,
             car._id,
             driverobj,
             codriverobj,
             manufacturerobj,
+            ),
+          )
+          ;
+        }
+        return CarsObj;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getRallyCar(id: string) {
+    return this.http.get('http://localhost:3000/data/rallycar/' + id)
+      .map((response: Response) => {
+        const cars = response.json().obj;
+        const CarsObj: Rallycar[] = [];
+        for (const car of cars) {
+          const driverobj = new Driver(car.car.driver.firstname, car.car.driver.lastname, car.car.driver.country, car.car.driver._id);
+          const codriverobj = new Codriver(
+            car.car.codriver.firstname,
+            car.car.codriver.lastname,
+            car.car.codriver.country,
+            car.car.codriver._id,
+          );
+          const manufacturerobj = new Manufacturer(car.car.manufacturer.name, car.car.manufacturer.country, car.car.manufacturer._id);
+          const carobj = new Car(
+            car.car.startnumber,
+            car.car.driver._id,
+            car.car.codriver._id,
+            car.car.manufacturer._id,
+            car.car._id,
+            driverobj,
+            codriverobj,
+            manufacturerobj,
+          );
+          const rallyobj = new Rally(car.rally.name, car.rally.country, car.rally.startdate, car.rally.enddate, car.rally._id);
+          CarsObj.push(new Rallycar(
+            car.car.startnumber,
+            car.rally.name,
+            car.car._id,
+            car._id,
+            carobj,
+            rallyobj,
             ),
           )
           ;

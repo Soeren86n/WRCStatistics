@@ -1,0 +1,45 @@
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <label for="rally">Rally</label>
+    <div class="input-group">
+        <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
+                    [style]="{'width':'100%', 'height':'100%'}">
+            <ng-template let-rally pTemplate="item">
+                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                    <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" (click)="getRallyCars()">
+            <i class="fa fa-refresh"></i>
+           <span class="sr-only">Refresh</span>
+        </button>
+      </span>
+    </div>
+</div>
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <div class="input-group">
+        <p-multiSelect [options]="selcars" [(ngModel)]="selectedCars" style="width: 100%; height: 42px" [style]="{'width':'100%', 'height':'100%'}">
+        </p-multiSelect>
+    </div>
+</div>
+<button
+        class="btn btn-primary form--space"
+        [disabled]="selectedCars.length < 1" (click)="insertRallyCars()">Submit
+</button>
+
+
+<p-dataList [value]="RallyCars" [paginator]="false">
+    <p-header>
+        List of Cars for Rally
+    </p-header>
+    <ul class="list-group">
+        <ng-template let-rallycar pTemplate="item">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>#{{rallycar.startnumber}} {{rallycar.carObj.driverObj.firstname}} {{rallycar.carObj.driverObj.lastname}} / {{rallycar.carObj.codriverObj.firstname}} {{rallycar.carObj.codriverObj.lastname}}</span>
+                {{rallycar.carObj.manufacturerObj.name}}
+            </li>
+        </ng-template>
+    </ul>
+</p-dataList>
+

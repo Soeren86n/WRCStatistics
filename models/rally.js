@@ -8,7 +8,8 @@ var schema = new Schema({
   country: { type: Schema.Types.ObjectId, ref: 'Country' },
   startdate: { type: String, required: true },
   enddate: { type: String, required: true },
-  stages: [{ type: Schema.Types.ObjectId, ref: 'Stage' }]
+  stages: [{ type: Schema.Types.ObjectId, ref: 'Stage' }],
+  cars: [{ type: Schema.Types.ObjectId, ref: 'Rallycar' }]
 });
 
 schema.post('remove', function (rally) {

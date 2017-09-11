@@ -110,11 +110,13 @@ export class InsertCodriverComponent implements OnInit {
   }
 
   getFlagCode(countryid: string) {
-    for (const country of this.countrys) {
-      if (country.countryID === countryid) {
-        return country.shortname.toLowerCase();
-      }
-    }
+    // for (const country of this.countrys) {
+    //   if (country.countryID === countryid) {
+    //     return country.shortname.toLowerCase();
+    //   }
+    // }
+    const tmpCountry = this.countrys.filter(country => country.countryID === countryid)[0];
+    return tmpCountry.shortname.toLowerCase();
   }
 
   resetWholeForm() {
