@@ -66,13 +66,17 @@ export class InsertRallycarsComponent implements OnInit {
   }
 
   getCars() {
-    this.getService.getCar()
+    const tmpRally = this.rallys.filter(rally => rally.rallyID === this.rallyselected)[0];
+    const tmpstartdate = new Date(tmpRally.startdate);
+    const tmpYear = tmpstartdate.getFullYear();
+    this.getService.getCarYear(tmpYear)
       .subscribe(
         (cars: Car[]) => {
           this.cars = cars;
+          this.selcars = [];
           for (const car of this.cars) {
             this.selcars.push({
-              label: '#' + car.startnumber + ' ' + car.driver + ' / ' + car.codriver + ' -> ' + car.manufacturer,
+              label: '#' + car.startnumber + ' ' + car.driver + ' / ' + car.codriver + ' -> ' + car.manufacturer + ' (' + car.year + ')',
               value: car.carID,
             });
           }
@@ -99,6 +103,11 @@ export class InsertRallycarsComponent implements OnInit {
         },
         error => console.error(error),
       );
+  }
+
+  updateCars() {
+    this.getCars();
+    this.getRallyCars();
   }
 
   getRallyCars() {

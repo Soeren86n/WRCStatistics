@@ -786,6 +786,7 @@ router.post('/insertcar', function (req, res, next) {
           }
           var car = new Car({
             startnumber: req.body.startnumber,
+            year: req.body.year,
             driver: driver,
             codriver: codriver,
             manufacturer: manufacturer,
@@ -866,6 +867,7 @@ router.patch('/updatecar/:id', function (req, res, next) {
         }
       });
       car.startnumber = req.body.startnumber;
+      car.year = req.body.year;
       car.driver = req.body.driver;
       car.codriver = req.body.codriver;
       car.manufacturer = req.body.manufacturer;

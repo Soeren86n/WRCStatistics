@@ -20,7 +20,7 @@ export class InsertCarComponent implements OnInit {
   codrivers: Codriver[] = [];
   manufacturers: Manufacturer[] = [];
   cars: Car[] = [];
-  CartoEdit: Car = new Car(0, '', '', '', '');
+  CartoEdit: Car = new Car(0, 0, '', '', '', '');
   seldriver: SelectItem[] = [];
   selcodriver: SelectItem[] = [];
   selmanufacturer: SelectItem[] = [];
@@ -34,6 +34,7 @@ export class InsertCarComponent implements OnInit {
   ngOnInit() {
     this.myForm = new FormGroup({
       startnumber: new FormControl(null, Validators.required),
+      year: new FormControl(null, Validators.required),
       driver: new FormControl(null, Validators.required),
       codriver: new FormControl(null, Validators.required),
       manufacturer: new FormControl(null, Validators.required),
@@ -127,6 +128,7 @@ export class InsertCarComponent implements OnInit {
     if (this.CartoEdit.carID === '') {
       const car = new Car(
         this.myForm.value.startnumber,
+        this.myForm.value.year,
         this.myForm.value.driver,
         this.myForm.value.codriver,
         this.myForm.value.manufacturer,
@@ -142,6 +144,7 @@ export class InsertCarComponent implements OnInit {
         );
     } else {
       this.CartoEdit.startnumber = this.myForm.value.startnumber;
+      this.CartoEdit.year = this.myForm.value.year;
       this.CartoEdit.driver = this.myForm.value.driver;
       this.CartoEdit.codriver = this.myForm.value.codriver;
       this.CartoEdit.manufacturer = this.myForm.value.manufacturer;
@@ -150,7 +153,7 @@ export class InsertCarComponent implements OnInit {
           this.notificationService.handleError(data.notification);
           this.getDriver();
           this.myForm.reset();
-          this.CartoEdit = new Car(0, '', '', '', '');
+          this.CartoEdit = new Car(0, 0, '', '', '', '');
         },
         error => console.error(error),
       );
@@ -162,6 +165,7 @@ export class InsertCarComponent implements OnInit {
     this.CartoEdit = car;
     this.myForm.setValue({
       startnumber: car.startnumber,
+      year: car.year,
       driver: car.driverObj.driverID,
       codriver: car.codriverObj.codriverID,
       manufacturer: car.manufacturerObj.manufacturerID,

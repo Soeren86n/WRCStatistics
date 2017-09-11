@@ -10,6 +10,16 @@
                 formControlName="startnumber">
     </div>
     <div class="form-group">
+        <label for="year">Year</label>
+        <input
+                type="number"
+                step="1"
+                min="2016"
+                id="year"
+                class="form-control"
+                formControlName="year">
+    </div>
+    <div class="form-group">
         <label for="driver">Driver</label>
         <div class="input-group">
             <p-dropdown [options]="seldriver" formControlName="driver" id="driver" style="width: 100%; height: 42px"
@@ -68,7 +78,8 @@
         <ng-template let-car pTemplate="item">
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span>#{{car.startnumber}} {{car.driver}} / {{car.codriver}} </span>
-                {{car.manufacturer}}
+                <span>{{car.manufacturer}}</span>
+                <span>({{car.year}})</span>
                 <div class="btn-group" role="group">
                     <button class="btn btn-outline-primary" (click)="editCar(car)">
                         <i class="fa fa-pencil" aria-hidden="true"></i>

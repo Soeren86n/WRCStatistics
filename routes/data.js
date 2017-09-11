@@ -153,6 +153,25 @@ router.get('/car', function (req, res, next) {
         });
       });
 });
+router.get('/car/year/:id', function (req, res, next) {
+  Car.find({ year: req.params.id })
+      .populate('driver')
+      .populate('codriver')
+      .populate('manufacturer')
+      .exec(function (err, car) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: car
+        });
+      });
+});
 router.get('/rallycar/:id', function (req, res, next) {
   Rallycar.find({ rally: req.params.id })
       .populate('rally')

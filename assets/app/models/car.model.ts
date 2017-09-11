@@ -4,6 +4,7 @@ import { Manufacturer } from './manufacturer.model';
 
 export class Car {
   constructor(public startnumber: number,
+              public year: number,
               public driver: string,
               public codriver: string,
               public manufacturer: string,

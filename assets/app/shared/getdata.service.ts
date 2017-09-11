@@ -207,6 +207,38 @@ export class GetdataService {
           const manufacturerobj = new Manufacturer(car.manufacturer.name, car.manufacturer.country, car.manufacturer._id);
           CarsObj.push(new Car(
             car.startnumber,
+            car.year,
+            car.driver.firstname + ' ' + car.driver.lastname,
+            car.codriver.firstname + ' ' + car.codriver.lastname,
+            car.manufacturer.name,
+            car._id,
+            driverobj,
+            codriverobj,
+            manufacturerobj,
+            ),
+          )
+          ;
+        }
+        return CarsObj;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getCarYear(year: number) {
+    return this.http.get('http://localhost:3000/data/car/year/' + year)
+      .map((response: Response) => {
+        const cars = response.json().obj;
+        const CarsObj: Car[] = [];
+        for (const car of cars) {
+          const driverobj = new Driver(car.driver.firstname, car.driver.lastname, car.driver.country, car.driver._id);
+          const codriverobj = new Codriver(car.codriver.firstname, car.codriver.lastname, car.codriver.country, car.codriver._id);
+          const manufacturerobj = new Manufacturer(car.manufacturer.name, car.manufacturer.country, car.manufacturer._id);
+          CarsObj.push(new Car(
+            car.startnumber,
+            car.year,
             car.driver.firstname + ' ' + car.driver.lastname,
             car.codriver.firstname + ' ' + car.codriver.lastname,
             car.manufacturer.name,
@@ -242,6 +274,7 @@ export class GetdataService {
           const manufacturerobj = new Manufacturer(car.car.manufacturer.name, car.car.manufacturer.country, car.car.manufacturer._id);
           const carobj = new Car(
             car.car.startnumber,
+            car.car.year,
             car.car.driver._id,
             car.car.codriver._id,
             car.car.manufacturer._id,
