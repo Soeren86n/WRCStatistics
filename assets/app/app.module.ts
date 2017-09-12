@@ -14,6 +14,7 @@ import { ConfirmationService, ConfirmDialogModule, GrowlModule } from 'primeng/p
 import { ErrorComponent } from './shared/error.component';
 import { GetdataService } from './shared/getdata.service';
 import { FormsModule } from '@angular/forms';
+import { RallystatsComponent } from './rallystats/rallystats.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     NavbarComponent,
     SidebarComponent,
     AuthenticationComponent,
+    RallystatsComponent,
     ErrorComponent,
   ],
   imports: [
