@@ -19,6 +19,7 @@ export class InsertStagetimeComponent implements OnInit {
   rallys: Rally[] = [];
   stages: Stage[] = [];
   cars: Rallycar[] = [];
+  Stagetimes: Stagetime[] = [];
   selrallys: SelectItem[] = [];
   selstages: SelectItem[] = [];
   rallyselected = '';
@@ -122,7 +123,6 @@ export class InsertStagetimeComponent implements OnInit {
               stagetimeobj.push(tmpStagetime);
             }
           }
-          console.log(stagetimeobj);
           this.insertService.insertstagetime(stagetimeobj)
             .subscribe(
               (data) => {
@@ -130,6 +130,17 @@ export class InsertStagetimeComponent implements OnInit {
               },
               error => console.error(error),
             );
+        },
+      );
+  }
+
+  getStagetimes() {
+    this.getService.getStagetime(this.stageselected)
+      .subscribe(
+        (stages: Stagetime[]) => {
+          this.Stagetimes = stages;
+          console.log('here');
+          console.log(this.Stagetimes);
         },
       );
   }

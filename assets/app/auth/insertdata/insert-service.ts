@@ -252,6 +252,18 @@ export class InsertService {
       });
   }
 
+  deleteRallycar(car: Rallycar) {
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.delete('http://localhost:3000/admin/deleterallycar/' + car.rallycarID + token)
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
   insertstagetime(stagetime: Stagetime[]) {
     const body = JSON.stringify(stagetime);
     const headers = new Headers({ 'Content-Type': 'application/json' });
@@ -265,5 +277,7 @@ export class InsertService {
         return Observable.throw(error.json());
       });
   }
+
+
 }
 

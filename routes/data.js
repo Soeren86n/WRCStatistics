@@ -12,6 +12,7 @@ var Driver = require('../models/driver');
 var Codriver = require('../models/codriver');
 var Car = require('../models/car');
 var Rallycar = require('../models/rallycar');
+var Stagetime = require('../models/stagetime');
 
 router.get('/country', function (req, res, next) {
   Country.find()
@@ -180,6 +181,10 @@ router.get('/rallycar/:id', function (req, res, next) {
         populate: [{ path: 'driver' }, { path: 'codriver' }, { path: 'manufacturer' }]
       })
       .exec(function (err, rallycar) {
+        Rally.findById(req.params.id, function (err, rally) {
+          rally.cars = rallycar;
+          rally.save();
+        });
         if (err) {
           return res.status(500).json({
             summary: 'An Error occurred',
@@ -190,6 +195,32 @@ router.get('/rallycar/:id', function (req, res, next) {
         res.status(200).json({
           message: 'Success',
           obj: rallycar
+        });
+      });
+});
+router.get('/stagetimes/:id', function (req, res, next) {
+  Stagetime.find({ stage: req.params.id })
+      .populate('rally')
+      .populate('stage')
+      .populate('car')
+      .populate('manufacturer')
+      .populate('driver')
+      .populate('codriver')
+      .exec(function (err, stagetime) {
+        Stage.findById(req.params.id, function (err, stage) {
+          stage.stagetimes = stagetime;
+          stage.save();
+        });
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: stagetime
         });
       });
 });

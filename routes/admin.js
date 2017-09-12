@@ -903,42 +903,43 @@ router.post('/insertrallycar', function (req, res, next) {
         severity: 'error'
       });
     }
-
-    for (var key in req.body) {
-      Rally.findById(req.body[key].rally, function (err, rally) {
-        if (!rally) {
-          return res.status(500).json({
-            summary: 'No Rally Found!',
-            detail: 'Rally not found',
-            severity: 'error'
-          });
-        }
-        Car.findById(req.body[key].carID, function (err, car) {
-          if (!car) {
-            return res.status(500).json({
-              summary: 'No car Found!',
-              detail: 'Car not found',
-              severity: 'error'
-            });
-          }
-
-          var rallycar = new Rallycar({
-            car: car,
-            rally: rally
-          });
-          rallycar.save(function (err, result) {
-            rally.cars.push(result);
-            if (err) {
+    Rally.findById(req.body[0].rally, function (err, rally) {
+      if (!rally) {
+        return res.status(500).json({
+          summary: 'No Rally Found!',
+          detail: 'Rally not found',
+          severity: 'error'
+        });
+      }
+      for (var key in req.body) {
+        (function (carid_now) {
+          Car.findById(carid_now, function (err, car) {
+            if (!car) {
               return res.status(500).json({
-                summary: 'An Error occurred',
-                detail: err.message,
+                summary: 'No car Found!',
+                detail: 'Car not found',
                 severity: 'error'
               });
             }
-          })
-        });
-      });
-    }
+
+            var rallycar = new Rallycar({
+              car: car,
+              rally: rally
+            });
+
+            rallycar.save(function (err, result) {
+              if (err) {
+                return res.status(500).json({
+                  summary: 'An Error occurred',
+                  detail: err.message,
+                  severity: 'error'
+                });
+              }
+            })
+          });
+        })(req.body[key].carID);
+      }
+    });
     res.status(201).json({
       message: 'Rallycars created',
       notification: {
@@ -946,6 +947,52 @@ router.post('/insertrallycar', function (req, res, next) {
         detail: 'Cars successfully created!',
         severity: 'success'
       }
+    });
+  });
+});
+router.delete('/deleterallycar/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Rallycar.findById(req.params.id, function (err, rallycar) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An Error occurred',
+          detail: err.message,
+          severity: 'error'
+        });
+      }
+      if (!rallycar) {
+        return res.status(500).json({
+          summary: 'No Rallycar Found!',
+          detail: 'Rallycar not found',
+          severity: 'error'
+        });
+      }
+      rallycar.remove(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Rallycar deleted',
+          obj: result,
+          notification: {
+            summary: 'Rallycar deleted',
+            detail: 'Rallycar ' + result.startnumber + ' successfully deleted!',
+            severity: 'success'
+          }
+        });
+      });
     });
   });
 });
@@ -960,84 +1007,85 @@ router.post('/insertstagetime', function (req, res, next) {
         severity: 'error'
       });
     }
-    for (var key in req.body) {
-      Rally.findById(req.body[key].rally, function (err, rally) {
-        if (!rally) {
-          return res.status(500).json({
-            summary: 'No Rally Found!',
-            detail: 'Rally not found',
-            severity: 'error'
-          });
-        }
-        Car.findById(req.body[key].car, function (err, car) {
-          if (!car) {
-            return res.status(500).json({
-              summary: 'No car Found!',
-              detail: 'Car not found',
-              severity: 'error'
-            });
-          }
-          Stage.findById(req.body[key].stage, function (err, stage) {
-            if (!stage) {
+
+    Rally.findById(req.body[0].rally, function (err, rally) {
+      if (!rally) {
+        return res.status(500).json({
+          summary: 'No Rally Found!',
+          detail: 'Rally not found',
+          severity: 'error'
+        });
+      }
+      for (var key in req.body) {
+        (function (car_now) {
+          Car.findById(car_now.car, function (err, car) {
+            if (!car) {
               return res.status(500).json({
-                summary: 'No Stage Found!',
-                detail: 'Stage not found',
+                summary: 'No car Found!',
+                detail: 'Car not found',
                 severity: 'error'
               });
             }
-            Manufacturer.findById(req.body[key].manufacturer, function (err, manufacturer) {
-              if (!manufacturer) {
+            Stage.findById(car_now.stage, function (err, stage) {
+              if (!stage) {
                 return res.status(500).json({
                   summary: 'No Stage Found!',
                   detail: 'Stage not found',
                   severity: 'error'
                 });
               }
-              Driver.findById(req.body[key].driver, function (err, driver) {
-                if (!driver) {
+              Manufacturer.findById(car_now.manufacturer, function (err, manufacturer) {
+                if (!manufacturer) {
                   return res.status(500).json({
                     summary: 'No Stage Found!',
                     detail: 'Stage not found',
                     severity: 'error'
                   });
                 }
-                Codriver.findById(req.body[key].codriver, function (err, codriver) {
-                  if (!codriver) {
+                Driver.findById(car_now.driver, function (err, driver) {
+                  if (!driver) {
                     return res.status(500).json({
                       summary: 'No Stage Found!',
                       detail: 'Stage not found',
                       severity: 'error'
                     });
                   }
-
-                  var stagetime = new Stagetime({
-                    stage: stage,
-                    rally: rally,
-                    car: car,
-                    time: req.body[key].time,
-                    position: req.body[key].position,
-                    manufacturer: manufacturer,
-                    driver: driver,
-                    codriver: codriver
-                  });
-                  stagetime.save(function (err, result) {
-                    rally.stagetimes.push(result);
-                    rally.save();
-                    if (err) {
+                  Codriver.findById(car_now.codriver, function (err, codriver) {
+                    if (!codriver) {
                       return res.status(500).json({
-                        summary: 'An Error occurred',
-                        detail: err.message,
+                        summary: 'No Stage Found!',
+                        detail: 'Stage not found',
                         severity: 'error'
                       });
                     }
-                  })
+                    var stagetime = new Stagetime({
+                      stage: stage,
+                      rally: rally,
+                      car: car,
+                      time: car_now.time,
+                      position: car_now.position,
+                      manufacturer: manufacturer,
+                      driver: driver,
+                      codriver: codriver
+                    });
+                    stagetime.save(function (err, result) {
+                      if (err) {
+                        return res.status(500).json({
+                          summary: 'An Error occurred',
+                          detail: err.message,
+                          severity: 'error'
+                        });
+                      }
+                    })
+                  });
                 });
               });
             });
           });
-        });
-      });
-    }
+        })(req.body[key]);
+      }
+    });
+
     res.status(201).json({
       message: 'Stagetime insert',
       notification: {

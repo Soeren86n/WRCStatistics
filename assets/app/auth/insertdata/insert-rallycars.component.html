@@ -38,8 +38,13 @@
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span>#{{rallycar.startnumber}} {{rallycar.carObj.driverObj.firstname}} {{rallycar.carObj.driverObj.lastname}} / {{rallycar.carObj.codriverObj.firstname}} {{rallycar.carObj.codriverObj.lastname}}</span>
                 {{rallycar.carObj.manufacturerObj.name}}
+                <button class="btn btn-outline-danger" (click)="confirmDel(rallycar)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <span class="sr-only">Delete Rallycar Number {{rallycar.startnumber}}</span>
+                </button>
             </li>
         </ng-template>
     </ul>
 </p-dataList>
 
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle"></p-confirmDialog>

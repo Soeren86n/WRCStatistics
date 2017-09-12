@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Rally } from '../../models/rally.model';
 import { Car } from '../../models/car.model';
-import { SelectItem } from 'primeng/primeng';
+import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { InsertService } from './insert-service';
 import { GetdataService } from '../../shared/getdata.service';
 import { NotificationService } from '../../shared/notification.service';
@@ -23,6 +23,7 @@ export class InsertRallycarsComponent implements OnInit {
 
   constructor(private insertService: InsertService,
               private getService: GetdataService,
+              private confirmationService: ConfirmationService,
               private notificationService: NotificationService) {
   }
 
@@ -85,21 +86,21 @@ export class InsertRallycarsComponent implements OnInit {
   }
 
   insertRallyCars() {
+    const tmpRallyCars: Rallycar[] = [];
     for (const selCar of this.selectedCars) {
       const tmpCar = this.cars.filter(car => car.carID === selCar)[0];
       const tmpRallyCar = new Rallycar(
         tmpCar.startnumber,
         this.rallyselected,
         tmpCar.carID);
-      this.RallyCars.push(tmpRallyCar);
+      tmpRallyCars.push(tmpRallyCar);
     }
-
-    this.insertService.insertrallycar(this.RallyCars)
+    this.insertService.insertrallycar(tmpRallyCars)
       .subscribe(
         (data) => {
           this.notificationService.handleError(data.notification);
           this.selectedCars = [];
-          this.RallyCars = [];
+          this.updateCars();
         },
         error => console.error(error),
       );
@@ -116,6 +117,26 @@ export class InsertRallycarsComponent implements OnInit {
         (cars: Rallycar[]) => {
           this.RallyCars = cars;
         },
+      );
+  }
+
+  confirmDel(car: Rallycar) {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete Car ' + car.startnumber + ' ?',
+      accept: () => {
+        this.deleteStage(car);
+      },
+    });
+  }
+
+  deleteStage(car: Rallycar) {
+    this.insertService.deleteRallycar(car)
+      .subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.updateCars();
+        },
+        error => console.error(error),
       );
   }
 
