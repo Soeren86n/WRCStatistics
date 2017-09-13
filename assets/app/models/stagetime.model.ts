@@ -10,7 +10,7 @@ export class Stagetime {
               public rally: string,
               public car: string,
               public time: string,
-              public position: string,
+              public position: number,
               public manufacturer: string,
               public driver: string,
               public codriver: string,

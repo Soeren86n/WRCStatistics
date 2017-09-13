@@ -1,6 +1,6 @@
 import { Country } from '../models/country.model';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Headers, Http, Response } from '@angular/http';
 import { NotificationService } from './notification.service';
 import { Observable } from 'rxjs/Observable';
 import { Rally } from '../models/rally.model';
@@ -11,6 +11,7 @@ import { Codriver } from '../models/codriver.model';
 import { Car } from '../models/car.model';
 import { Rallycar } from '../models/rallycar.model';
 import { Stagetime } from '../models/stagetime.model';
+import { Positionhistory } from '../models/positionhistory.model';
 
 @Injectable()
 export class GetdataService {
@@ -371,6 +372,105 @@ export class GetdataService {
           StagetimesObj.push(stagetimeobj);
         }
         return StagetimesObj;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getOveralltime(id: string) {
+    return this.http.get('http://localhost:3000/data/overalltimes/' + id)
+      .map((response: Response) => {
+        const stagetimes = response.json().obj;
+        const StagetimesObj: Stagetime[] = [];
+        for (const stagetime of stagetimes) {
+          const driverobj = new Driver(
+            stagetime.driver.firstname,
+            stagetime.driver.lastname,
+            stagetime.driver.country,
+            stagetime.driver._id,
+          );
+          const codriverobj = new Codriver(
+            stagetime.codriver.firstname,
+            stagetime.codriver.lastname,
+            stagetime.codriver.country,
+            stagetime.codriver._id,
+          );
+          const manufacturerobj = new Manufacturer(
+            stagetime.manufacturer.name,
+            stagetime.manufacturer.country,
+            stagetime.manufacturer._id,
+          );
+          const carobj = new Car(
+            stagetime.car.startnumber,
+            stagetime.car.year,
+            stagetime.car.driver,
+            stagetime.car.codriver,
+            stagetime.car.manufacturer,
+            stagetime.car._id,
+          );
+          const rallyobj = new Rally(
+            stagetime.rally.name,
+            stagetime.rally.country,
+            stagetime.rally.startdate,
+            stagetime.rally.enddate,
+            stagetime.rally._id,
+          );
+          const stageobj = new Stage(
+            stagetime.stage.name,
+            stagetime.stage.day,
+            stagetime.stage.date,
+            stagetime.stage.cancelled,
+            stagetime.stage.powerstage,
+            stagetime.stage.stagenumber,
+            stagetime.stage.meter,
+            stagetime.stage.rally,
+          );
+          const stagetimeobj = new Stagetime(
+            stageobj.name,
+            rallyobj.name,
+            carobj.startnumber + '',
+            stagetime.time,
+            stagetime.position,
+            manufacturerobj.name,
+            driverobj.lastname,
+            codriverobj.lastname,
+            stagetime._id,
+            stageobj,
+            rallyobj,
+            carobj,
+            manufacturerobj,
+            driverobj,
+            codriverobj,
+          );
+          StagetimesObj.push(stagetimeobj);
+        }
+        return StagetimesObj;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getPositionHistory(rally: string, cars: Rallycar[]) {
+    const body = JSON.stringify(cars);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    return this.http.post('http://localhost:3000/data/positionhistory/' + rally, body, { headers })
+      .map((response: Response) => {
+        const data = response.json().obj;
+        const positionObj: Positionhistory[] = [];
+        for (const dataobj of data) {
+          const tmpPosition: Positionhistory = new Positionhistory(
+            dataobj.driver._id,
+            dataobj.driver.firstname + ' ' + dataobj.driver.lastname,
+            dataobj.stage.stagenumber,
+            dataobj.position,
+          );
+          positionObj.push(tmpPosition);
+        }
+        return positionObj;
       })
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

@@ -12,6 +12,7 @@ import { InsertCodriverComponent } from './insertdata/insert-codriver.component'
 import { InsertCarComponent } from './insertdata/insert-car.component';
 import { InsertStagetimeComponent } from './insertdata/insert-stagetime.component';
 import { InsertRallycarsComponent } from './insertdata/insert-rallycars.component';
+import { InsertOveralltimeComponent } from './insertdata/insert-overalltime.component';
 
 const AUTH_ROUTES: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
@@ -26,6 +27,7 @@ const AUTH_ROUTES: Routes = [
   { path: 'insertcodriver', component: InsertCodriverComponent },
   { path: 'insertcar', component: InsertCarComponent },
   { path: 'insertstagetime', component: InsertStagetimeComponent },
+  { path: 'insertoveralltime', component: InsertOveralltimeComponent },
   { path: 'insertrallycars', component: InsertRallycarsComponent },
 ];
 

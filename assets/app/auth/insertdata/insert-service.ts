@@ -278,6 +278,20 @@ export class InsertService {
       });
   }
 
+  insertoveralltime(stagetime: Stagetime[]) {
+    const body = JSON.stringify(stagetime);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertoveralltime/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
 
 }
 

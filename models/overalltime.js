@@ -13,4 +13,4 @@ var schema = new Schema({
 });
 
 
-module.exports = mongoose.model('Stagetime', schema);
+module.exports = mongoose.model('Overalltime', schema);

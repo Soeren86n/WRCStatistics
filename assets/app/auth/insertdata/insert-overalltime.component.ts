@@ -10,11 +10,11 @@ import { Stagetime } from '../../models/stagetime.model';
 import { Rallycar } from '../../models/rallycar.model';
 
 @Component({
-  selector: 'app-insertStagetime',
-  templateUrl: 'insert-stagetime.component.html',
+  selector: 'app-insertOveralltime',
+  templateUrl: 'insert-overalltime.component.html',
 })
 
-export class InsertStagetimeComponent implements OnInit {
+export class InsertOveralltimeComponent implements OnInit {
   myForm: FormGroup;
   rallys: Rally[] = [];
   stages: Stage[] = [];
@@ -124,7 +124,7 @@ export class InsertStagetimeComponent implements OnInit {
               stagetimeobj.push(tmpStagetime);
             }
           }
-          this.insertService.insertstagetime(stagetimeobj)
+          this.insertService.insertoveralltime(stagetimeobj)
             .subscribe(
               (data) => {
                 this.notificationService.handleError(data.notification);
@@ -136,10 +136,11 @@ export class InsertStagetimeComponent implements OnInit {
   }
 
   getStagetimes() {
-    this.getService.getStagetime(this.stageselected)
+    this.getService.getOveralltime(this.stageselected)
       .subscribe(
         (stages: Stagetime[]) => {
           this.Stagetimes = stages;
+          console.log(this.Stagetimes);
         },
       );
   }

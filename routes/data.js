@@ -13,6 +13,7 @@ var Codriver = require('../models/codriver');
 var Car = require('../models/car');
 var Rallycar = require('../models/rallycar');
 var Stagetime = require('../models/stagetime');
+var Overalltime = require('../models/overalltime');
 
 router.get('/country', function (req, res, next) {
   Country.find()
@@ -211,6 +212,55 @@ router.get('/stagetimes/:id', function (req, res, next) {
           stage.stagetimes = stagetime;
           stage.save();
         });
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: stagetime
+        });
+      });
+});
+
+router.get('/overalltimes/:id', function (req, res, next) {
+  Overalltime.find({ stage: req.params.id })
+      .populate('rally')
+      .populate('stage')
+      .populate('car')
+      .populate('manufacturer')
+      .populate('driver')
+      .populate('codriver')
+      .exec(function (err, stagetime) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: stagetime
+        });
+      });
+});
+
+router.post('/positionhistory/:id', function (req, res, next) {
+  var id = [];
+  for (key in req.body) {
+    id.push(req.body[key].carObj.driver);
+  }
+  Overalltime.find({ rally: req.params.id, driver: { $in: id }})
+      .populate('driver')
+      .populate('stage')
+      .sort({ stage: 1 })
+      .sort({ position: 1 })
+      .select({ position: 1, driver: 1, stage: 1 })
+      .exec(function (err, stagetime) {
         if (err) {
           return res.status(500).json({
             summary: 'An Error occurred',

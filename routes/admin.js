@@ -13,6 +13,7 @@ var Codriver = require('../models/codriver');
 var Car = require('../models/car');
 var Rallycar = require('../models/rallycar');
 var Stagetime = require('../models/stagetime');
+var Overalltime = require('../models/overalltime');
 
 router.use('/', function (req, res, next) {
   jwt.verify(req.query.token, 'secret', function (err, decoded) {
@@ -1091,6 +1092,106 @@ router.post('/insertstagetime', function (req, res, next) {
       notification: {
         summary: 'Stagetime created',
         detail: 'Stagetime successfully created!',
+        severity: 'success'
+      }
+    });
+  });
+});
+
+router.post('/insertoveralltime', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+
+    Rally.findById(req.body[0].rally, function (err, rally) {
+      if (!rally) {
+        return res.status(500).json({
+          summary: 'No Rally Found!',
+          detail: 'Rally not found',
+          severity: 'error'
+        });
+      }
+      for (var key in req.body) {
+        (function (car_now) {
+          Car.findById(car_now.car, function (err, car) {
+            if (!car) {
+              return res.status(500).json({
+                summary: 'No car Found!',
+                detail: 'Car not found',
+                severity: 'error'
+              });
+            }
+            Stage.findById(car_now.stage, function (err, stage) {
+              if (!stage) {
+                return res.status(500).json({
+                  summary: 'No Stage Found!',
+                  detail: 'Stage not found',
+                  severity: 'error'
+                });
+              }
+              Manufacturer.findById(car_now.manufacturer, function (err, manufacturer) {
+                if (!manufacturer) {
+                  return res.status(500).json({
+                    summary: 'No Stage Found!',
+                    detail: 'Stage not found',
+                    severity: 'error'
+                  });
+                }
+                Driver.findById(car_now.driver, function (err, driver) {
+                  if (!driver) {
+                    return res.status(500).json({
+                      summary: 'No Stage Found!',
+                      detail: 'Stage not found',
+                      severity: 'error'
+                    });
+                  }
+                  Codriver.findById(car_now.codriver, function (err, codriver) {
+                    if (!codriver) {
+                      return res.status(500).json({
+                        summary: 'No Stage Found!',
+                        detail: 'Stage not found',
+                        severity: 'error'
+                      });
+                    }
+                    var overalltime = new Overalltime({
+                      stage: stage,
+                      rally: rally,
+                      car: car,
+                      time: car_now.time,
+                      position: car_now.position,
+                      manufacturer: manufacturer,
+                      driver: driver,
+                      codriver: codriver
+                    });
+                    overalltime.save(function (err, result) {
+                      if (err) {
+                        return res.status(500).json({
+                          summary: 'An Error occurred',
+                          detail: err.message,
+                          severity: 'error'
+                        });
+                      }
+                    })
+                  });
+                });
+              });
+            });
+          });
+        })(req.body[key]);
+      }
+    });
+
+    res.status(201).json({
+      message: 'Overalltime insert',
+      notification: {
+        summary: 'Overalltime created',
+        detail: 'Overalltime successfully created!',
         severity: 'success'
       }
     });
