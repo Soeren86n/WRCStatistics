@@ -4,6 +4,7 @@ import { Positionhistory } from '../models/positionhistory.model';
 import { SelectItem } from 'primeng/primeng';
 import { Rally } from '../models/rally.model';
 import { Rallycar } from '../models/rallycar.model';
+import { Rallymeterdifference } from '../models/rallymeterdifference.model';
 
 @Component({
   selector: 'app-currentpositionhistory',
@@ -33,6 +34,11 @@ export class CurrentPositionhistoryComponent implements OnInit {
       },
       legend: {
         position: 'bottom',
+      },
+      elements: {
+        line: {
+          fill: false,
+        },
       },
       scales: {
         yAxes: [{
@@ -81,6 +87,7 @@ export class CurrentPositionhistoryComponent implements OnInit {
         (cars: Rallycar[]) => {
           this.rallycars = cars;
           this.selcars = [];
+          this.selectedCars = [];
           for (const car of this.rallycars) {
             this.selcars.push({
               label: '#' + car.startnumber + ' ' + car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname,
@@ -131,8 +138,7 @@ export class CurrentPositionhistoryComponent implements OnInit {
             const Tempdata = {
               label: tmpDriverlabel,
               data: stage,
-              lineTension: 0.1,
-              fill: false,
+              lineTension: 0.2,
               borderColor: this.getRandomColor(),
             };
             tmpdata.datasets.push(Tempdata);
@@ -140,6 +146,13 @@ export class CurrentPositionhistoryComponent implements OnInit {
           this.data = tmpdata;
         },
       );
+  }
+
+  getotaltimeinSeconds(time: string) {
+    const splittime = time.split(':');
+    let seconds = +splittime[0] * 60;
+    seconds = seconds + +splittime[1];
+    return seconds;
   }
 
   getFlagCode(rallyid: string) {

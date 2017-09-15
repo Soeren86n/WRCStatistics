@@ -259,7 +259,7 @@ router.post('/positionhistory/:id', function (req, res, next) {
       .populate('stage')
       .sort({ stage: 1 })
       .sort({ position: 1 })
-      .select({ position: 1, driver: 1, stage: 1 })
+      .select({ position: 1, driver: 1, stage: 1, time: 1 })
       .exec(function (err, stagetime) {
         if (err) {
           return res.status(500).json({

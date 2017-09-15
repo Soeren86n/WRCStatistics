@@ -12,6 +12,7 @@ import { Car } from '../models/car.model';
 import { Rallycar } from '../models/rallycar.model';
 import { Stagetime } from '../models/stagetime.model';
 import { Positionhistory } from '../models/positionhistory.model';
+import { Rallymeterdifference } from '../models/rallymeterdifference.model';
 
 @Injectable()
 export class GetdataService {
