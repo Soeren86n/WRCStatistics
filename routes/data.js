@@ -14,6 +14,7 @@ var Car = require('../models/car');
 var Rallycar = require('../models/rallycar');
 var Stagetime = require('../models/stagetime');
 var Overalltime = require('../models/overalltime');
+var Rallymeterdifference = require('../models/rallymeterdifference');
 
 router.get('/country', function (req, res, next) {
   Country.find()
@@ -274,4 +275,30 @@ router.post('/positionhistory/:id', function (req, res, next) {
         });
       });
 });
+
+router.post('/rallymeterdifference/:id', function (req, res, next) {
+  var id = [];
+  for (key in req.body) {
+    id.push(req.body[key].carObj.driver);
+  }
+  Rallymeterdifference.find({ rally: req.params.id, driver: { $in: id }})
+      .populate('driver')
+      .populate('stage')
+      .sort({ meterpersecond: -1 })
+      .select({ meterpersecond: 1, driver: 1, stage: 1, time: 1 , position: 1, meter: 1, rally: 1, car: 1})
+      .exec(function (err, stagetime) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: stagetime
+        });
+      });
+});
+
 module.exports = router;

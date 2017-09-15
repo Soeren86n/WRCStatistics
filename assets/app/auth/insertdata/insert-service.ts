@@ -11,6 +11,7 @@ import { Codriver } from '../../models/codriver.model';
 import { Car } from '../../models/car.model';
 import { Rallycar } from '../../models/rallycar.model';
 import { Stagetime } from '../../models/stagetime.model';
+import { Rallymeterdifference } from '../../models/rallymeterdifference.model';
 
 @Injectable()
 export class InsertService {
@@ -271,6 +272,20 @@ export class InsertService {
       ? '?token=' + localStorage.getItem('token')
       : '';
     return this.http.post('http://localhost:3000/admin/insertstagetime/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  insertmeterdifference(rallymeter: Rallymeterdifference[]) {
+    const body = JSON.stringify(rallymeter);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.post('http://localhost:3000/admin/insertmeterdifference/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

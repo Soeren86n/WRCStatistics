@@ -478,4 +478,33 @@ export class GetdataService {
         return Observable.throw(error.json());
       });
   }
+
+  getMeterdifference(rally: string, cars: Rallycar[]) {
+    const body = JSON.stringify(cars);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    return this.http.post('http://localhost:3000/data/rallymeterdifference/' + rally, body, { headers })
+      .map((response: Response) => {
+        const data = response.json().obj;
+        const meterdifferenceObj: Rallymeterdifference[] = [];
+        for (const dataobj of data) {
+          const tmpDiff = new Rallymeterdifference(
+            dataobj.position,
+            dataobj.meter,
+            dataobj.time,
+            dataobj.meterpersecond,
+            dataobj.driver._id,
+            dataobj.stage.stagenumber,
+            dataobj.rally,
+            dataobj.car,
+            dataobj.driver,
+          );
+          meterdifferenceObj.push(tmpDiff);
+        }
+        return meterdifferenceObj;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
 }

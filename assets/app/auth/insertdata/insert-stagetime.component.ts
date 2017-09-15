@@ -8,6 +8,7 @@ import { GetdataService } from '../../shared/getdata.service';
 import { NotificationService } from '../../shared/notification.service';
 import { Stagetime } from '../../models/stagetime.model';
 import { Rallycar } from '../../models/rallycar.model';
+import { Rallymeterdifference } from '../../models/rallymeterdifference.model';
 
 @Component({
   selector: 'app-insertStagetime',
@@ -105,29 +106,55 @@ export class InsertStagetimeComponent implements OnInit {
           const stagetime = this.stagetimesRaw;
           const array = stagetime.split(/\r?\n/);
           const stagetimeobj: Stagetime[] = [];
+          const rallymeterobj: Rallymeterdifference[] = [];
+          const selectedStageObj = this.stages.filter(stage => stage.StageID === this.stageselected)[0];
           for (let i = 0; i < array.length; i = i + 1) {
             const line = array[i].split('\t');
             // Array Position, Drivernumber, Country+Name, Time, Diff  Prev, Diff First
             const tmpCar = this.cars.filter(car => car.startnumber === +line[1])[0];
             if (tmpCar) {
+              // tslint:disable-next-line
+              const position = +line[0].replace('.', '');
+              const time = line[3];
               const tmpStagetime: Stagetime = new Stagetime(
                 this.stageselected,
                 this.rallyselected,
                 tmpCar.carObj.carID,
-                line[3],
+                time,
                 // tslint:disable-next-line
-                +line[0].replace('.',''),
+                position,
                 tmpCar.carObj.manufacturer,
                 tmpCar.carObj.driver,
                 tmpCar.carObj.codriver,
               );
               stagetimeobj.push(tmpStagetime);
+              const meter = selectedStageObj.meter;
+              const totalsecond = this.getotaltimeinSeconds(time);
+              const meterpersecond = meter / totalsecond;
+              const tmprallymeterobj: Rallymeterdifference = new Rallymeterdifference(
+                position,
+                meter,
+                '' + totalsecond,
+                '' + meterpersecond,
+                tmpCar.carObj.driver,
+                selectedStageObj.StageID,
+                this.rallyselected,
+                tmpCar.carID,
+              );
+              rallymeterobj.push(tmprallymeterobj);
             }
           }
           this.insertService.insertstagetime(stagetimeobj)
             .subscribe(
               (data) => {
                 this.notificationService.handleError(data.notification);
+                this.insertService.insertmeterdifference(rallymeterobj)
+                  .subscribe(
+                    (data) => {
+                      this.notificationService.handleError(data.notification);
+                    },
+                    error => console.error(error),
+                  );
               },
               error => console.error(error),
             );
@@ -142,6 +169,13 @@ export class InsertStagetimeComponent implements OnInit {
           this.Stagetimes = stages;
         },
       );
+  }
+
+  getotaltimeinSeconds(time: string) {
+    const splittime = time.split(':');
+    let seconds = +splittime[0] * 60;
+    seconds = seconds + +splittime[1];
+    return seconds;
   }
 
 

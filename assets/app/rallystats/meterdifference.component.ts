@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { GetdataService } from '../shared/getdata.service';
-import { Positionhistory } from '../models/positionhistory.model';
-import { SelectItem } from 'primeng/primeng';
-import { Rally } from '../models/rally.model';
 import { Rallycar } from '../models/rallycar.model';
+import { Rally } from '../models/rally.model';
+import { SelectItem } from 'primeng/primeng';
+import { Rallymeterdifference } from '../models/rallymeterdifference.model';
 
 @Component({
-  selector: 'app-currentpositionhistory',
-  templateUrl: 'current-positionhistory.component.html',
+  selector: 'app-meterdifference',
+  templateUrl: 'meterdifference.component.html',
 })
 
-export class CurrentPositionhistoryComponent implements OnInit {
+export class MeterdifferenceComponent implements OnInit {
   data: any;
   options: any;
-  positions: Positionhistory[];
   rallys: Rally[] = [];
   selrallys: SelectItem[] = [];
   selcars: SelectItem[] = [];
@@ -21,11 +20,23 @@ export class CurrentPositionhistoryComponent implements OnInit {
   rallycars: Rallycar[] = [];
   selectedCars: string[] = [];
 
-
   constructor(private getService: GetdataService) {
     this.data = {
-      labels: [],
-      datasets: [],
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label: 'My First dataset',
+          backgroundColor: '#42A5F5',
+          borderColor: '#1E88E5',
+          data: [65, 59, 80, 81, 56, 55, 40],
+        },
+        {
+          label: 'My Second dataset',
+          backgroundColor: '#9CCC65',
+          borderColor: '#7CB342',
+          data: [28, 48, 40, 19, 86, 27, 90],
+        },
+      ],
     };
     this.options = {
       title: {
@@ -40,11 +51,10 @@ export class CurrentPositionhistoryComponent implements OnInit {
         },
       },
       scales: {
-        yAxes: [{
+        xAxes: [{
           ticks: {
-            beginAtZero: false,
+            beginAtZero: true,
             reverse: true,
-            stepSize: 1,
           },
         }],
       },
@@ -97,7 +107,6 @@ export class CurrentPositionhistoryComponent implements OnInit {
       );
   }
 
-
   getGraphdata() {
     const tmpdata = {
       labels: [],
@@ -112,14 +121,17 @@ export class CurrentPositionhistoryComponent implements OnInit {
         tmpCar.carID, tmpCar.rallycarID, tmpCar.carObj, tmpCar.rallyObj);
       tmpRallyCars.push(tmpRallyCar);
     }
-    this.getService.getPositionHistory(this.rallyselected, tmpRallyCars)
+    this.getService.getMeterdifference(this.rallyselected, tmpRallyCars)
       .subscribe(
-        (positions: Positionhistory[]) => {
-          this.positions = positions;
+        (resultobj: Rallymeterdifference[]) => {
           const tmpStage = [];
           tmpdata.labels = [];
-          for (const position of this.positions) {
+          const fastesttime = [];
+          for (const position of resultobj) {
             tmpStage[+position.stage - 1] = position.stage;
+            if (!fastesttime[+position.stage] || position.time < fastesttime[+position.stage]) {
+              fastesttime[+position.stage] = position.time;
+            }
           }
           for (const stage of tmpStage) {
             if (stage) {
@@ -128,22 +140,25 @@ export class CurrentPositionhistoryComponent implements OnInit {
           }
           for (const car of tmpRallyCars) {
             const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
-            const stage = [];
-            for (const position of this.positions) {
+            const meter = [];
+            for (const position of resultobj) {
               if (position.driver === car.carObj.driver) {
-                stage[+position.stage - 1] = position.position;
+                const reach = +position.meterpersecond * fastesttime[position.stage];
+                const distance = +position.meter - reach;
+                meter[+position.stage - 1] = distance.toFixed(2);
               }
             }
-            console.log(stage);
+            const colorfield = this.getRandomColor();
             const Tempdata = {
               label: tmpDriverlabel,
-              data: stage,
-              lineTension: 0.2,
-              borderColor: this.getRandomColor(),
+              data: meter,
+              backgroundColor: colorfield,
+              borderColor: colorfield,
             };
             tmpdata.datasets.push(Tempdata);
           }
           this.data = tmpdata;
+          console.log(this.data);
         },
       );
   }
@@ -161,5 +176,4 @@ export class CurrentPositionhistoryComponent implements OnInit {
     }
     return color;
   }
-
 }
