@@ -34,7 +34,7 @@
     "mongoose": "^4.11.11",
     "mongoose-unique-validator": "^1.0.6",
     "morgan": "^1.8.2",
-    "primeng": "^4.2.0",
+    "primeng": "^4.2.1",
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.3",
     "serve-favicon": "^2.4.4",
@@ -54,7 +54,7 @@
     "tslint": "^5.7.0",
     "tslint-config-airbnb": "^5.3.0",
     "typescript": "^2.5.2",
-    "webpack": "^3.5.6",
+    "webpack": "^3.6.0",
     "webpack-merge": "^4.1.0"
   }
 }
