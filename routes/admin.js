@@ -272,6 +272,59 @@ router.delete('/deleterally/:id', function (req, res, next) {
   });
 });
 
+router.post('/insertcompleterallystage', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+
+    Rally.findById(req.body[0].rally, function (err, rally) {
+      if (!rally) {
+        return res.status(500).json({
+          summary: 'No Rally Found!',
+          detail: 'Rally not found',
+          severity: 'error'
+        });
+      }
+      for (var key in req.body) {
+        (function (data_now) {
+          var stage = new Stage({
+            name: data_now.name,
+            day: data_now.day,
+            date: data_now.date,
+            cancelled: data_now.cancelled,
+            stagenumber: data_now.stagenumber,
+            meter: data_now.meter,
+            rally: rally
+          });
+          stage.save(function (err, result) {
+            if (err) {
+              return res.status(500).json({
+                summary: 'An Error occurred',
+                detail: err.message,
+                severity: 'error'
+              });
+            }
+          })
+        })(req.body[key]);
+      }
+    });
+
+    res.status(201).json({
+      message: 'Stages insert',
+      notification: {
+        summary: 'Stages created',
+        detail: 'Stages successfully created!',
+        severity: 'success'
+      }
+    });
+  });
+});
 router.post('/insertstage', function (req, res, next) {
   var decoded = jwt.decode(req.query.token);
   User.findById(decoded.user._id, function (err, user) {

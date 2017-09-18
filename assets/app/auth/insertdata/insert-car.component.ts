@@ -32,9 +32,11 @@ export class InsertCarComponent implements OnInit {
   }
 
   ngOnInit() {
+    const today = new Date();
+    const year = today.getFullYear();
     this.myForm = new FormGroup({
       startnumber: new FormControl(null, Validators.required),
-      year: new FormControl(null, Validators.required),
+      year: new FormControl(year, Validators.required),
       driver: new FormControl(null, Validators.required),
       codriver: new FormControl(null, Validators.required),
       manufacturer: new FormControl(null, Validators.required),

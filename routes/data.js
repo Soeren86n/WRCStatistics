@@ -70,6 +70,7 @@ router.get('/stage', function (req, res, next) {
 router.get('/rally/stage/:id', function (req, res, next) {
   Stage.find({ rally: req.params.id })
       .populate('rally')
+      .sort({ stagenumber: 1 })
       .exec(function (err, stage) {
         if (err) {
           return res.status(500).json({

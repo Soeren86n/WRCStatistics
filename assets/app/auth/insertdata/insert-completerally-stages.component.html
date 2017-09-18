@@ -1,0 +1,20 @@
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <label for="rally">Rally</label>
+    <div class="input-group" >
+        <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
+                    [style]="{'width':'100%', 'height':'100%'}">
+            <ng-template let-rally pTemplate="item">
+                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                    <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+</div>
+<div class="form-group">
+    <label for="AllTimes">Insert Stages</label>
+    <textarea class="form-control" id="AllTimes" rows="20" [(ngModel)]="stagesRaw"></textarea>
+</div>
+<button class="btn" (click)="generateObjs()">
+    Generate Stages
+</button>

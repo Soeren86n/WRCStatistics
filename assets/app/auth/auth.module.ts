@@ -20,6 +20,7 @@ import { InsertCarComponent } from './insertdata/insert-car.component';
 import { InsertStagetimeComponent } from './insertdata/insert-stagetime.component';
 import { InsertRallycarsComponent } from './insertdata/insert-rallycars.component';
 import { InsertOveralltimeComponent } from './insertdata/insert-overalltime.component';
+import { InsertCompleterallyStagesComponent } from './insertdata/insert-completerally-stages.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { InsertOveralltimeComponent } from './insertdata/insert-overalltime.comp
     InsertStagetimeComponent,
     InsertRallycarsComponent,
     InsertOveralltimeComponent,
+    InsertCompleterallyStagesComponent,
   ],
   imports: [
     CommonModule,

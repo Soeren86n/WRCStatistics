@@ -121,12 +121,14 @@ export class InsertStagetimeComponent implements OnInit {
                 this.rallyselected,
                 tmpCar.carObj.carID,
                 time,
-                // tslint:disable-next-line
                 position,
                 tmpCar.carObj.manufacturer,
                 tmpCar.carObj.driver,
                 tmpCar.carObj.codriver,
               );
+              if (selectedStageObj.cancelled) {
+                tmpStagetime.time = '0';
+              }
               stagetimeobj.push(tmpStagetime);
               const meter = selectedStageObj.meter;
               const totalsecond = this.getotaltimeinSeconds(time);

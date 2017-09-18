@@ -134,7 +134,6 @@ export class CurrentPositionhistoryComponent implements OnInit {
                 stage[+position.stage - 1] = position.position;
               }
             }
-            console.log(stage);
             const Tempdata = {
               label: tmpDriverlabel,
               data: stage,
