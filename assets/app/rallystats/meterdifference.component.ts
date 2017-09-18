@@ -116,7 +116,7 @@ export class MeterdifferenceComponent implements OnInit {
           const fastesttime = [];
           for (const position of resultobj) {
             tmpStage[+position.stage - 1] = position.stage;
-            if (!fastesttime[+position.stage] || position.time < fastesttime[+position.stage]) {
+            if (!fastesttime[+position.stage] || +position.time < +fastesttime[+position.stage]) {
               fastesttime[+position.stage] = position.time;
             }
           }
@@ -145,7 +145,6 @@ export class MeterdifferenceComponent implements OnInit {
             tmpdata.datasets.push(Tempdata);
           }
           this.data = tmpdata;
-          console.log(this.data);
         },
       );
   }
