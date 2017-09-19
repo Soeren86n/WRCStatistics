@@ -301,5 +301,27 @@ router.post('/rallymeterdifference/:id', function (req, res, next) {
         });
       });
 });
+router.get('/stagewins', function (req, res, next) {
+  Stagetime.find({ 'position': 1 })
+      .populate('rally')
+      .populate('stage')
+      .populate('car')
+      .populate('manufacturer')
+      .populate('driver')
+      .populate('codriver')
+      .exec(function (err, stage) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Successs',
+          obj: stage
+        });
+      });
+});
 
 module.exports = router;

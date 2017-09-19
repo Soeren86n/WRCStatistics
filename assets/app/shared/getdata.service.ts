@@ -507,4 +507,79 @@ export class GetdataService {
         return Observable.throw(error.json());
       });
   }
+
+  getStagewins() {
+    return this.http.get('http://localhost:3000/data/stagewins/')
+      .map((response: Response) => {
+        const stagetimes = response.json().obj;
+        const StagetimesObj: Stagetime[] = [];
+        for (const stagetime of stagetimes) {
+          const driverobj = new Driver(
+            stagetime.driver.firstname,
+            stagetime.driver.lastname,
+            stagetime.driver.country,
+            stagetime.driver._id,
+          );
+          const codriverobj = new Codriver(
+            stagetime.codriver.firstname,
+            stagetime.codriver.lastname,
+            stagetime.codriver.country,
+            stagetime.codriver._id,
+          );
+          const manufacturerobj = new Manufacturer(
+            stagetime.manufacturer.name,
+            stagetime.manufacturer.country,
+            stagetime.manufacturer._id,
+          );
+          const carobj = new Car(
+            stagetime.car.startnumber,
+            stagetime.car.year,
+            stagetime.car.driver,
+            stagetime.car.codriver,
+            stagetime.car.manufacturer,
+            stagetime.car._id,
+          );
+          const rallyobj = new Rally(
+            stagetime.rally.name,
+            stagetime.rally.country,
+            stagetime.rally.startdate,
+            stagetime.rally.enddate,
+            stagetime.rally._id,
+          );
+          const stageobj = new Stage(
+            stagetime.stage.name,
+            stagetime.stage.day,
+            stagetime.stage.date,
+            stagetime.stage.cancelled,
+            stagetime.stage.powerstage,
+            stagetime.stage.stagenumber,
+            stagetime.stage.meter,
+            stagetime.stage.rally,
+          );
+          const stagetimeobj = new Stagetime(
+            stageobj.name,
+            rallyobj.name,
+            carobj.startnumber + '',
+            stagetime.time,
+            stagetime.position,
+            manufacturerobj.name,
+            driverobj.lastname,
+            codriverobj.lastname,
+            stagetime._id,
+            stageobj,
+            rallyobj,
+            carobj,
+            manufacturerobj,
+            driverobj,
+            codriverobj,
+          );
+          StagetimesObj.push(stagetimeobj);
+        }
+        return StagetimesObj;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
 }
