@@ -1,4 +1,18 @@
 <h1>Stagewins</h1>
-<p-chart type="pie" [data]="driverdata"></p-chart>
-<p-chart type="pie" [data]="codriverdata"></p-chart>
-<p-chart type="pie" [data]="manufacturerdata"></p-chart>
+<p-selectButton [options]="pietype" [(ngModel)]="selectedPie" (click)="setPieData()"></p-selectButton>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p-chart type="pie" [data]="driverdata"></p-chart>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p-chart type="pie" [data]="codriverdata"></p-chart>
+        </div>
+        <div class="col">
+            <p-chart type="pie" [data]="manufacturerdata"></p-chart>
+        </div>
+    </div>
+
+</div>
