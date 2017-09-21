@@ -4,6 +4,7 @@ import { Positionhistory } from '../models/positionhistory.model';
 import { SelectItem } from 'primeng/primeng';
 import { Rally } from '../models/rally.model';
 import { Rallycar } from '../models/rallycar.model';
+import { allcolors, Colorcode } from '../models/color.model';
 
 @Component({
   selector: 'app-currentpositionhistory',
@@ -20,7 +21,8 @@ export class CurrentPositionhistoryComponent implements OnInit {
   rallyselected = '';
   rallycars: Rallycar[] = [];
   selectedCars: string[] = [];
-
+  colors: Colorcode[] = [];
+  allorigcolors: Colorcode[] = [];
 
   constructor(private getService: GetdataService) {
     this.data = {
@@ -53,6 +55,10 @@ export class CurrentPositionhistoryComponent implements OnInit {
 
   ngOnInit() {
     this.getRallys();
+    for (const color of allcolors) {
+      this.allorigcolors.push(color);
+      this.colors.push(color);
+    }
   }
 
   getRallys() {
@@ -99,6 +105,10 @@ export class CurrentPositionhistoryComponent implements OnInit {
 
 
   getGraphdata() {
+    this.colors = [];
+    for (const color of this.allorigcolors) {
+      this.colors.push(color);
+    }
     const tmpdata = {
       labels: [],
       datasets: [],
@@ -153,12 +163,20 @@ export class CurrentPositionhistoryComponent implements OnInit {
   }
 
   getRandomColor() {
-    const letters = '0123456789ABCDEF'.split('');
-    let color = '#';
-    for (let i = 0; i < 6; i = i + 1) {
-      color += letters[Math.floor(Math.random() * 16)];
+    if (this.colors.length < 2) {
+      this.colors = [];
+      for (const color of this.allorigcolors) {
+        this.colors.push(color);
+      }
     }
-    return color;
+
+    let random = Math.floor(Math.random() * 36);
+    while (!this.colors[random]) {
+      random = Math.floor(Math.random() * 36);
+    }
+    const colorhex = this.colors[random].hexcode;
+    this.colors.splice(random, 1);
+    return colorhex;
   }
 
 }
