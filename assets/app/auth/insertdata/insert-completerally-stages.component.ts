@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Rally } from '../../models/rally.model';
 import { Stage } from '../../models/stage.model';
 import { SelectItem } from 'primeng/primeng';
 import { InsertService } from './insert-service';
 import { GetdataService } from '../../shared/getdata.service';
 import { NotificationService } from '../../shared/notification.service';
-import { Stagetime } from '../../models/stagetime.model';
-import { Rallycar } from '../../models/rallycar.model';
-import { Rallymeterdifference } from '../../models/rallymeterdifference.model';
 
 @Component({
   selector: 'app-insert-completeRallyStages',

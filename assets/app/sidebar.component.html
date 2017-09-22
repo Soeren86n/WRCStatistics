@@ -19,6 +19,9 @@
     <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
         <a class="nav-link" routerLinkActive="active"  [routerLink]="['stats/stagewins']">Stagewins</a>
     </li>
+    <li class="nav-item" [ngClass]="{'d-none d-md-block': navMobileCollapse}">
+        <a class="nav-link" routerLinkActive="active"  [routerLink]="['stats/rallywins']">Rallywins</a>
+    </li>
 </ul>
 <ul class="nav flex-column mainsidebar bg-dark" *ngIf="authService.isLoggedIn()">
     <li class="nav-item"[ngClass]="{'d-none d-md-block': navMobileCollapse}">

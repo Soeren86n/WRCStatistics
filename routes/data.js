@@ -143,6 +143,8 @@ router.get('/car', function (req, res, next) {
       .populate('driver')
       .populate('codriver')
       .populate('manufacturer')
+      .sort({ year: 1 })
+      .sort({ startnumber: 1 })
       .exec(function (err, car) {
         if (err) {
           return res.status(500).json({
@@ -162,6 +164,7 @@ router.get('/car/year/:id', function (req, res, next) {
       .populate('driver')
       .populate('codriver')
       .populate('manufacturer')
+      .sort({ startnumber: 1 })
       .exec(function (err, car) {
         if (err) {
           return res.status(500).json({
@@ -256,7 +259,7 @@ router.post('/positionhistory/:id', function (req, res, next) {
   for (key in req.body) {
     id.push(req.body[key].carObj.driver);
   }
-  Overalltime.find({ rally: req.params.id, driver: { $in: id }})
+  Overalltime.find({ rally: req.params.id, driver: { $in: id } })
       .populate('driver')
       .populate('stage')
       .sort({ stage: 1 })
@@ -282,11 +285,11 @@ router.post('/rallymeterdifference/:id', function (req, res, next) {
   for (key in req.body) {
     id.push(req.body[key].carObj.driver);
   }
-  Rallymeterdifference.find({ rally: req.params.id, driver: { $in: id }})
+  Rallymeterdifference.find({ rally: req.params.id, driver: { $in: id } })
       .populate('driver')
       .populate('stage')
       .sort({ meterpersecond: -1 })
-      .select({ meterpersecond: 1, driver: 1, stage: 1, time: 1 , position: 1, meter: 1, rally: 1, car: 1})
+      .select({ meterpersecond: 1, driver: 1, stage: 1, time: 1, position: 1, meter: 1, rally: 1, car: 1 })
       .exec(function (err, stagetime) {
         if (err) {
           return res.status(500).json({
@@ -318,7 +321,38 @@ router.get('/stagewins', function (req, res, next) {
           });
         }
         res.status(200).json({
-          message: 'Successs',
+          message: 'Success',
+          obj: stage
+        });
+      });
+});
+
+router.get('/rallywins', function (req, res, next) {
+  Overalltime.find({ 'position': 1 })
+      .populate({
+        path: 'stage',
+        match: {
+          powerstage: true
+        }
+      })
+      .populate('rally')
+      .populate('car')
+      .populate('manufacturer')
+      .populate('driver')
+      .populate('codriver')
+      .exec(function (err, stage) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        stage = stage.filter(function(stage) {
+          return stage.stage;
+        });
+        res.status(200).json({
+          message: 'Success',
           obj: stage
         });
       });

@@ -6,6 +6,7 @@ import { ChartModule, DropdownModule, MultiSelectModule, SelectButtonModule, Sha
 import { CurrentPositionhistoryComponent } from './current-positionhistory.component';
 import { MeterdifferenceComponent } from './meterdifference.component';
 import { StagewinsComponent } from './stagewins.component';
+import { RallywinsComponent } from './rallywins.component';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { StagewinsComponent } from './stagewins.component';
     CurrentPositionhistoryComponent,
     MeterdifferenceComponent,
     StagewinsComponent,
+    RallywinsComponent,
   ],
   imports: [
     CommonModule,
