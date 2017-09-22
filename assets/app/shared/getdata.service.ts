@@ -487,6 +487,17 @@ export class GetdataService {
         const data = response.json().obj;
         const meterdifferenceObj: Rallymeterdifference[] = [];
         for (const dataobj of data) {
+          const stageobj = new Stage(
+            dataobj.stage.name,
+            dataobj.stage.day,
+            dataobj.stage.date,
+            dataobj.stage.cancelled,
+            dataobj.stage.powerstage,
+            dataobj.stage.stagenumber,
+            dataobj.stage.meter,
+            dataobj.stage.rally,
+            dataobj.stage._id,
+          );
           const tmpDiff = new Rallymeterdifference(
             dataobj.position,
             dataobj.meter,
@@ -497,6 +508,7 @@ export class GetdataService {
             dataobj.rally,
             dataobj.car,
             dataobj.driver,
+            stageobj,
           );
           meterdifferenceObj.push(tmpDiff);
         }

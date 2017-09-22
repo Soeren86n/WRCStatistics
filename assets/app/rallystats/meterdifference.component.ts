@@ -5,6 +5,7 @@ import { Rally } from '../models/rally.model';
 import { SelectItem } from 'primeng/primeng';
 import { Rallymeterdifference } from '../models/rallymeterdifference.model';
 import { allcolors, Colorcode } from '../models/color.model';
+import { Stage } from '../models/stage.model';
 
 @Component({
   selector: 'app-meterdifference',
@@ -15,9 +16,12 @@ export class MeterdifferenceComponent implements OnInit {
   data: any;
   options: any;
   rallys: Rally[] = [];
+  stages: Stage[] = [];
   selrallys: SelectItem[] = [];
   selcars: SelectItem[] = [];
+  selstages: SelectItem[] = [];
   rallyselected = '';
+  selectedStages: string[] = [];
   rallycars: Rallycar[] = [];
   selectedCars: string[] = [];
   colors: Colorcode[] = [];
@@ -97,6 +101,24 @@ export class MeterdifferenceComponent implements OnInit {
               value: car.carID,
             });
           }
+          this.getStages();
+        },
+      );
+  }
+
+  getStages() {
+    this.getService.getRallyStages(this.rallyselected)
+      .subscribe(
+        (stages: Stage[]) => {
+          this.selectedStages = [];
+          this.stages = stages;
+          this.selstages = [];
+          for (const stage of this.stages) {
+            this.selstages.push({
+              label: '#' + stage.stagenumber + ' ' + stage.name + ' - ' + stage.meter / 1000 + ' km',
+              value: stage.StageID,
+            });
+          }
         },
       );
   }
@@ -126,9 +148,11 @@ export class MeterdifferenceComponent implements OnInit {
           tmpdata.labels = [];
           const fastesttime = [];
           for (const position of resultobj) {
-            tmpStage[+position.stage - 1] = position.stage;
-            if (!fastesttime[+position.stage] || +position.time < +fastesttime[+position.stage]) {
-              fastesttime[+position.stage] = position.time;
+            if (this.selectedStages.indexOf(position.stageObj.StageID) > -1) {
+              tmpStage[+position.stage - 1] = position.stage;
+              if (!fastesttime[+position.stage] || +position.time < +fastesttime[+position.stage]) {
+                fastesttime[+position.stage] = position.time;
+              }
             }
           }
           for (const stage of tmpStage) {
@@ -140,12 +164,16 @@ export class MeterdifferenceComponent implements OnInit {
             const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
             const meter = [];
             for (const position of resultobj) {
-              if (position.driver === car.carObj.driver) {
+              if (position.driver === car.carObj.driver && this.selectedStages.indexOf(position.stageObj.StageID) > -1) {
                 const reach = +position.meterpersecond * fastesttime[position.stage];
                 const distance = +position.meter - reach;
-                meter[+position.stage - 1] = distance.toFixed(2);
+                meter.push({ y: position.stage, x: distance.toFixed(2) });
               }
             }
+            // tslint:disable-next-line
+            meter.sort(function (a, b) {
+              return (a.y > b.y) ? 1 : ((b.y > a.y) ? -1 : 0);
+            });
             const colorfield = this.getRandomColor();
             const Tempdata = {
               label: tmpDriverlabel,
