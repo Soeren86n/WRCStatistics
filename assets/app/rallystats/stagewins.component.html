@@ -7,7 +7,7 @@
                 <label for="rally">Rally</label>
                 <div class="input-group">
                     <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally"
-                               >
+                    >
                         <ng-template let-rally pTemplate="item">
                             <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
                                 <span class="flag-icon flag-icon-{{getFlagCode(rally.value)}}"></span>
@@ -23,11 +23,11 @@
                       </span>
                 </div>
             </div>
-            <div class="form-group" *ngIf="selectedPie === 'all'">
+            <div class="form-group" *ngIf="selectedPie === 'all' || selectedPie === 'power'">
                 <label for="year">Year</label>
                 <div class="input-group">
                     <p-dropdown [options]="selyears" [(ngModel)]="yearselected" id="year"
-                               >
+                    >
                         <ng-template let-rally pTemplate="item">
                             <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
                                 <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
@@ -35,7 +35,12 @@
                         </ng-template>
                     </p-dropdown>
                     <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" (click)="setPieDataforYear()">
+        <button class="btn btn-secondary" type="button" (click)="setPieDataforYear()" *ngIf="selectedPie === 'all'">
+            <i class="fa fa-refresh"></i>
+           <span class="sr-only">Refresh</span>
+        </button>
+        <button class="btn btn-secondary" type="button" (click)="setPowerPieDataforYear()"
+                *ngIf="selectedPie === 'power'">
             <i class="fa fa-refresh"></i>
            <span class="sr-only">Refresh</span>
         </button>

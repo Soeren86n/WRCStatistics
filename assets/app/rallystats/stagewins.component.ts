@@ -158,6 +158,83 @@ export class StagewinsComponent implements OnInit {
     }
   }
 
+  setPowerPieDataforYear() {
+    this.colors = [];
+    for (const color of this.allorigcolors) {
+      this.colors.push(color);
+    }
+    if (this.yearselected === 0) {
+      this.setPieDataforPower();
+    } else {
+      this.psdriver = [];
+      this.pscodriver = [];
+      this.psmanufacturer = [];
+      for (const time of this.Stagetimes) {
+        const tmpdate = new Date(time.rallyObj.startdate);
+        const tmpYear = tmpdate.getFullYear();
+        if (!time.stageObj.cancelled && tmpYear === this.yearselected && time.stageObj.powerstage) {
+          if (!this.psdriver[time.carObj.driver]) {
+            this.psdriver[time.carObj.driver] = 1;
+          } else {
+            this.psdriver[time.carObj.driver] = this.psdriver[time.carObj.driver] + 1;
+          }
+          if (!this.pscodriver[time.carObj.codriver]) {
+            this.pscodriver[time.carObj.codriver] = 1;
+          } else {
+            this.pscodriver[time.carObj.codriver] = this.pscodriver[time.carObj.codriver] + 1;
+          }
+          if (!this.psmanufacturer[time.carObj.manufacturer]) {
+            this.psmanufacturer[time.carObj.manufacturer] = 1;
+          } else {
+            this.psmanufacturer[time.carObj.manufacturer] = this.psmanufacturer[time.carObj.manufacturer] + 1;
+          }
+        }
+      }
+      const tmpdriverdata = {
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: [],
+        }],
+      };
+      const tmpcodriverdata = {
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: [],
+        }],
+      };
+      const tmpmanufacturerdata = {
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: [],
+        }],
+      };
+      for (const key in this.psdriver) {
+        const tmptime = this.Stagetimes.filter(time => time.carObj.driver === key)[0];
+        tmpdriverdata.labels.push(tmptime.driverObj.firstname + ' ' + tmptime.driverObj.lastname);
+        tmpdriverdata.datasets[0].data.push(this.psdriver[key]);
+        tmpdriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
+      }
+      this.driverdata = tmpdriverdata;
+      for (const key in this.pscodriver) {
+        const tmptime = this.Stagetimes.filter(time => time.carObj.codriver === key)[0];
+        tmpcodriverdata.labels.push(tmptime.codriverObj.firstname + ' ' + tmptime.codriverObj.lastname);
+        tmpcodriverdata.datasets[0].data.push(this.pscodriver[key]);
+        tmpcodriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
+      }
+      this.codriverdata = tmpcodriverdata;
+      for (const key in this.psmanufacturer) {
+        const tmptime = this.Stagetimes.filter(time => time.carObj.manufacturer === key)[0];
+        tmpmanufacturerdata.labels.push(tmptime.manufacturerObj.name);
+        tmpmanufacturerdata.datasets[0].data.push(this.psmanufacturer[key]);
+        tmpmanufacturerdata.datasets[0].backgroundColor.push(this.getRandomColor());
+      }
+      this.manufacturerdata = tmpmanufacturerdata;
+    }
+  }
+
   setPieDataforYear() {
     this.colors = [];
     for (const color of this.allorigcolors) {
