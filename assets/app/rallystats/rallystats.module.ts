@@ -7,6 +7,7 @@ import { CurrentPositionhistoryComponent } from './current-positionhistory.compo
 import { MeterdifferenceComponent } from './meterdifference.component';
 import { StagewinsComponent } from './stagewins.component';
 import { RallywinsComponent } from './rallywins.component';
+import { CurrentTimedistanceComponent } from './current-timedistance.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { RallywinsComponent } from './rallywins.component';
     MeterdifferenceComponent,
     StagewinsComponent,
     RallywinsComponent,
+    CurrentTimedistanceComponent,
   ],
   imports: [
     CommonModule,

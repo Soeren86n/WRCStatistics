@@ -468,6 +468,7 @@ export class GetdataService {
             dataobj.driver.firstname + ' ' + dataobj.driver.lastname,
             dataobj.stage.stagenumber,
             dataobj.position,
+            dataobj.time,
           );
           positionObj.push(tmpPosition);
         }

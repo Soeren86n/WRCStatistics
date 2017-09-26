@@ -5,16 +5,17 @@ import { SelectItem } from 'primeng/primeng';
 import { Rally } from '../models/rally.model';
 import { Rallycar } from '../models/rallycar.model';
 import { allcolors, Colorcode } from '../models/color.model';
+import { Rallymeterdifference } from '../models/rallymeterdifference.model';
 
 @Component({
-  selector: 'app-currentpositionhistory',
-  templateUrl: 'current-positionhistory.component.html',
+  selector: 'app-currenttimedistance',
+  templateUrl: 'current-timedistance.component.html',
 })
 
-export class CurrentPositionhistoryComponent implements OnInit {
+export class CurrentTimedistanceComponent implements OnInit {
   data: any;
   options: any;
-  positions: Positionhistory[];
+  distance: Rallymeterdifference[];
   rallys: Rally[] = [];
   selrallys: SelectItem[] = [];
   selcars: SelectItem[] = [];
@@ -46,7 +47,6 @@ export class CurrentPositionhistoryComponent implements OnInit {
           ticks: {
             beginAtZero: false,
             reverse: true,
-            stepSize: 1,
           },
         }],
       },
@@ -124,12 +124,15 @@ export class CurrentPositionhistoryComponent implements OnInit {
     }
     this.getService.getPositionHistory(this.rallyselected, tmpRallyCars)
       .subscribe(
-        (positions: Positionhistory[]) => {
-          this.positions = positions;
+        (resultobj: Positionhistory[]) => {
           const tmpStage = [];
           tmpdata.labels = [];
-          for (const position of this.positions) {
+          const fastesttime = [];
+          for (const position of resultobj) {
             tmpStage[+position.stage - 1] = position.stage;
+            if (!fastesttime[+position.stage] || this.getotaltimeinSeconds(position.time) < +fastesttime[+position.stage]) {
+              fastesttime[+position.stage] = this.getotaltimeinSeconds(position.time);
+            }
           }
           for (const stage of tmpStage) {
             if (stage) {
@@ -138,22 +141,22 @@ export class CurrentPositionhistoryComponent implements OnInit {
           }
           for (const car of tmpRallyCars) {
             const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
-            const stage = [];
-            for (const position of this.positions) {
+            const meter = [];
+            for (const position of resultobj) {
               if (position.driver === car.carObj.driver) {
-                stage[+position.stage - 1] = position.position;
+                const reach =   this.getotaltimeinSeconds(position.time) - fastesttime[position.stage];
+                meter.push(reach.toFixed(2));
               }
             }
             const Tempdata = {
               label: tmpDriverlabel,
-              data: stage,
+              data: meter,
               lineTension: 0.2,
               borderColor: this.getRandomColor(),
             };
             tmpdata.datasets.push(Tempdata);
           }
           this.data = tmpdata;
-          console.log(this.data);
         },
       );
   }
@@ -178,6 +181,23 @@ export class CurrentPositionhistoryComponent implements OnInit {
     const colorhex = this.colors[random].hexcode;
     this.colors.splice(random, 1);
     return colorhex;
+  }
+
+  getotaltimeinSeconds(time: string) {
+    const splittime = time.split(':');
+    let seconds = 0;
+    let minutes = 0;
+    if (splittime.length === 2) {
+      seconds = +splittime[0] * 60;
+      seconds = seconds + +splittime[1];
+    } else if (splittime.length === 3) {
+      minutes = +splittime[0] * 60 * 60;
+      seconds = +splittime[1] * 60;
+      seconds = minutes + seconds + +splittime[2];
+    } else {
+      seconds = +splittime;
+    }
+    return seconds;
   }
 
 }
