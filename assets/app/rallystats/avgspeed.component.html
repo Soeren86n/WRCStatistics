@@ -1,0 +1,46 @@
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <label for="rally">Rally</label>
+    <div class="input-group" >
+        <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
+                    [style]="{'width':'100%', 'height':'100%'}" (click)="getCars()">
+            <ng-template let-rally pTemplate="item">
+                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                    <span class="flag-icon flag-icon-{{getFlagCode(rally.value)}}"></span>
+                    <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" (click)="getStages()">
+            <i class="fa fa-refresh"></i>
+           <span class="sr-only">Refresh</span>
+        </button>
+      </span>
+    </div>
+</div>
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <label for="stage">Stage</label>
+    <div class="input-group" >
+        <p-multiSelect [options]="selstages" [(ngModel)]="selectedStages" style="width: 100%; height: 42px" [style]="{'width':'100%', 'height':'100%'}">
+        </p-multiSelect>
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" (click)="getGraphdata()">
+            <i class="fa fa-refresh"></i>
+           <span class="sr-only">Refresh</span>
+        </button>
+      </span>
+    </div>
+</div>
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <div class="input-group">
+        <p-multiSelect [options]="selcars" [(ngModel)]="selectedCars" style="width: 100%; height: 42px" [style]="{'width':'100%', 'height':'100%'}">
+        </p-multiSelect>
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" (click)="getGraphdata()" [disabled]="selectedCars.length < 1">
+            <i class="fa fa-refresh"></i>
+           <span class="sr-only">Refresh</span>
+        </button>
+      </span>
+    </div>
+</div>
+<p-chart type="bar" [data]="data" [options]="options"></p-chart>

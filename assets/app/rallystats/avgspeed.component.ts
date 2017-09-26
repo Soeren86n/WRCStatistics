@@ -1,24 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { GetdataService } from '../shared/getdata.service';
-import { Positionhistory } from '../models/positionhistory.model';
-import { SelectItem } from 'primeng/primeng';
-import { Rally } from '../models/rally.model';
 import { Rallycar } from '../models/rallycar.model';
+import { Rally } from '../models/rally.model';
+import { SelectItem } from 'primeng/primeng';
+import { Rallymeterdifference } from '../models/rallymeterdifference.model';
 import { allcolors, Colorcode } from '../models/color.model';
+import { Stage } from '../models/stage.model';
 
 @Component({
-  selector: 'app-currentpositionhistory',
-  templateUrl: 'current-positionhistory.component.html',
+  selector: 'app-avgspeed',
+  templateUrl: 'avgspeed.component.html',
 })
 
-export class CurrentPositionhistoryComponent implements OnInit {
+export class AvgspeedComponent implements OnInit {
   data: any;
   options: any;
-  positions: Positionhistory[];
   rallys: Rally[] = [];
+  stages: Stage[] = [];
   selrallys: SelectItem[] = [];
   selcars: SelectItem[] = [];
+  selstages: SelectItem[] = [];
   rallyselected = '';
+  selectedStages: string[] = [];
   rallycars: Rallycar[] = [];
   selectedCars: string[] = [];
   colors: Colorcode[] = [];
@@ -41,12 +44,15 @@ export class CurrentPositionhistoryComponent implements OnInit {
           fill: false,
         },
       },
+      tooltips: {
+        mode: 'index',
+        intersect: true,
+      },
       scales: {
-        yAxes: [{
+        xAxes: [{
           ticks: {
-            beginAtZero: false,
+            beginAtZero: true,
             reverse: true,
-            stepSize: 1,
           },
         }],
       },
@@ -99,10 +105,27 @@ export class CurrentPositionhistoryComponent implements OnInit {
               value: car.carID,
             });
           }
+          this.getStages();
         },
       );
   }
 
+  getStages() {
+    this.getService.getRallyStages(this.rallyselected)
+      .subscribe(
+        (stages: Stage[]) => {
+          this.selectedStages = [];
+          this.stages = stages;
+          this.selstages = [];
+          for (const stage of this.stages) {
+            this.selstages.push({
+              label: '#' + stage.stagenumber + ' ' + stage.name + ' - ' + stage.meter / 1000 + ' km',
+              value: stage.StageID,
+            });
+          }
+        },
+      );
+  }
 
   getGraphdata() {
     this.colors = [];
@@ -122,14 +145,15 @@ export class CurrentPositionhistoryComponent implements OnInit {
         tmpCar.carID, tmpCar.rallycarID, tmpCar.carObj, tmpCar.rallyObj);
       tmpRallyCars.push(tmpRallyCar);
     }
-    this.getService.getPositionHistory(this.rallyselected, tmpRallyCars)
+    this.getService.getMeterdifference(this.rallyselected, tmpRallyCars)
       .subscribe(
-        (positions: Positionhistory[]) => {
-          this.positions = positions;
+        (resultobj: Rallymeterdifference[]) => {
           const tmpStage = [];
           tmpdata.labels = [];
-          for (const position of this.positions) {
-            tmpStage[+position.stage - 1] = position.stage;
+          for (const position of resultobj) {
+            if (this.selectedStages.indexOf(position.stageObj.StageID) > -1 && !position.stageObj.cancelled) {
+              tmpStage[+position.stage - 1] = position.stage;
+            }
           }
           for (const stage of tmpStage) {
             if (stage) {
@@ -138,17 +162,26 @@ export class CurrentPositionhistoryComponent implements OnInit {
           }
           for (const car of tmpRallyCars) {
             const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
-            const stage = [];
-            for (const position of this.positions) {
-              if (position.driver === car.carObj.driver) {
-                stage[+position.stage - 1] = position.position;
+            const meter = [];
+            for (const position of resultobj) {
+              if (position.driver === car.carObj.driver
+                && this.selectedStages.indexOf(position.stageObj.StageID) > -1
+                && !position.stageObj.cancelled
+              ) {
+
+                const distance = +position.meterpersecond * 3.6;
+                meter.push({ x: position.stage, y: distance.toFixed(2) });
               }
             }
+            meter.sort(function (a, b) {
+              return (a.x > b.x) ? 1 : ((b.x > a.x) ? -1 : 0);
+            });
+            const colorfield = this.getRandomColor();
             const Tempdata = {
               label: tmpDriverlabel,
-              data: stage,
-              lineTension: 0.2,
-              borderColor: this.getRandomColor(),
+              data: meter,
+              backgroundColor: colorfield,
+              borderColor: colorfield,
             };
             tmpdata.datasets.push(Tempdata);
           }
@@ -178,5 +211,4 @@ export class CurrentPositionhistoryComponent implements OnInit {
     this.colors.splice(random, 1);
     return colorhex;
   }
-
 }

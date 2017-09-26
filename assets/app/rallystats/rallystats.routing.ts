@@ -4,6 +4,7 @@ import { MeterdifferenceComponent } from './meterdifference.component';
 import { StagewinsComponent } from './stagewins.component';
 import { RallywinsComponent } from './rallywins.component';
 import { CurrentTimedistanceComponent } from './current-timedistance.component';
+import { AvgspeedComponent } from './avgspeed.component';
 
 
 const RALLYSTATS_ROUTES: Routes = [
@@ -13,6 +14,7 @@ const RALLYSTATS_ROUTES: Routes = [
   { path: 'stagewins', component: StagewinsComponent },
   { path: 'rallywins', component: RallywinsComponent },
   { path: 'currentimedistance', component: CurrentTimedistanceComponent },
+  { path: 'avgspeed', component: AvgspeedComponent },
 ];
 
 export const rallystatRouting = RouterModule.forChild(RALLYSTATS_ROUTES);

@@ -176,9 +176,14 @@ export class InsertStagetimeComponent implements OnInit {
   getotaltimeinSeconds(time: string) {
     const splittime = time.split(':');
     let seconds = 0;
-    if (splittime.length > 1) {
+    let minutes = 0;
+    if (splittime.length === 2) {
       seconds = +splittime[0] * 60;
       seconds = seconds + +splittime[1];
+    } else if (splittime.length === 3) {
+      minutes = +splittime[0] * 60 * 60;
+      seconds = +splittime[1] * 60;
+      seconds = minutes + seconds + +splittime[2];
     } else {
       seconds = +splittime;
     }

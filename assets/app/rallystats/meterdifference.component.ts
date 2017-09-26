@@ -148,7 +148,7 @@ export class MeterdifferenceComponent implements OnInit {
           tmpdata.labels = [];
           const fastesttime = [];
           for (const position of resultobj) {
-            if (this.selectedStages.indexOf(position.stageObj.StageID) > -1) {
+            if (this.selectedStages.indexOf(position.stageObj.StageID) > -1 && !position.stageObj.cancelled) {
               tmpStage[+position.stage - 1] = position.stage;
               if (!fastesttime[+position.stage] || +position.time < +fastesttime[+position.stage]) {
                 fastesttime[+position.stage] = position.time;

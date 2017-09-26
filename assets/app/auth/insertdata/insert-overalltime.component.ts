@@ -140,7 +140,6 @@ export class InsertOveralltimeComponent implements OnInit {
       .subscribe(
         (stages: Stagetime[]) => {
           this.Stagetimes = stages;
-          console.log(this.Stagetimes);
         },
       );
   }
