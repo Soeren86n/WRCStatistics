@@ -15,6 +15,7 @@ var Rallycar = require('../models/rallycar');
 var Stagetime = require('../models/stagetime');
 var Overalltime = require('../models/overalltime');
 var Rallymeterdifference = require('../models/rallymeterdifference');
+var Championshippoint = require('../models/championshippoint');
 
 router.get('/country', function (req, res, next) {
   Country.find()
@@ -354,6 +355,29 @@ router.get('/rallywins', function (req, res, next) {
         res.status(200).json({
           message: 'Success',
           obj: stage
+        });
+      });
+});
+
+router.get('/championpoints/:id', function (req, res, next) {
+  var start = new Date(req.params.id, 0, 1);
+  var end = new Date(req.params.id, 11, 31);
+  Championshippoint.find({ date: {$gte: start, $lt: end} })
+      .populate('rally')
+      .populate('driver')
+      .populate('codriver')
+      .populate('manufacturer')
+      .exec(function (err, points) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        res.status(200).json({
+          message: 'Success',
+          obj: points
         });
       });
 });

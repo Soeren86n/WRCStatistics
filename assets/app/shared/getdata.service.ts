@@ -13,6 +13,7 @@ import { Rallycar } from '../models/rallycar.model';
 import { Stagetime } from '../models/stagetime.model';
 import { Positionhistory } from '../models/positionhistory.model';
 import { Rallymeterdifference } from '../models/rallymeterdifference.model';
+import { Championshippoint } from '../models/championshippoint.model';
 
 @Injectable()
 export class GetdataService {
@@ -664,6 +665,58 @@ export class GetdataService {
           StagetimesObj.push(stagetimeobj);
         }
         return StagetimesObj;
+      })
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  getChampionshippoints(id: number) {
+    return this.http.get('http://localhost:3000/data/championpoints/' + id)
+      .map((response: Response) => {
+        const data = response.json().obj;
+        const PointsObj: Championshippoint[] = [];
+        for (const points of data) {
+          const driverobj = new Driver(
+            points.driver.firstname,
+            points.driver.lastname,
+            points.driver.country,
+            points.driver._id,
+          );
+          const codriverobj = new Codriver(
+            points.codriver.firstname,
+            points.codriver.lastname,
+            points.codriver.country,
+            points.codriver._id,
+          );
+          const manufacturerobj = new Manufacturer(
+            points.manufacturer.name,
+            points.manufacturer.country,
+            points.manufacturer._id,
+          );
+          const rallyobj = new Rally(
+            points.rally.name,
+            points.rally.country,
+            points.rally.startdate,
+            points.rally.enddate,
+            points.rally._id);
+          const tmpPoint = new Championshippoint(
+            points.points,
+            points.type,
+            points.date,
+            points.rally._id,
+            points.driver._id,
+            points.codriver._id,
+            points.manufacturer._id,
+            driverobj,
+            codriverobj,
+            manufacturerobj,
+            rallyobj,
+            );
+          PointsObj.push(tmpPoint);
+        }
+        return PointsObj;
       })
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

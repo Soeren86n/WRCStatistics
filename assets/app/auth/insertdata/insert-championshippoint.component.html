@@ -1,0 +1,55 @@
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <label for="rally">Rally</label>
+    <div class="input-group">
+        <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
+                    [style]="{'width':'100%', 'height':'100%'}">
+            <ng-template let-rally pTemplate="item">
+                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                    <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" (click)="getRallyCars()">
+            <i class="fa fa-refresh"></i>
+           <span class="sr-only">Refresh</span>
+        </button>
+      </span>
+    </div>
+</div>
+<div class="form-group" *ngIf="this.rallys.length > 0">
+    <label for="car">Car</label>
+    <p-dropdown [options]="selcars" [(ngModel)]="selectedCar" id="car" style="width: 100%; height: 42px"
+                [style]="{'width':'100%', 'height':'100%'}">
+        <ng-template let-rally pTemplate="item">
+            <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+            </div>
+        </ng-template>
+    </p-dropdown>
+</div>
+<div class="form-check">
+    <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="isPowerstagepoints" (change)="changetopowerstage()">
+        Powerstagepoints!
+    </label>
+</div>
+<div class="form-group">
+    <label for="points">Points</label>
+    <input type="number" class="form-control" id="points" [(ngModel)]="points" step="1" min="1" max="{{isPowerstagepoints ? 5 : 25}}">
+</div>
+<button
+        class="btn btn-primary form--space"
+        (click)="insertPoints()">Submit
+</button>
+
+<p-dataTable [value]="tblPoints">
+    <p-column field="driver" header="Driver" [sortable]="true"></p-column>
+    <p-column field="manufacturer" header="Manufacturer" [sortable]="true"></p-column>
+    <p-column field="rally" header="Rally" [sortable]="true"></p-column>
+    <p-column field="point" header="Points" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+            <span [class]="car.lblcolor">{{car[col.field]}}</span>
+        </ng-template>
+    </p-column>
+</p-dataTable>

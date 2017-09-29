@@ -14,6 +14,7 @@ import { InsertStagetimeComponent } from './insertdata/insert-stagetime.componen
 import { InsertRallycarsComponent } from './insertdata/insert-rallycars.component';
 import { InsertOveralltimeComponent } from './insertdata/insert-overalltime.component';
 import { InsertCompleterallyStagesComponent } from './insertdata/insert-completerally-stages.component';
+import { InsertChampionshippointComponent } from './insertdata/insert-championshippoint.component';
 
 const AUTH_ROUTES: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
@@ -31,6 +32,7 @@ const AUTH_ROUTES: Routes = [
   { path: 'insertoveralltime', component: InsertOveralltimeComponent },
   { path: 'insertrallycars', component: InsertRallycarsComponent },
   { path: 'insertcompleterallystages', component: InsertCompleterallyStagesComponent },
+  { path: 'insertpoints', component: InsertChampionshippointComponent },
 ];
 
 export const authRouting = RouterModule.forChild(AUTH_ROUTES);

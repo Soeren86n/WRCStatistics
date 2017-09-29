@@ -21,7 +21,7 @@
 <div class="form-group" *ngIf="this.rallys.length > 0">
     <label for="stage">Stage</label>
     <div class="input-group" >
-        <p-multiSelect [options]="selstages" [(ngModel)]="selectedStages" style="width: 100%; height: 42px" [style]="{'width':'100%', 'height':'100%'}">
+        <p-multiSelect id="stage" [options]="selstages" [(ngModel)]="selectedStages" style="width: 100%; height: 42px" [style]="{'width':'100%', 'height':'100%'}">
         </p-multiSelect>
         <span class="input-group-btn">
         <button class="btn btn-secondary" type="button" (click)="getGraphdata()">

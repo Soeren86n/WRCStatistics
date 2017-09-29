@@ -15,6 +15,7 @@ var Rallycar = require('../models/rallycar');
 var Stagetime = require('../models/stagetime');
 var Overalltime = require('../models/overalltime');
 var Rallymeterdifference = require('../models/rallymeterdifference');
+var Championshippoint = require('../models/championshippoint');
 
 router.use('/', function (req, res, next) {
   jwt.verify(req.query.token, 'secret', function (err, decoded) {
@@ -1328,6 +1329,81 @@ router.post('/insertmeterdifference', function (req, res, next) {
       notification: {
         summary: 'Rallymeter created',
         detail: 'Rallymeter successfully created!',
+        severity: 'success'
+      }
+    });
+  });
+});
+
+router.post('/insertpoints', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Rally.findById(req.body.rally, function (err, rally) {
+      if (!rally) {
+        return res.status(500).json({
+          summary: 'No Rally Found!',
+          detail: 'Rally not found',
+          severity: 'error'
+        });
+      }
+      Driver.findById(req.body.driver, function (err, driver) {
+        if (!driver) {
+          return res.status(500).json({
+            summary: 'No driver Found!',
+            detail: 'Driver not found',
+            severity: 'error'
+          });
+        }
+        Codriver.findById(req.body.codriver, function (err, codriver) {
+          if (!codriver) {
+            return res.status(500).json({
+              summary: 'No codriver Found!',
+              detail: 'Codriver not found',
+              severity: 'error'
+            });
+          }
+          Manufacturer.findById(req.body.manufacturer, function (err, manufacturer) {
+            if (!manufacturer) {
+              return res.status(500).json({
+                summary: 'No manufacturer Found!',
+                detail: 'Manufacturer not found',
+                severity: 'error'
+              });
+            }
+            var points = new Championshippoint({
+              points: req.body.points,
+              type: req.body.type,
+              date: req.body.date,
+              rally: rally,
+              driver: driver,
+              codriver: codriver,
+              manufacturer: manufacturer
+            });
+            points.save(function (err, result) {
+              if (err) {
+                return res.status(500).json({
+                  summary: 'An Error occurred',
+                  detail: err.message,
+                  severity: 'error'
+                });
+              }
+            })
+          });
+        });
+      });
+    });
+    res.status(201).json({
+      message: 'Points created',
+      notification: {
+        summary: 'Points created',
+        detail: 'Points successfully created!',
         severity: 'success'
       }
     });

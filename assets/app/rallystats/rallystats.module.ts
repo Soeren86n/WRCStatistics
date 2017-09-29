@@ -9,6 +9,7 @@ import { StagewinsComponent } from './stagewins.component';
 import { RallywinsComponent } from './rallywins.component';
 import { CurrentTimedistanceComponent } from './current-timedistance.component';
 import { AvgspeedComponent } from './avgspeed.component';
+import { ChampionshippointsComponent } from './championshippoints.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { AvgspeedComponent } from './avgspeed.component';
     RallywinsComponent,
     CurrentTimedistanceComponent,
     AvgspeedComponent,
+    ChampionshippointsComponent,
   ],
   imports: [
     CommonModule,
