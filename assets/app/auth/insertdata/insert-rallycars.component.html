@@ -1,25 +1,18 @@
 <div class="form-group" *ngIf="this.rallys.length > 0">
     <label for="rally">Rally</label>
-    <div class="input-group">
-        <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
-                    [style]="{'width':'100%', 'height':'100%'}">
-            <ng-template let-rally pTemplate="item">
-                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
-                    <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
-                </div>
-            </ng-template>
-        </p-dropdown>
-        <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" (click)="updateCars()">
-            <i class="fa fa-refresh"></i>
-           <span class="sr-only">Refresh</span>
-        </button>
-      </span>
-    </div>
+    <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
+                [style]="{'width':'100%', 'height':'100%'}" (onChange)="updateCars()">
+        <ng-template let-rally pTemplate="item">
+            <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+            </div>
+        </ng-template>
+    </p-dropdown>
 </div>
 <div class="form-group" *ngIf="this.rallys.length > 0">
     <div class="input-group">
-        <p-multiSelect [options]="selcars" [(ngModel)]="selectedCars" style="width: 100%; height: 42px" [style]="{'width':'100%', 'height':'100%'}">
+        <p-multiSelect [options]="selcars" [(ngModel)]="selectedCars" style="width: 100%; height: 42px"
+                       [style]="{'width':'100%', 'height':'100%'}">
         </p-multiSelect>
     </div>
 </div>

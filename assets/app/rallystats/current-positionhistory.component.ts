@@ -87,6 +87,10 @@ export class CurrentPositionhistoryComponent implements OnInit {
   }
 
   getCars() {
+    this.data = {
+      labels: [],
+      datasets: [],
+    };
     this.getService.getRallyCar(this.rallyselected)
       .subscribe(
         (cars: Rallycar[]) => {

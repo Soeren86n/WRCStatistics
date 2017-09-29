@@ -89,6 +89,10 @@ export class MeterdifferenceComponent implements OnInit {
   }
 
   getCars() {
+    this.data = {
+      labels: [],
+      datasets: [],
+    };
     this.getService.getRallyCar(this.rallyselected)
       .subscribe(
         (cars: Rallycar[]) => {

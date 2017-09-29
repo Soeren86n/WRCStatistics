@@ -1,25 +1,17 @@
 <div class="form-group" *ngIf="this.rallys.length > 0">
     <label for="rally">Rally</label>
-    <div class="input-group" >
-        <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
-                    [style]="{'width':'100%', 'height':'100%'}">
-            <ng-template let-rally pTemplate="item">
-                <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
-                    <span class="flag-icon flag-icon-{{getFlagCode(rally.value)}}"></span>
-                    <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
-                </div>
-            </ng-template>
-        </p-dropdown>
-        <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" (click)="getStages()">
-            <i class="fa fa-refresh"></i>
-           <span class="sr-only">Refresh</span>
-        </button>
-      </span>
-    </div>
+    <p-dropdown [options]="selrallys" [(ngModel)]="rallyselected" id="rally" style="width: 100%; height: 42px"
+                [style]="{'width':'100%', 'height':'100%'}" (onChange)="getStages()">
+        <ng-template let-rally pTemplate="item">
+            <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                <span class="flag-icon flag-icon-{{getFlagCode(rally.value)}}"></span>
+                <div style="font-size:14px;float:right;margin-top:4px">{{rally.label}}</div>
+            </div>
+        </ng-template>
+    </p-dropdown>
 </div>
 
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space"  *ngIf="this.rallys.length > 0">
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form--space" *ngIf="this.rallys.length > 0">
     <div class="form-group">
         <label for="name">Name</label>
         <input

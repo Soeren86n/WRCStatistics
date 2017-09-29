@@ -1,13 +1,7 @@
 <div class="form-group">
     <label for="year">Year</label>
     <div class="input-group">
-        <input type="number" min="2017" step="1" class="form-control" id="year" [(ngModel)]="year">
-        <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" (click)="getGraphdata()">
-            <i class="fa fa-refresh"></i>
-           <span class="sr-only">Refresh</span>
-        </button>
-      </span>
+        <input type="number" min="2017" step="1" class="form-control" id="year" [(ngModel)]="year" (onChange)="getGraphdata()">
     </div>
 </div>
 <div class="form-group">
@@ -21,14 +15,8 @@
     <label for="driver">{{selLabel}}</label>
     <div class="input-group">
         <p-multiSelect id="driver" [options]="selcars" [(ngModel)]="selectedData" style="width: 100%; height: 42px"
-                       [style]="{'width':'100%', 'height':'100%'}">
+                       [style]="{'width':'100%', 'height':'100%'}" (onChange)="setGraphdata()">
         </p-multiSelect>
-        <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" (click)="setGraphdata()">
-            <i class="fa fa-refresh"></i>
-           <span class="sr-only">Refresh</span>
-        </button>
-      </span>
     </div>
 </div>
 <p-chart type="bar" [data]="data" [options]="options"></p-chart>
