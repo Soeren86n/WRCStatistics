@@ -158,6 +158,14 @@ export class StagewinsComponent implements OnInit {
     }
   }
 
+  setPieDataforYearSwitch() {
+    if (this.selectedPie === 'all') {
+      this.setPieDataforYear();
+    } else if (this.selectedPie === 'power') {
+      this.setPowerPieDataforYear();
+    }
+  }
+
   setPowerPieDataforYear() {
     this.colors = [];
     for (const color of this.allorigcolors) {
