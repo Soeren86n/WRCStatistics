@@ -44,4 +44,15 @@
             <span [class]="car.lblcolor">{{car[col.field]}}</span>
         </ng-template>
     </p-column>
+    <p-column>
+        <ng-template let-car="rowData" pTemplate="body">
+            <div class="btn-group" role="group">
+                <button class="btn btn-outline-danger" (click)="confirmDel(car)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <span class="sr-only">Delete {{car.startnumber}}</span>
+                </button>
+            </div>
+        </ng-template>
+    </p-column>
 </p-dataTable>
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle"></p-confirmDialog>

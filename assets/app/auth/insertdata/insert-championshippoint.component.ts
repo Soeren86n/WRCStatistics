@@ -8,6 +8,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { Rallycar } from '../../models/rallycar.model';
 import { Championshippoint } from '../../models/championshippoint.model';
 import { Manufacturer } from '../../models/manufacturer.model';
+import { Stagetime } from '../../models/stagetime.model';
 
 @Component({
   selector: 'app-insertChampionshippoint',
@@ -28,6 +29,7 @@ export class InsertChampionshippointComponent implements OnInit {
 
   constructor(private insertService: InsertService,
               private getService: GetdataService,
+              private confirmationService: ConfirmationService,
               private notificationService: NotificationService) {
   }
 
@@ -122,6 +124,7 @@ export class InsertChampionshippointComponent implements OnInit {
           this.notificationService.handleError(data.notification);
           this.points = 0;
           this.isPowerstagepoints = false;
+          this.getPoints();
         },
         error => console.error(error),
       );
@@ -148,9 +151,31 @@ export class InsertChampionshippointComponent implements OnInit {
               point: point.points,
               rally: point.rallyObj.name,
               lblcolor: lbl,
+              pointID: point.pointID,
             });
           }
         },
+      );
+  }
+
+  confirmDel(car: any) {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete Car ' + car.startnumber + ' ?',
+      accept: () => {
+        const selectedPoints = this.ChampionPoints.filter(point => point.pointID === car.pointID)[0];
+        this.deletePoints(selectedPoints);
+      },
+    });
+  }
+
+  deletePoints(points: Championshippoint) {
+    this.insertService.deletePoints(points)
+      .subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getPoints();
+        },
+        error => console.error(error),
       );
   }
 
