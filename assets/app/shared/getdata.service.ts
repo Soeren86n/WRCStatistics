@@ -709,6 +709,7 @@ export class GetdataService {
             points.driver._id,
             points.codriver._id,
             points.manufacturer._id,
+            points._id,
             driverobj,
             codriverobj,
             manufacturerobj,

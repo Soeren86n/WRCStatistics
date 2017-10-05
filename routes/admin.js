@@ -1485,4 +1485,100 @@ router.delete('/deletestagetime/:id', function (req, res, next) {
   });
 });
 
+router.delete('/deleteoveralltime/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Overalltime.findById(req.params.id, function (err, overalltime) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An Error occurred',
+          detail: err.message,
+          severity: 'error'
+        });
+      }
+      if (!overalltime) {
+        return res.status(500).json({
+          summary: 'No Overalltime Found!',
+          detail: 'Overalltime not found',
+          severity: 'error'
+        });
+      }
+      overalltime.remove(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+
+        res.status(200).json({
+          message: 'Overalltime deleted',
+          obj: result,
+          notification: {
+            summary: 'Overalltime deleted',
+            detail: 'Overalltime for Position #' + result.position + ' successfully deleted!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
+
+router.delete('/deletechampionpoints/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Championshippoint.findById(req.params.id, function (err, point) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An Error occurred',
+          detail: err.message,
+          severity: 'error'
+        });
+      }
+      if (!point) {
+        return res.status(500).json({
+          summary: 'No Overalltime Found!',
+          detail: 'Overalltime not found',
+          severity: 'error'
+        });
+      }
+      point.remove(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+
+        res.status(200).json({
+          message: 'Points deleted',
+          obj: result,
+          notification: {
+            summary: 'Points deleted',
+            detail: 'Points #' + result.points + ' successfully deleted!',
+            severity: 'success'
+          }
+        });
+      });
+    });
+  });
+});
+
 module.exports = router;

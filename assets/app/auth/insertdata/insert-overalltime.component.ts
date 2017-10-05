@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Rally } from '../../models/rally.model';
 import { Stage } from '../../models/stage.model';
-import { SelectItem } from 'primeng/primeng';
+import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { InsertService } from './insert-service';
 import { GetdataService } from '../../shared/getdata.service';
 import { NotificationService } from '../../shared/notification.service';
@@ -25,9 +25,11 @@ export class InsertOveralltimeComponent implements OnInit {
   rallyselected = '';
   stageselected = '';
   stagetimesRaw = '';
+  tblOveralltimes = [];
 
   constructor(private insertService: InsertService,
               private getService: GetdataService,
+              private confirmationService: ConfirmationService,
               private notificationService: NotificationService) {
   }
 
@@ -82,6 +84,7 @@ export class InsertOveralltimeComponent implements OnInit {
             });
             this.stageselected = stage.StageID;
           }
+          this.getStagetimes();
           this.getCars();
         },
       );
@@ -93,6 +96,27 @@ export class InsertOveralltimeComponent implements OnInit {
         (cars: Rallycar[]) => {
           this.cars = cars;
         },
+      );
+  }
+
+  confirmDel(car: any) {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete Car ' + car.startnumber + ' ?',
+      accept: () => {
+        const selectedStagetime = this.Stagetimes.filter(stagetime => stagetime.car === car.startnumber)[0];
+        this.deleteStagetime(selectedStagetime);
+      },
+    });
+  }
+
+  deleteStagetime(stagetime: Stagetime) {
+    this.insertService.deleteOveralltime(stagetime)
+      .subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getStagetimes();
+        },
+        error => console.error(error),
       );
   }
 
@@ -140,6 +164,17 @@ export class InsertOveralltimeComponent implements OnInit {
       .subscribe(
         (stages: Stagetime[]) => {
           this.Stagetimes = stages;
+          this.tblOveralltimes = [];
+          for (const time of this.Stagetimes) {
+            this.tblOveralltimes.push({
+              startnumber: time.car,
+              driver: time.driverObj.firstname + ' ' + time.driverObj.lastname,
+              codriver: time.codriverObj.firstname + ' ' + time.codriverObj.lastname,
+              manufacturer: time.manufacturerObj.name,
+              time: time.time,
+              position: time.position,
+            });
+          }
         },
       );
   }

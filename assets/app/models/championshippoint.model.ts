@@ -11,6 +11,7 @@ export class Championshippoint {
               public driver: string,
               public codriver: string,
               public manufacturer: string,
+              public pointID?: string,
               public driverObj?: Driver,
               public codriverObj?: Codriver,
               public manufacturerObj?: Manufacturer,

@@ -309,7 +309,6 @@ export class InsertService {
   }
 
   deleteStagetime(stagetime: Stagetime) {
-    console.log(stagetime);
     const token = localStorage.getItem('token')
       ? '?token=' + localStorage.getItem('token')
       : '';
@@ -335,6 +334,18 @@ export class InsertService {
       });
   }
 
+  deleteOveralltime(stagetime: Stagetime) {
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.delete('http://localhost:3000/admin/deleteoveralltime/' + stagetime.stagetimeID + token)
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
   insertpoints(point: Championshippoint) {
     const body = JSON.stringify(point);
     const headers = new Headers({ 'Content-Type': 'application/json' });
@@ -342,6 +353,18 @@ export class InsertService {
       ? '?token=' + localStorage.getItem('token')
       : '';
     return this.http.post('http://localhost:3000/admin/insertpoints/' + token, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
+  deletePoints(point: Championshippoint) {
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.delete('http://localhost:3000/admin/deletechampionpoints/' + point.pointID + token)
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());

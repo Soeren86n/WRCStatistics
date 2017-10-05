@@ -193,7 +193,6 @@ export class InsertStagetimeComponent implements OnInit {
     this.confirmationService.confirm({
       message: 'Are you sure that you want to delete Car ' + car.startnumber + ' ?',
       accept: () => {
-        console.log(car);
         const selectedStagetime = this.Stagetimes.filter(stagetime => stagetime.car === car.startnumber)[0];
         this.deleteStagetime(selectedStagetime);
       },
