@@ -1410,4 +1410,79 @@ router.post('/insertpoints', function (req, res, next) {
   });
 });
 
+router.delete('/deletestagetime/:id', function (req, res, next) {
+  var decoded = jwt.decode(req.query.token);
+  User.findById(decoded.user._id, function (err, user) {
+    if (!user.admin) {
+      return res.status(401).json({
+        summary: 'Not Authorised',
+        detail: 'User ' + user.email + ' is not Authorised',
+        severity: 'error'
+      });
+    }
+    Stagetime.findById(req.params.id, function (err, stagetime) {
+      if (err) {
+        return res.status(500).json({
+          summary: 'An Error occurred',
+          detail: err.message,
+          severity: 'error'
+        });
+      }
+      if (!stagetime) {
+        return res.status(500).json({
+          summary: 'No Stagetime Found!',
+          detail: 'Stagetime not found',
+          severity: 'error'
+        });
+      }
+      stagetime.remove(function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            summary: 'An Error occurred',
+            detail: err.message,
+            severity: 'error'
+          });
+        }
+        Rallymeterdifference.findOne({
+          'stage': result.stage,
+          'car': result.car
+        }, function (err, meterdifference) {
+          if (err) {
+            return res.status(500).json({
+              summary: 'An Error occurred',
+              detail: err.message,
+              severity: 'error'
+            });
+          }
+          if (!meterdifference) {
+            return res.status(500).json({
+              summary: 'No Meterdifference Found!',
+              detail: 'Meterdifference not found',
+              severity: 'error'
+            });
+          }
+          meterdifference.remove(function (err, result) {
+            if (err) {
+              return res.status(500).json({
+                summary: 'An Error occurred',
+                detail: err.message,
+                severity: 'error'
+              });
+            }
+          });
+          res.status(200).json({
+            message: 'Stagetime and Meterdifference deleted',
+            obj: result,
+            notification: {
+              summary: 'Stagetime and Meterdifference deleted',
+              detail: 'Stagetime and Meterdifference for Position #' + result.position + ' successfully deleted!',
+              severity: 'success'
+            }
+          });
+        });
+      });
+    });
+  });
+});
+
 module.exports = router;

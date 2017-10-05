@@ -308,6 +308,19 @@ export class InsertService {
       });
   }
 
+  deleteStagetime(stagetime: Stagetime) {
+    console.log(stagetime);
+    const token = localStorage.getItem('token')
+      ? '?token=' + localStorage.getItem('token')
+      : '';
+    return this.http.delete('http://localhost:3000/admin/deletestagetime/' + stagetime.stagetimeID + token)
+      .map((response: Response) => response.json())
+      .catch((error: Response) => {
+        this.notificationService.handleError(error.json());
+        return Observable.throw(error.json());
+      });
+  }
+
   insertoveralltime(stagetime: Stagetime[]) {
     const body = JSON.stringify(stagetime);
     const headers = new Headers({ 'Content-Type': 'application/json' });

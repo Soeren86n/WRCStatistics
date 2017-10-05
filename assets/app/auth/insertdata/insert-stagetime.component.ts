@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Rally } from '../../models/rally.model';
 import { Stage } from '../../models/stage.model';
-import { SelectItem } from 'primeng/primeng';
+import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { InsertService } from './insert-service';
 import { GetdataService } from '../../shared/getdata.service';
 import { NotificationService } from '../../shared/notification.service';
@@ -23,11 +23,14 @@ export class InsertStagetimeComponent implements OnInit {
   Stagetimes: Stagetime[] = [];
   selrallys: SelectItem[] = [];
   selstages: SelectItem[] = [];
+  selectedCars: any;
   rallyselected = '';
   stageselected = '';
   stagetimesRaw = '';
+  tblStagetimes = [];
 
   constructor(private insertService: InsertService,
+              private confirmationService: ConfirmationService,
               private getService: GetdataService,
               private notificationService: NotificationService) {
   }
@@ -83,6 +86,7 @@ export class InsertStagetimeComponent implements OnInit {
             });
             this.stageselected = stage.StageID;
           }
+          this.getStagetimes();
           this.getCars();
         },
       );
@@ -154,6 +158,7 @@ export class InsertStagetimeComponent implements OnInit {
                   .subscribe(
                     (data) => {
                       this.notificationService.handleError(data.notification);
+                      this.getStagetimes();
                     },
                     error => console.error(error),
                   );
@@ -169,7 +174,40 @@ export class InsertStagetimeComponent implements OnInit {
       .subscribe(
         (stages: Stagetime[]) => {
           this.Stagetimes = stages;
+          this.tblStagetimes = [];
+          for (const time of this.Stagetimes) {
+            this.tblStagetimes.push({
+              startnumber: time.car,
+              driver: time.driverObj.firstname + ' ' + time.driverObj.lastname,
+              codriver: time.codriverObj.firstname + ' ' + time.codriverObj.lastname,
+              manufacturer: time.manufacturerObj.name,
+              time: time.time,
+              position: time.position,
+            });
+          }
         },
+      );
+  }
+
+  confirmDel(car: any) {
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to delete Car ' + car.startnumber + ' ?',
+      accept: () => {
+        console.log(car);
+        const selectedStagetime = this.Stagetimes.filter(stagetime => stagetime.car === car.startnumber)[0];
+        this.deleteStagetime(selectedStagetime);
+      },
+    });
+  }
+
+  deleteStagetime(stagetime: Stagetime) {
+    this.insertService.deleteStagetime(stagetime)
+      .subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getStagetimes();
+        },
+        error => console.error(error),
       );
   }
 

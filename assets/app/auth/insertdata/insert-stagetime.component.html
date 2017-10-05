@@ -24,6 +24,27 @@
     <label for="AllTimes">Insert Stagetimes</label>
     <textarea class="form-control" id="AllTimes" rows="20" [(ngModel)]="stagetimesRaw"></textarea>
 </div>
-<button class="btn" (click)="generateObjs()">
+<button class="btn form--space" (click)="generateObjs()">
     Generate Stagetimes
 </button>
+
+<p-dataTable [value]="tblStagetimes" sortField="position">
+    <p-column field="startnumber" header="#" [sortable]="true"></p-column>
+    <p-column field="driver" header="Driver" [sortable]="true"></p-column>
+    <p-column field="codriver" header="Codriver" [sortable]="true"></p-column>
+    <p-column field="manufacturer" header="Manufacturer" [sortable]="true"></p-column>
+    <p-column field="time" header="Time" [sortable]="true"> </p-column>
+    <p-column field="position" header="Pos" [sortable]="true"> </p-column>
+    <p-column>
+        <ng-template let-car="rowData" pTemplate="body">
+            <div class="btn-group" role="group">
+                <button class="btn btn-outline-danger" (click)="confirmDel(car)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <span class="sr-only">Delete {{car.startnumber}}</span>
+                </button>
+            </div>
+        </ng-template>
+    </p-column>
+</p-dataTable>
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle"></p-confirmDialog>
+
