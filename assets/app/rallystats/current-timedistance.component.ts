@@ -42,6 +42,10 @@ export class CurrentTimedistanceComponent implements OnInit {
           fill: false,
         },
       },
+      tooltips: {
+        mode: 'nearest',
+        intersect: false,
+      },
       scales: {
         yAxes: [{
           ticks: {

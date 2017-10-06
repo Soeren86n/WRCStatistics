@@ -41,6 +41,10 @@ export class CurrentPositionhistoryComponent implements OnInit {
           fill: false,
         },
       },
+      tooltips: {
+        mode: 'nearest',
+        intersect: false,
+      },
       scales: {
         yAxes: [{
           ticks: {

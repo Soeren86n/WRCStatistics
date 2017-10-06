@@ -31,47 +31,8 @@ export class ChampionshippointsComponent implements OnInit {
 
   constructor(private getService: GetdataService) {
     this.data = {
-      labels: ['Januar', 'Februar', 'Januar', 'Februar', 'Januar', 'Februar', 'Last'],
-      datasets: [
-        {
-          type: 'line',
-          label: 'Ogier',
-          data: [25, 44, 66, 88, 102, 128, 141],
-          fill: false,
-          lineTension: 0.2,
-          borderColor: '#4bc0c0',
-          backgroundColor: '#4bc0c0',
-        },
-        {
-          type: 'line',
-          label: 'Neuville',
-          data: [5, 7, 20, 20, 45, 62, 87],
-          fill: false,
-          lineTension: 0.2,
-          borderColor: '#565656',
-          backgroundColor: '#565656',
-        },
-        {
-          type: 'bar',
-          label: 'Ogier',
-          data: [25, 19, 22, 22, 14, 26, 13],
-          backgroundColor: '#4bc0c0',
-        },
-        {
-          type: 'bar',
-          label: 'Neuville',
-          stack: 'Neuville',
-          data: [5, 3, 15, 25, 18, 18, 15],
-          backgroundColor: '#565656',
-        },
-        {
-          type: 'bar',
-          label: 'Neuville',
-          stack: 'Neuville',
-          data: [0, 0, 5, 1, 4, 4, 2],
-          backgroundColor: '#cecece',
-        },
-      ],
+      labels: [],
+      datasets: [],
     };
     this.options = {
       title: {

@@ -82,7 +82,7 @@ export class InsertCompleterallyStagesComponent implements OnInit {
           stagenumber = +line[0].substring(2);
           name = line[1];
           meter = +line[2] * 1000;
-          cancelled = line[4] !== 'COMPLETED';
+          cancelled = line[4] !== 'COMPLETED' && line[4] !== 'TO RUN';
           powerstage = i === array.length - 1;
           const stage = new Stage(name, day, date, cancelled, powerstage, stagenumber, meter, this.rallyselected);
           stagesobj.push(stage);
