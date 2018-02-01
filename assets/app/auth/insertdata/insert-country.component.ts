@@ -92,9 +92,8 @@ export class InsertCountryComponent implements OnInit {
     }
     if (inArray) {
       return null;
-    } else {
-      return { noMatch: true };
     }
+    return { noMatch: true };
   }
 
 }

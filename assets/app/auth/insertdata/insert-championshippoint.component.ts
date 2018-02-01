@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Rally } from '../../models/rally.model';
-import { Car } from '../../models/car.model';
 import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { InsertService } from './insert-service';
 import { GetdataService } from '../../shared/getdata.service';
 import { NotificationService } from '../../shared/notification.service';
 import { Rallycar } from '../../models/rallycar.model';
 import { Championshippoint } from '../../models/championshippoint.model';
-import { Manufacturer } from '../../models/manufacturer.model';
-import { Stagetime } from '../../models/stagetime.model';
+
 
 @Component({
   selector: 'app-insertChampionshippoint',

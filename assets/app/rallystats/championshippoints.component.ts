@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GetdataService } from '../shared/getdata.service';
-import { Rallycar } from '../models/rallycar.model';
-import { Rally } from '../models/rally.model';
 import { SelectItem } from 'primeng/primeng';
-import { Rallymeterdifference } from '../models/rallymeterdifference.model';
 import { allcolors, Colorcode } from '../models/color.model';
-import { Stage } from '../models/stage.model';
-import { Car } from '../models/car.model';
 import { Championshippoint } from '../models/championshippoint.model';
 
 @Component({

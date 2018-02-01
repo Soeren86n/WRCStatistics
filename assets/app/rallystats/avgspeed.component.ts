@@ -173,7 +173,7 @@ export class AvgspeedComponent implements OnInit {
                 meter.push({ x: position.stage, y: distance.toFixed(2) });
               }
             }
-            meter.sort(function (a, b) {
+            meter.sort((a, b) => {
               return (a.x > b.x) ? 1 : ((b.x > a.x) ? -1 : 0);
             });
             const colorfield = this.getRandomColor();

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { GetdataService } from '../shared/getdata.service';
 import { Stagetime } from '../models/stagetime.model';
 import { SelectItem } from 'primeng/primeng';
-import { Rally } from '../models/rally.model';
 import { allcolors, Colorcode } from '../models/color.model';
 
 
