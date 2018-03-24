@@ -1,7 +1,5 @@
 export class CountryCode {
-  constructor(public Name: string,
-              public Code: string) {
-  }
+  constructor(public Name: string, public Code: string) {}
 }
 
 export const AllCountrys: CountryCode[] = [

@@ -11,7 +11,6 @@ import { Rallymeterdifference } from '../models/rallymeterdifference.model';
   selector: 'app-currenttimedistance',
   templateUrl: 'current-timedistance.component.html',
 })
-
 export class CurrentTimedistanceComponent implements OnInit {
   data: any;
   options: any;
@@ -47,12 +46,14 @@ export class CurrentTimedistanceComponent implements OnInit {
         intersect: false,
       },
       scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: false,
-            reverse: true,
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: false,
+              reverse: true,
+            },
           },
-        }],
+        ],
       },
     };
   }
@@ -66,28 +67,25 @@ export class CurrentTimedistanceComponent implements OnInit {
   }
 
   getRallys() {
-    this.getService.getRallys()
-      .subscribe(
-        (rallys: Rally[]) => {
-          this.rallys = rallys;
-          this.selrallys = [];
-          const options = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          };
-          for (const rally of this.rallys) {
-            const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
-            const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
-            this.selrallys.push({
-              label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
-              value: rally.rallyID,
-            });
-            this.rallyselected = rally.rallyID;
-            this.getCars();
-          }
-        },
-      );
+    this.getService.getRallys().subscribe((rallys: Rally[]) => {
+      this.rallys = rallys;
+      this.selrallys = [];
+      const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      for (const rally of this.rallys) {
+        const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
+        const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
+        this.selrallys.push({
+          label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
+          value: rally.rallyID,
+        });
+        this.rallyselected = rally.rallyID;
+        this.getCars();
+      }
+    });
   }
 
   getCars() {
@@ -95,22 +93,18 @@ export class CurrentTimedistanceComponent implements OnInit {
       labels: [],
       datasets: [],
     };
-    this.getService.getRallyCar(this.rallyselected)
-      .subscribe(
-        (cars: Rallycar[]) => {
-          this.rallycars = cars;
-          this.selcars = [];
-          this.selectedCars = [];
-          for (const car of this.rallycars) {
-            this.selcars.push({
-              label: '#' + car.startnumber + ' ' + car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname,
-              value: car.carID,
-            });
-          }
-        },
-      );
+    this.getService.getRallyCar(this.rallyselected).subscribe((cars: Rallycar[]) => {
+      this.rallycars = cars;
+      this.selcars = [];
+      this.selectedCars = [];
+      for (const car of this.rallycars) {
+        this.selcars.push({
+          label: '#' + car.startnumber + ' ' + car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname,
+          value: car.carID,
+        });
+      }
+    });
   }
-
 
   getGraphdata() {
     this.colors = [];
@@ -123,54 +117,55 @@ export class CurrentTimedistanceComponent implements OnInit {
     };
     const tmpRallyCars: Rallycar[] = [];
     for (const selCar of this.selectedCars) {
-      const tmpCar = this.rallycars.filter(car => car.carID === selCar)[0];
+      const tmpCar = this.rallycars.filter((car) => car.carID === selCar)[0];
       const tmpRallyCar = new Rallycar(
         tmpCar.startnumber,
         this.rallyselected,
-        tmpCar.carID, tmpCar.rallycarID, tmpCar.carObj, tmpCar.rallyObj);
+        tmpCar.carID,
+        tmpCar.rallycarID,
+        tmpCar.carObj,
+        tmpCar.rallyObj,
+      );
       tmpRallyCars.push(tmpRallyCar);
     }
-    this.getService.getPositionHistory(this.rallyselected, tmpRallyCars)
-      .subscribe(
-        (resultobj: Positionhistory[]) => {
-          const tmpStage = [];
-          tmpdata.labels = [];
-          const fastesttime = [];
-          for (const position of resultobj) {
-            tmpStage[+position.stage - 1] = position.stage;
-            if (!fastesttime[+position.stage] || this.getotaltimeinSeconds(position.time) < +fastesttime[+position.stage]) {
-              fastesttime[+position.stage] = this.getotaltimeinSeconds(position.time);
-            }
+    this.getService.getPositionHistory(this.rallyselected, tmpRallyCars).subscribe((resultobj: Positionhistory[]) => {
+      const tmpStage = [];
+      tmpdata.labels = [];
+      const fastesttime = [];
+      for (const position of resultobj) {
+        tmpStage[+position.stage - 1] = position.stage;
+        if (!fastesttime[+position.stage] || this.getotaltimeinSeconds(position.time) < +fastesttime[+position.stage]) {
+          fastesttime[+position.stage] = this.getotaltimeinSeconds(position.time);
+        }
+      }
+      for (const stage of tmpStage) {
+        if (stage) {
+          tmpdata.labels.push(stage);
+        }
+      }
+      for (const car of tmpRallyCars) {
+        const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
+        const meter = [];
+        for (const position of resultobj) {
+          if (position.driver === car.carObj.driver) {
+            const reach = this.getotaltimeinSeconds(position.time) - fastesttime[position.stage];
+            meter.push(reach.toFixed(2));
           }
-          for (const stage of tmpStage) {
-            if (stage) {
-              tmpdata.labels.push(stage);
-            }
-          }
-          for (const car of tmpRallyCars) {
-            const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
-            const meter = [];
-            for (const position of resultobj) {
-              if (position.driver === car.carObj.driver) {
-                const reach =   this.getotaltimeinSeconds(position.time) - fastesttime[position.stage];
-                meter.push(reach.toFixed(2));
-              }
-            }
-            const Tempdata = {
-              label: tmpDriverlabel,
-              data: meter,
-              lineTension: 0.2,
-              borderColor: this.getRandomColor(),
-            };
-            tmpdata.datasets.push(Tempdata);
-          }
-          this.data = tmpdata;
-        },
-      );
+        }
+        const Tempdata = {
+          label: tmpDriverlabel,
+          data: meter,
+          lineTension: 0.2,
+          borderColor: this.getRandomColor(),
+        };
+        tmpdata.datasets.push(Tempdata);
+      }
+      this.data = tmpdata;
+    });
   }
 
   getFlagCode(rallyid: string) {
-    const tmpRally = this.rallys.filter(rally => rally.rallyID === rallyid)[0];
+    const tmpRally = this.rallys.filter((rally) => rally.rallyID === rallyid)[0];
     return tmpRally.countryObj.shortname.toLowerCase();
   }
 
@@ -207,5 +202,4 @@ export class CurrentTimedistanceComponent implements OnInit {
     }
     return seconds;
   }
-
 }

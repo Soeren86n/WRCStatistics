@@ -11,7 +11,6 @@ import { CurrentTimedistanceComponent } from './current-timedistance.component';
 import { AvgspeedComponent } from './avgspeed.component';
 import { ChampionshippointsComponent } from './championshippoints.component';
 
-
 @NgModule({
   declarations: [
     CurrentPositionhistoryComponent,
@@ -33,9 +32,6 @@ import { ChampionshippointsComponent } from './championshippoints.component';
     MultiSelectModule,
     SelectButtonModule,
   ],
-  providers: [
-  ],
+  providers: [],
 })
-export class RallystatsModule {
-
-}
+export class RallystatsModule {}

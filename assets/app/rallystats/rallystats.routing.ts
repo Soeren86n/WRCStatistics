@@ -7,7 +7,6 @@ import { CurrentTimedistanceComponent } from './current-timedistance.component';
 import { AvgspeedComponent } from './avgspeed.component';
 import { ChampionshippointsComponent } from './championshippoints.component';
 
-
 const RALLYSTATS_ROUTES: Routes = [
   { path: '', redirectTo: 'currentpositionhistory', pathMatch: 'full' },
   { path: 'currentpositionhistory', component: CurrentPositionhistoryComponent },

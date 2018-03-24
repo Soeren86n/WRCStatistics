@@ -7,10 +7,7 @@ import { SigninComponent } from './signin.component';
 import { LogoutComponent } from './logout.component';
 import { InsertCountryComponent } from './insertdata/insert-country.component';
 import { InsertService } from './insertdata/insert-service';
-import {
-  ConfirmDialogModule, DataListModule, DataTableModule, DropdownModule, MultiSelectModule,
-  SharedModule,
-} from 'primeng/primeng';
+import { ConfirmDialogModule, DataListModule, DataTableModule, DropdownModule, MultiSelectModule, SharedModule } from 'primeng/primeng';
 import { InsertRallyComponent } from './insertdata/insert-rally.component';
 import { InsertStageComponent } from './insertdata/insert-stage.component';
 import { InsertManufacturerComponent } from './insertdata/insert-manufacturer.component';
@@ -53,10 +50,6 @@ import { InsertChampionshippointComponent } from './insertdata/insert-championsh
     SharedModule,
     MultiSelectModule,
   ],
-  providers: [
-    InsertService,
-  ],
+  providers: [InsertService],
 })
-export class AuthModule {
-
-}
+export class AuthModule {}

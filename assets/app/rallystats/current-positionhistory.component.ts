@@ -10,7 +10,6 @@ import { allcolors, Colorcode } from '../models/color.model';
   selector: 'app-currentpositionhistory',
   templateUrl: 'current-positionhistory.component.html',
 })
-
 export class CurrentPositionhistoryComponent implements OnInit {
   data: any;
   options: any;
@@ -46,13 +45,15 @@ export class CurrentPositionhistoryComponent implements OnInit {
         intersect: false,
       },
       scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: false,
-            reverse: true,
-            stepSize: 1,
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: false,
+              reverse: true,
+              stepSize: 1,
+            },
           },
-        }],
+        ],
       },
     };
   }
@@ -66,28 +67,25 @@ export class CurrentPositionhistoryComponent implements OnInit {
   }
 
   getRallys() {
-    this.getService.getRallys()
-      .subscribe(
-        (rallys: Rally[]) => {
-          this.rallys = rallys;
-          this.selrallys = [];
-          const options = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          };
-          for (const rally of this.rallys) {
-            const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
-            const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
-            this.selrallys.push({
-              label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
-              value: rally.rallyID,
-            });
-            this.rallyselected = rally.rallyID;
-            this.getCars();
-          }
-        },
-      );
+    this.getService.getRallys().subscribe((rallys: Rally[]) => {
+      this.rallys = rallys;
+      this.selrallys = [];
+      const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      for (const rally of this.rallys) {
+        const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
+        const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
+        this.selrallys.push({
+          label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
+          value: rally.rallyID,
+        });
+        this.rallyselected = rally.rallyID;
+        this.getCars();
+      }
+    });
   }
 
   getCars() {
@@ -95,22 +93,18 @@ export class CurrentPositionhistoryComponent implements OnInit {
       labels: [],
       datasets: [],
     };
-    this.getService.getRallyCar(this.rallyselected)
-      .subscribe(
-        (cars: Rallycar[]) => {
-          this.rallycars = cars;
-          this.selcars = [];
-          this.selectedCars = [];
-          for (const car of this.rallycars) {
-            this.selcars.push({
-              label: '#' + car.startnumber + ' ' + car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname,
-              value: car.carID,
-            });
-          }
-        },
-      );
+    this.getService.getRallyCar(this.rallyselected).subscribe((cars: Rallycar[]) => {
+      this.rallycars = cars;
+      this.selcars = [];
+      this.selectedCars = [];
+      for (const car of this.rallycars) {
+        this.selcars.push({
+          label: '#' + car.startnumber + ' ' + car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname,
+          value: car.carID,
+        });
+      }
+    });
   }
-
 
   getGraphdata() {
     this.colors = [];
@@ -123,50 +117,51 @@ export class CurrentPositionhistoryComponent implements OnInit {
     };
     const tmpRallyCars: Rallycar[] = [];
     for (const selCar of this.selectedCars) {
-      const tmpCar = this.rallycars.filter(car => car.carID === selCar)[0];
+      const tmpCar = this.rallycars.filter((car) => car.carID === selCar)[0];
       const tmpRallyCar = new Rallycar(
         tmpCar.startnumber,
         this.rallyselected,
-        tmpCar.carID, tmpCar.rallycarID, tmpCar.carObj, tmpCar.rallyObj);
+        tmpCar.carID,
+        tmpCar.rallycarID,
+        tmpCar.carObj,
+        tmpCar.rallyObj,
+      );
       tmpRallyCars.push(tmpRallyCar);
     }
-    this.getService.getPositionHistory(this.rallyselected, tmpRallyCars)
-      .subscribe(
-        (positions: Positionhistory[]) => {
-          this.positions = positions;
-          const tmpStage = [];
-          tmpdata.labels = [];
-          for (const position of this.positions) {
-            tmpStage[+position.stage - 1] = position.stage;
+    this.getService.getPositionHistory(this.rallyselected, tmpRallyCars).subscribe((positions: Positionhistory[]) => {
+      this.positions = positions;
+      const tmpStage = [];
+      tmpdata.labels = [];
+      for (const position of this.positions) {
+        tmpStage[+position.stage - 1] = position.stage;
+      }
+      for (const stage of tmpStage) {
+        if (stage) {
+          tmpdata.labels.push(stage);
+        }
+      }
+      for (const car of tmpRallyCars) {
+        const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
+        const stage = [];
+        for (const position of this.positions) {
+          if (position.driver === car.carObj.driver) {
+            stage[+position.stage - 1] = position.position;
           }
-          for (const stage of tmpStage) {
-            if (stage) {
-              tmpdata.labels.push(stage);
-            }
-          }
-          for (const car of tmpRallyCars) {
-            const tmpDriverlabel = car.carObj.driverObj.firstname + ' ' + car.carObj.driverObj.lastname;
-            const stage = [];
-            for (const position of this.positions) {
-              if (position.driver === car.carObj.driver) {
-                stage[+position.stage - 1] = position.position;
-              }
-            }
-            const Tempdata = {
-              label: tmpDriverlabel,
-              data: stage,
-              lineTension: 0.2,
-              borderColor: this.getRandomColor(),
-            };
-            tmpdata.datasets.push(Tempdata);
-          }
-          this.data = tmpdata;
-        },
-      );
+        }
+        const Tempdata = {
+          label: tmpDriverlabel,
+          data: stage,
+          lineTension: 0.2,
+          borderColor: this.getRandomColor(),
+        };
+        tmpdata.datasets.push(Tempdata);
+      }
+      this.data = tmpdata;
+    });
   }
 
   getFlagCode(rallyid: string) {
-    const tmpRally = this.rallys.filter(rally => rally.rallyID === rallyid)[0];
+    const tmpRally = this.rallys.filter((rally) => rally.rallyID === rallyid)[0];
     return tmpRally.countryObj.shortname.toLowerCase();
   }
 
@@ -186,5 +181,4 @@ export class CurrentPositionhistoryComponent implements OnInit {
     this.colors.splice(random, 1);
     return colorhex;
   }
-
 }

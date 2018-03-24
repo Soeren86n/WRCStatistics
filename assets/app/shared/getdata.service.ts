@@ -17,22 +17,16 @@ import { Championshippoint } from '../models/championshippoint.model';
 
 @Injectable()
 export class GetdataService {
-
-  constructor(private http: Http, private notificationService: NotificationService) {
-  }
-
+  constructor(private http: Http, private notificationService: NotificationService) {}
 
   getCountrys() {
-    return this.http.get('http://localhost:3000/data/country')
+    return this.http
+      .get('http://localhost:3000/data/country')
       .map((response: Response) => {
         const countrys = response.json().obj;
         const countryObjs: Country[] = [];
         for (const country of countrys) {
-          countryObjs.push(new Country(
-            country.name,
-            country.shortname,
-            country._id),
-          );
+          countryObjs.push(new Country(country.name, country.shortname, country._id));
         }
         return countryObjs;
       })
@@ -43,22 +37,14 @@ export class GetdataService {
   }
 
   getRallys() {
-    return this.http.get('http://localhost:3000/data/rally')
+    return this.http
+      .get('http://localhost:3000/data/rally')
       .map((response: Response) => {
         const rallys = response.json().obj;
         const RallyObjs: Rally[] = [];
         for (const rally of rallys) {
           const countryobj = new Country(rally.country.name, rally.country.shortname, rally.country._id);
-          RallyObjs.push(new Rally(
-            rally.name,
-            rally.country.name,
-            rally.startdate,
-            rally.enddate,
-            rally._id,
-            countryobj,
-            ),
-          )
-          ;
+          RallyObjs.push(new Rally(rally.name, rally.country.name, rally.startdate, rally.enddate, rally._id, countryobj));
         }
         return RallyObjs;
       })
@@ -69,7 +55,8 @@ export class GetdataService {
   }
 
   getStages() {
-    return this.http.get('http://localhost:3000/data/stage')
+    return this.http
+      .get('http://localhost:3000/data/stage')
       .map((response: Response) => {
         const stages = response.json().obj;
         const StageObjs: Stage[] = [];
@@ -87,7 +74,8 @@ export class GetdataService {
               stage.rally.name,
               stage._id,
               rallyobj,
-            ));
+            ),
+          );
         }
         return StageObjs;
       })
@@ -98,7 +86,8 @@ export class GetdataService {
   }
 
   getRallyStages(id: string) {
-    return this.http.get('http://localhost:3000/data/rally/stage/' + id)
+    return this.http
+      .get('http://localhost:3000/data/rally/stage/' + id)
       .map((response: Response) => {
         const stages = response.json().obj;
         const StageObjs: Stage[] = [];
@@ -116,7 +105,8 @@ export class GetdataService {
               stage.rally.name,
               stage._id,
               rallyobj,
-            ));
+            ),
+          );
         }
         return StageObjs;
       })
@@ -127,20 +117,14 @@ export class GetdataService {
   }
 
   getManufacturer() {
-    return this.http.get('http://localhost:3000/data/manufacturer')
+    return this.http
+      .get('http://localhost:3000/data/manufacturer')
       .map((response: Response) => {
         const manufacturers = response.json().obj;
         const ManufacturerObjs: Manufacturer[] = [];
         for (const manu of manufacturers) {
           const countryobj = new Country(manu.country.name, manu.country.shortname, manu.country._id);
-          ManufacturerObjs.push(new Manufacturer(
-            manu.name,
-            manu.country.name,
-            manu._id,
-            countryobj,
-            ),
-          )
-          ;
+          ManufacturerObjs.push(new Manufacturer(manu.name, manu.country.name, manu._id, countryobj));
         }
         return ManufacturerObjs;
       })
@@ -151,21 +135,14 @@ export class GetdataService {
   }
 
   getDriver() {
-    return this.http.get('http://localhost:3000/data/driver')
+    return this.http
+      .get('http://localhost:3000/data/driver')
       .map((response: Response) => {
         const drivers = response.json().obj;
         const DriverObjs: Driver[] = [];
         for (const driver of drivers) {
           const countryobj = new Country(driver.country.name, driver.country.shortname, driver.country._id);
-          DriverObjs.push(new Driver(
-            driver.firstname,
-            driver.lastname,
-            driver.country.name,
-            driver._id,
-            countryobj,
-            ),
-          )
-          ;
+          DriverObjs.push(new Driver(driver.firstname, driver.lastname, driver.country.name, driver._id, countryobj));
         }
         return DriverObjs;
       })
@@ -176,21 +153,14 @@ export class GetdataService {
   }
 
   getCodriver() {
-    return this.http.get('http://localhost:3000/data/codriver')
+    return this.http
+      .get('http://localhost:3000/data/codriver')
       .map((response: Response) => {
         const drivers = response.json().obj;
         const DriverObjs: Codriver[] = [];
         for (const driver of drivers) {
           const countryobj = new Country(driver.country.name, driver.country.shortname, driver.country._id);
-          DriverObjs.push(new Codriver(
-            driver.firstname,
-            driver.lastname,
-            driver.country.name,
-            driver._id,
-            countryobj,
-            ),
-          )
-          ;
+          DriverObjs.push(new Codriver(driver.firstname, driver.lastname, driver.country.name, driver._id, countryobj));
         }
         return DriverObjs;
       })
@@ -201,7 +171,8 @@ export class GetdataService {
   }
 
   getCar() {
-    return this.http.get('http://localhost:3000/data/car')
+    return this.http
+      .get('http://localhost:3000/data/car')
       .map((response: Response) => {
         const cars = response.json().obj;
         const CarsObj: Car[] = [];
@@ -209,19 +180,19 @@ export class GetdataService {
           const driverobj = new Driver(car.driver.firstname, car.driver.lastname, car.driver.country, car.driver._id);
           const codriverobj = new Codriver(car.codriver.firstname, car.codriver.lastname, car.codriver.country, car.codriver._id);
           const manufacturerobj = new Manufacturer(car.manufacturer.name, car.manufacturer.country, car.manufacturer._id);
-          CarsObj.push(new Car(
-            car.startnumber,
-            car.year,
-            car.driver.firstname + ' ' + car.driver.lastname,
-            car.codriver.firstname + ' ' + car.codriver.lastname,
-            car.manufacturer.name,
-            car._id,
-            driverobj,
-            codriverobj,
-            manufacturerobj,
+          CarsObj.push(
+            new Car(
+              car.startnumber,
+              car.year,
+              car.driver.firstname + ' ' + car.driver.lastname,
+              car.codriver.firstname + ' ' + car.codriver.lastname,
+              car.manufacturer.name,
+              car._id,
+              driverobj,
+              codriverobj,
+              manufacturerobj,
             ),
-          )
-          ;
+          );
         }
         return CarsObj;
       })
@@ -232,7 +203,8 @@ export class GetdataService {
   }
 
   getCarYear(year: number) {
-    return this.http.get('http://localhost:3000/data/car/year/' + year)
+    return this.http
+      .get('http://localhost:3000/data/car/year/' + year)
       .map((response: Response) => {
         const cars = response.json().obj;
         const CarsObj: Car[] = [];
@@ -240,19 +212,19 @@ export class GetdataService {
           const driverobj = new Driver(car.driver.firstname, car.driver.lastname, car.driver.country, car.driver._id);
           const codriverobj = new Codriver(car.codriver.firstname, car.codriver.lastname, car.codriver.country, car.codriver._id);
           const manufacturerobj = new Manufacturer(car.manufacturer.name, car.manufacturer.country, car.manufacturer._id);
-          CarsObj.push(new Car(
-            car.startnumber,
-            car.year,
-            car.driver.firstname + ' ' + car.driver.lastname,
-            car.codriver.firstname + ' ' + car.codriver.lastname,
-            car.manufacturer.name,
-            car._id,
-            driverobj,
-            codriverobj,
-            manufacturerobj,
+          CarsObj.push(
+            new Car(
+              car.startnumber,
+              car.year,
+              car.driver.firstname + ' ' + car.driver.lastname,
+              car.codriver.firstname + ' ' + car.codriver.lastname,
+              car.manufacturer.name,
+              car._id,
+              driverobj,
+              codriverobj,
+              manufacturerobj,
             ),
-          )
-          ;
+          );
         }
         return CarsObj;
       })
@@ -263,7 +235,8 @@ export class GetdataService {
   }
 
   getRallyCar(id: string) {
-    return this.http.get('http://localhost:3000/data/rallycar/' + id)
+    return this.http
+      .get('http://localhost:3000/data/rallycar/' + id)
       .map((response: Response) => {
         const cars = response.json().obj;
         const CarsObj: Rallycar[] = [];
@@ -288,14 +261,7 @@ export class GetdataService {
             manufacturerobj,
           );
           const rallyobj = new Rally(car.rally.name, car.rally.country, car.rally.startdate, car.rally.enddate, car.rally._id);
-          const rallycarobj = new Rallycar(
-            car.car.startnumber,
-            car.rally.name,
-            car.car._id,
-            car._id,
-            carobj,
-            rallyobj,
-          );
+          const rallycarobj = new Rallycar(car.car.startnumber, car.rally.name, car.car._id, car._id, carobj, rallyobj);
           CarsObj.push(rallycarobj);
         }
         return CarsObj;
@@ -307,7 +273,8 @@ export class GetdataService {
   }
 
   getStagetime(id: string) {
-    return this.http.get('http://localhost:3000/data/stagetimes/' + id)
+    return this.http
+      .get('http://localhost:3000/data/stagetimes/' + id)
       .map((response: Response) => {
         const stagetimes = response.json().obj;
         const StagetimesObj: Stagetime[] = [];
@@ -324,11 +291,7 @@ export class GetdataService {
             stagetime.codriver.country,
             stagetime.codriver._id,
           );
-          const manufacturerobj = new Manufacturer(
-            stagetime.manufacturer.name,
-            stagetime.manufacturer.country,
-            stagetime.manufacturer._id,
-          );
+          const manufacturerobj = new Manufacturer(stagetime.manufacturer.name, stagetime.manufacturer.country, stagetime.manufacturer._id);
           const carobj = new Car(
             stagetime.car.startnumber,
             stagetime.car.year,
@@ -382,7 +345,8 @@ export class GetdataService {
   }
 
   getOveralltime(id: string) {
-    return this.http.get('http://localhost:3000/data/overalltimes/' + id)
+    return this.http
+      .get('http://localhost:3000/data/overalltimes/' + id)
       .map((response: Response) => {
         const stagetimes = response.json().obj;
         const StagetimesObj: Stagetime[] = [];
@@ -399,11 +363,7 @@ export class GetdataService {
             stagetime.codriver.country,
             stagetime.codriver._id,
           );
-          const manufacturerobj = new Manufacturer(
-            stagetime.manufacturer.name,
-            stagetime.manufacturer.country,
-            stagetime.manufacturer._id,
-          );
+          const manufacturerobj = new Manufacturer(stagetime.manufacturer.name, stagetime.manufacturer.country, stagetime.manufacturer._id);
           const carobj = new Car(
             stagetime.car.startnumber,
             stagetime.car.year,
@@ -459,7 +419,8 @@ export class GetdataService {
   getPositionHistory(rally: string, cars: Rallycar[]) {
     const body = JSON.stringify(cars);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    return this.http.post('http://localhost:3000/data/positionhistory/' + rally, body, { headers })
+    return this.http
+      .post('http://localhost:3000/data/positionhistory/' + rally, body, { headers })
       .map((response: Response) => {
         const data = response.json().obj;
         const positionObj: Positionhistory[] = [];
@@ -484,7 +445,8 @@ export class GetdataService {
   getMeterdifference(rally: string, cars: Rallycar[]) {
     const body = JSON.stringify(cars);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    return this.http.post('http://localhost:3000/data/rallymeterdifference/' + rally, body, { headers })
+    return this.http
+      .post('http://localhost:3000/data/rallymeterdifference/' + rally, body, { headers })
       .map((response: Response) => {
         const data = response.json().obj;
         const meterdifferenceObj: Rallymeterdifference[] = [];
@@ -523,7 +485,8 @@ export class GetdataService {
   }
 
   getStagewins() {
-    return this.http.get('http://localhost:3000/data/stagewins/')
+    return this.http
+      .get('http://localhost:3000/data/stagewins/')
       .map((response: Response) => {
         const stagetimes = response.json().obj;
         const StagetimesObj: Stagetime[] = [];
@@ -540,11 +503,7 @@ export class GetdataService {
             stagetime.codriver.country,
             stagetime.codriver._id,
           );
-          const manufacturerobj = new Manufacturer(
-            stagetime.manufacturer.name,
-            stagetime.manufacturer.country,
-            stagetime.manufacturer._id,
-          );
+          const manufacturerobj = new Manufacturer(stagetime.manufacturer.name, stagetime.manufacturer.country, stagetime.manufacturer._id);
           const carobj = new Car(
             stagetime.car.startnumber,
             stagetime.car.year,
@@ -598,7 +557,8 @@ export class GetdataService {
   }
 
   getRallywins() {
-    return this.http.get('http://localhost:3000/data/rallywins/')
+    return this.http
+      .get('http://localhost:3000/data/rallywins/')
       .map((response: Response) => {
         const stagetimes = response.json().obj;
         const StagetimesObj: Stagetime[] = [];
@@ -615,11 +575,7 @@ export class GetdataService {
             stagetime.codriver.country,
             stagetime.codriver._id,
           );
-          const manufacturerobj = new Manufacturer(
-            stagetime.manufacturer.name,
-            stagetime.manufacturer.country,
-            stagetime.manufacturer._id,
-          );
+          const manufacturerobj = new Manufacturer(stagetime.manufacturer.name, stagetime.manufacturer.country, stagetime.manufacturer._id);
           const carobj = new Car(
             stagetime.car.startnumber,
             stagetime.car.year,
@@ -673,34 +629,27 @@ export class GetdataService {
   }
 
   getChampionshippoints(id: number) {
-    return this.http.get('http://localhost:3000/data/championpoints/' + id)
+    return this.http
+      .get('http://localhost:3000/data/championpoints/' + id)
       .map((response: Response) => {
         const data = response.json().obj;
         const PointsObj: Championshippoint[] = [];
         for (const points of data) {
-          const driverobj = new Driver(
-            points.driver.firstname,
-            points.driver.lastname,
-            points.driver.country,
-            points.driver._id,
-          );
+          const driverobj = new Driver(points.driver.firstname, points.driver.lastname, points.driver.country, points.driver._id);
           const codriverobj = new Codriver(
             points.codriver.firstname,
             points.codriver.lastname,
             points.codriver.country,
             points.codriver._id,
           );
-          const manufacturerobj = new Manufacturer(
-            points.manufacturer.name,
-            points.manufacturer.country,
-            points.manufacturer._id,
-          );
+          const manufacturerobj = new Manufacturer(points.manufacturer.name, points.manufacturer.country, points.manufacturer._id);
           const rallyobj = new Rally(
             points.rally.name,
             points.rally.country,
             points.rally.startdate,
             points.rally.enddate,
-            points.rally._id);
+            points.rally._id,
+          );
           const tmpPoint = new Championshippoint(
             points.points,
             points.type,
@@ -714,7 +663,7 @@ export class GetdataService {
             codriverobj,
             manufacturerobj,
             rallyobj,
-            );
+          );
           PointsObj.push(tmpPoint);
         }
         return PointsObj;

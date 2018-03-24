@@ -17,31 +17,9 @@ import { FormsModule } from '@angular/forms';
 import { RallystatsComponent } from './rallystats/rallystats.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    SidebarComponent,
-    AuthenticationComponent,
-    RallystatsComponent,
-    ErrorComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    routing,
-    HttpModule,
-    GrowlModule,
-    ConfirmDialogModule,
-  ],
-  providers: [
-    AuthService,
-    NotificationService,
-    GetdataService,
-    ConfirmationService,
-  ],
+  declarations: [AppComponent, NavbarComponent, SidebarComponent, AuthenticationComponent, RallystatsComponent, ErrorComponent],
+  imports: [BrowserModule, FormsModule, BrowserAnimationsModule, routing, HttpModule, GrowlModule, ConfirmDialogModule],
+  providers: [AuthService, NotificationService, GetdataService, ConfirmationService],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-
-}
+export class AppModule {}

@@ -11,7 +11,6 @@ import { Manufacturer } from '../../models/manufacturer.model';
   selector: 'app-insertManufacturer',
   templateUrl: 'insert-manufacturer.component.html',
 })
-
 export class InsertManufacturerComponent implements OnInit {
   myForm: FormGroup;
   countrys: Country[] = [];
@@ -19,11 +18,12 @@ export class InsertManufacturerComponent implements OnInit {
   ManufacturertoEdit: Manufacturer = new Manufacturer('', '', '');
   selcountrys: SelectItem[] = [];
 
-  constructor(private confirmationService: ConfirmationService,
-              private insertService: InsertService,
-              private getService: GetdataService,
-              private notificationService: NotificationService) {
-  }
+  constructor(
+    private confirmationService: ConfirmationService,
+    private insertService: InsertService,
+    private getService: GetdataService,
+    private notificationService: NotificationService,
+  ) {}
 
   ngOnInit() {
     this.myForm = new FormGroup({
@@ -34,53 +34,43 @@ export class InsertManufacturerComponent implements OnInit {
   }
 
   getCountrys() {
-    this.getService.getCountrys()
-      .subscribe(
-        (countrys: Country[]) => {
-          this.countrys = countrys;
-          this.selcountrys = [];
-          for (const country of this.countrys) {
-            this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
-          }
-          this.myForm.controls['country'].setValue(this.selcountrys[0].value);
-          if (this.countrys.length < 1) {
-            const msg = {
-              summary: 'No Country created',
-              detail: 'Please create at first a Country',
-              severity: 'error',
-            };
-            this.notificationService.handleError(msg);
-          } else {
-            this.getManufacturer();
-          }
-        },
-      );
+    this.getService.getCountrys().subscribe((countrys: Country[]) => {
+      this.countrys = countrys;
+      this.selcountrys = [];
+      for (const country of this.countrys) {
+        this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
+      }
+      this.myForm.controls['country'].setValue(this.selcountrys[0].value);
+      if (this.countrys.length < 1) {
+        const msg = {
+          summary: 'No Country created',
+          detail: 'Please create at first a Country',
+          severity: 'error',
+        };
+        this.notificationService.handleError(msg);
+      } else {
+        this.getManufacturer();
+      }
+    });
   }
 
   getManufacturer() {
-    this.getService.getManufacturer()
-      .subscribe(
-        (manufacturer: Manufacturer[]) => {
-          this.manufacturers = manufacturer;
-        },
-      );
+    this.getService.getManufacturer().subscribe((manufacturer: Manufacturer[]) => {
+      this.manufacturers = manufacturer;
+    });
   }
 
   onSubmit() {
     if (this.ManufacturertoEdit.manufacturerID === '') {
-      const manufacturer = new Manufacturer(
-        this.myForm.value.name,
-        this.myForm.value.country,
+      const manufacturer = new Manufacturer(this.myForm.value.name, this.myForm.value.country);
+      this.insertService.insertmanufacturer(manufacturer).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getCountrys();
+          this.myForm.reset();
+        },
+        (error) => console.error(error),
       );
-      this.insertService.insertmanufacturer(manufacturer)
-        .subscribe(
-          (data) => {
-            this.notificationService.handleError(data.notification);
-            this.getCountrys();
-            this.myForm.reset();
-          },
-          error => console.error(error),
-        );
     } else {
       this.ManufacturertoEdit.name = this.myForm.value.name;
       this.ManufacturertoEdit.country = this.myForm.value.country;
@@ -91,7 +81,7 @@ export class InsertManufacturerComponent implements OnInit {
           this.getCountrys();
           this.ManufacturertoEdit = new Manufacturer('', '', '');
         },
-        error => console.error(error),
+        (error) => console.error(error),
       );
     }
   }
@@ -111,10 +101,9 @@ export class InsertManufacturerComponent implements OnInit {
     //     return country.shortname.toLowerCase();
     //   }
     // }
-    const tmpCountry = this.countrys.filter(country => country.countryID === countryid)[0];
+    const tmpCountry = this.countrys.filter((country) => country.countryID === countryid)[0];
     return tmpCountry.shortname.toLowerCase();
   }
-
 
   resetWholeForm() {
     this.ManufacturertoEdit = new Manufacturer('', '', '');

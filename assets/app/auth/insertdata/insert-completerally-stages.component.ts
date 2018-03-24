@@ -10,54 +10,46 @@ import { NotificationService } from '../../shared/notification.service';
   selector: 'app-insert-completeRallyStages',
   templateUrl: 'insert-completerally-stages.component.html',
 })
-
 export class InsertCompleterallyStagesComponent implements OnInit {
   rallys: Rally[] = [];
   selrallys: SelectItem[] = [];
   rallyselected = '';
   stagesRaw = '';
 
-  constructor(private insertService: InsertService,
-              private getService: GetdataService,
-              private notificationService: NotificationService) {
-  }
+  constructor(private insertService: InsertService, private getService: GetdataService, private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.getRallys();
   }
 
   getRallys() {
-    this.getService.getRallys()
-      .subscribe(
-        (rallys: Rally[]) => {
-          this.rallys = rallys;
-          this.selrallys = [];
-          const options = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          };
-          for (const rally of this.rallys) {
-            const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
-            const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
-            this.selrallys.push({
-              label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
-              value: rally.rallyID,
-            });
-            this.rallyselected = rally.rallyID;
-          }
-          if (this.rallys.length < 1) {
-            const msg = {
-              summary: 'No Rally created',
-              detail: 'Please create at first a Rally',
-              severity: 'error',
-            };
-            this.notificationService.handleError(msg);
-          }
-        },
-      );
+    this.getService.getRallys().subscribe((rallys: Rally[]) => {
+      this.rallys = rallys;
+      this.selrallys = [];
+      const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      for (const rally of this.rallys) {
+        const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
+        const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
+        this.selrallys.push({
+          label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
+          value: rally.rallyID,
+        });
+        this.rallyselected = rally.rallyID;
+      }
+      if (this.rallys.length < 1) {
+        const msg = {
+          summary: 'No Rally created',
+          detail: 'Please create at first a Rally',
+          severity: 'error',
+        };
+        this.notificationService.handleError(msg);
+      }
+    });
   }
-
 
   generateObjs() {
     const stagesobj: Stage[] = [];
@@ -89,14 +81,11 @@ export class InsertCompleterallyStagesComponent implements OnInit {
         }
       }
     }
-    this.insertService.insertcompleterallystage(stagesobj)
-      .subscribe(
-        (data) => {
-          this.notificationService.handleError(data.notification);
-        },
-        error => console.error(error),
-      );
+    this.insertService.insertcompleterallystage(stagesobj).subscribe(
+      (data) => {
+        this.notificationService.handleError(data.notification);
+      },
+      (error) => console.error(error),
+    );
   }
-
-
 }

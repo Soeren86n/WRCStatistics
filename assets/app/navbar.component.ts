@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
   selector: 'my-navbar',
   templateUrl: './navbar.component.html',
 })
-
 export class NavbarComponent {
   navMobileCollapse = true;
 }

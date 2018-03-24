@@ -16,17 +16,14 @@ import { Championshippoint } from '../../models/championshippoint.model';
 
 @Injectable()
 export class InsertService {
-
-  constructor(private http: Http, private notificationService: NotificationService) {
-  }
+  constructor(private http: Http, private notificationService: NotificationService) {}
 
   insertcountry(country: Country) {
     const body = JSON.stringify(country);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertcountry/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertcountry/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -37,10 +34,9 @@ export class InsertService {
   updatecountry(country: Country) {
     const body = JSON.stringify(country);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.patch('http://localhost:3000/admin/updatecountry/' + country.countryID + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .patch('http://localhost:3000/admin/updatecountry/' + country.countryID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -51,10 +47,9 @@ export class InsertService {
   insertrally(rally: Rally) {
     const body = JSON.stringify(rally);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertrally/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertrally/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -65,10 +60,9 @@ export class InsertService {
   updaterally(rally: Rally) {
     const body = JSON.stringify(rally);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.patch('http://localhost:3000/admin/updaterally/' + rally.rallyID + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .patch('http://localhost:3000/admin/updaterally/' + rally.rallyID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -77,10 +71,9 @@ export class InsertService {
   }
 
   deleteRally(rally: Rally) {
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.delete('http://localhost:3000/admin/deleterally/' + rally.rallyID + token)
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .delete('http://localhost:3000/admin/deleterally/' + rally.rallyID + token)
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -91,10 +84,9 @@ export class InsertService {
   insertstage(stage: Stage) {
     const body = JSON.stringify(stage);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertstage/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertstage/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -105,10 +97,9 @@ export class InsertService {
   insertcompleterallystage(stage: Stage[]) {
     const body = JSON.stringify(stage);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertcompleterallystage/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertcompleterallystage/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -119,10 +110,9 @@ export class InsertService {
   updatestage(stage: Stage) {
     const body = JSON.stringify(stage);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.patch('http://localhost:3000/admin/updatestage/' + stage.StageID + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .patch('http://localhost:3000/admin/updatestage/' + stage.StageID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -131,10 +121,9 @@ export class InsertService {
   }
 
   deleteStage(stage: Stage) {
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.delete('http://localhost:3000/admin/deletestage/' + stage.StageID + token)
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .delete('http://localhost:3000/admin/deletestage/' + stage.StageID + token)
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -145,10 +134,9 @@ export class InsertService {
   insertmanufacturer(manufacturer: Manufacturer) {
     const body = JSON.stringify(manufacturer);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertmanufacturer/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertmanufacturer/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -159,10 +147,9 @@ export class InsertService {
   updatemanufacturer(manufacturer: Manufacturer) {
     const body = JSON.stringify(manufacturer);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.patch('http://localhost:3000/admin/updatemanufacturer/' + manufacturer.manufacturerID + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .patch('http://localhost:3000/admin/updatemanufacturer/' + manufacturer.manufacturerID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -173,10 +160,9 @@ export class InsertService {
   insertdriver(driver: Driver) {
     const body = JSON.stringify(driver);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertdriver/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertdriver/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -187,10 +173,9 @@ export class InsertService {
   updatedriver(driver: Driver) {
     const body = JSON.stringify(driver);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.patch('http://localhost:3000/admin/updatedriver/' + driver.driverID + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .patch('http://localhost:3000/admin/updatedriver/' + driver.driverID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -201,10 +186,9 @@ export class InsertService {
   insertcodriver(codriver: Codriver) {
     const body = JSON.stringify(codriver);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertcodriver/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertcodriver/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -215,10 +199,9 @@ export class InsertService {
   updatecodriver(codriver: Codriver) {
     const body = JSON.stringify(codriver);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.patch('http://localhost:3000/admin/updatecodriver/' + codriver.codriverID + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .patch('http://localhost:3000/admin/updatecodriver/' + codriver.codriverID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -229,10 +212,9 @@ export class InsertService {
   insertcar(car: Car) {
     const body = JSON.stringify(car);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertcar/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertcar/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -243,10 +225,9 @@ export class InsertService {
   updatecar(car: Car) {
     const body = JSON.stringify(car);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.patch('http://localhost:3000/admin/updatecar/' + car.carID + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .patch('http://localhost:3000/admin/updatecar/' + car.carID + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -257,10 +238,9 @@ export class InsertService {
   insertrallycar(car: Rallycar[]) {
     const body = JSON.stringify(car);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertrallycar/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertrallycar/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -269,10 +249,9 @@ export class InsertService {
   }
 
   deleteRallycar(car: Rallycar) {
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.delete('http://localhost:3000/admin/deleterallycar/' + car.rallycarID + token)
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .delete('http://localhost:3000/admin/deleterallycar/' + car.rallycarID + token)
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -283,10 +262,9 @@ export class InsertService {
   insertstagetime(stagetime: Stagetime[]) {
     const body = JSON.stringify(stagetime);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertstagetime/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertstagetime/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -297,10 +275,9 @@ export class InsertService {
   insertmeterdifference(rallymeter: Rallymeterdifference[]) {
     const body = JSON.stringify(rallymeter);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertmeterdifference/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertmeterdifference/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -309,10 +286,9 @@ export class InsertService {
   }
 
   deleteStagetime(stagetime: Stagetime) {
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.delete('http://localhost:3000/admin/deletestagetime/' + stagetime.stagetimeID + token)
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .delete('http://localhost:3000/admin/deletestagetime/' + stagetime.stagetimeID + token)
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -323,10 +299,9 @@ export class InsertService {
   insertoveralltime(stagetime: Stagetime[]) {
     const body = JSON.stringify(stagetime);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertoveralltime/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertoveralltime/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -335,10 +310,9 @@ export class InsertService {
   }
 
   deleteOveralltime(stagetime: Stagetime) {
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.delete('http://localhost:3000/admin/deleteoveralltime/' + stagetime.stagetimeID + token)
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .delete('http://localhost:3000/admin/deleteoveralltime/' + stagetime.stagetimeID + token)
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -349,10 +323,9 @@ export class InsertService {
   insertpoints(point: Championshippoint) {
     const body = JSON.stringify(point);
     const headers = new Headers({ 'Content-Type': 'application/json' });
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.post('http://localhost:3000/admin/insertpoints/' + token, body, { headers })
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .post('http://localhost:3000/admin/insertpoints/' + token, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
@@ -361,17 +334,13 @@ export class InsertService {
   }
 
   deletePoints(point: Championshippoint) {
-    const token = localStorage.getItem('token')
-      ? '?token=' + localStorage.getItem('token')
-      : '';
-    return this.http.delete('http://localhost:3000/admin/deletechampionpoints/' + point.pointID + token)
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this.http
+      .delete('http://localhost:3000/admin/deletechampionpoints/' + point.pointID + token)
       .map((response: Response) => response.json())
       .catch((error: Response) => {
         this.notificationService.handleError(error.json());
         return Observable.throw(error.json());
       });
   }
-
-
 }
-

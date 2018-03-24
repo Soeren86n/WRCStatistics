@@ -11,7 +11,6 @@ import { Driver } from '../../models/driver.model';
   selector: 'app-insertDriver',
   templateUrl: 'insert-driver.component.html',
 })
-
 export class InsertDriverComponent implements OnInit {
   myForm: FormGroup;
   countrys: Country[] = [];
@@ -19,10 +18,7 @@ export class InsertDriverComponent implements OnInit {
   selcountrys: SelectItem[] = [];
   DrivertoEdit: Driver = new Driver('', '', '', '');
 
-  constructor(private insertService: InsertService,
-              private getService: GetdataService,
-              private notificationService: NotificationService) {
-  }
+  constructor(private insertService: InsertService, private getService: GetdataService, private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.myForm = new FormGroup({
@@ -34,54 +30,43 @@ export class InsertDriverComponent implements OnInit {
   }
 
   getCountrys() {
-    this.getService.getCountrys()
-      .subscribe(
-        (countrys: Country[]) => {
-          this.countrys = countrys;
-          this.selcountrys = [];
-          for (const country of this.countrys) {
-            this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
-          }
-          this.myForm.controls['country'].setValue(this.selcountrys[0].value);
-          if (this.countrys.length < 1) {
-            const msg = {
-              summary: 'No Country created',
-              detail: 'Please create at first a Country',
-              severity: 'error',
-            };
-            this.notificationService.handleError(msg);
-          } else {
-            this.getDriver();
-          }
-        },
-      );
+    this.getService.getCountrys().subscribe((countrys: Country[]) => {
+      this.countrys = countrys;
+      this.selcountrys = [];
+      for (const country of this.countrys) {
+        this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
+      }
+      this.myForm.controls['country'].setValue(this.selcountrys[0].value);
+      if (this.countrys.length < 1) {
+        const msg = {
+          summary: 'No Country created',
+          detail: 'Please create at first a Country',
+          severity: 'error',
+        };
+        this.notificationService.handleError(msg);
+      } else {
+        this.getDriver();
+      }
+    });
   }
 
   getDriver() {
-    this.getService.getDriver()
-      .subscribe(
-        (driver: Driver[]) => {
-          this.drivers = driver;
-        },
-      );
+    this.getService.getDriver().subscribe((driver: Driver[]) => {
+      this.drivers = driver;
+    });
   }
 
   onSubmit() {
     if (this.DrivertoEdit.driverID === '') {
-      const driver = new Driver(
-        this.myForm.value.firstname,
-        this.myForm.value.lastname,
-        this.myForm.value.country,
+      const driver = new Driver(this.myForm.value.firstname, this.myForm.value.lastname, this.myForm.value.country);
+      this.insertService.insertdriver(driver).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getCountrys();
+          this.myForm.reset();
+        },
+        (error) => console.error(error),
       );
-      this.insertService.insertdriver(driver)
-        .subscribe(
-          (data) => {
-            this.notificationService.handleError(data.notification);
-            this.getCountrys();
-            this.myForm.reset();
-          },
-          error => console.error(error),
-        );
     } else {
       this.DrivertoEdit.firstname = this.myForm.value.firstname;
       this.DrivertoEdit.lastname = this.myForm.value.lastname;
@@ -93,7 +78,7 @@ export class InsertDriverComponent implements OnInit {
           this.myForm.reset();
           this.DrivertoEdit = new Driver('', '', '', '');
         },
-        error => console.error(error),
+        (error) => console.error(error),
       );
     }
   }
@@ -114,7 +99,7 @@ export class InsertDriverComponent implements OnInit {
     //     return country.shortname.toLowerCase();
     //   }
     // }
-    const tmpCountry = this.countrys.filter(country => country.countryID === countryid)[0];
+    const tmpCountry = this.countrys.filter((country) => country.countryID === countryid)[0];
     return tmpCountry.shortname.toLowerCase();
   }
 
@@ -122,5 +107,4 @@ export class InsertDriverComponent implements OnInit {
     this.myForm.reset();
     this.DrivertoEdit = new Driver('', '', '', '');
   }
-
 }

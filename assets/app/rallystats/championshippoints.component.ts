@@ -8,7 +8,6 @@ import { Championshippoint } from '../models/championshippoint.model';
   selector: 'app-championshippoints',
   templateUrl: 'championshippoints.component.html',
 })
-
 export class ChampionshippointsComponent implements OnInit {
   data: any;
   options: any;
@@ -47,12 +46,14 @@ export class ChampionshippointsComponent implements OnInit {
         intersect: false,
       },
       scales: {
-        xAxes: [{
-          ticks: {
-            beginAtZero: true,
-            reverse: false,
+        xAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              reverse: false,
+            },
           },
-        }],
+        ],
       },
     };
   }
@@ -66,19 +67,16 @@ export class ChampionshippointsComponent implements OnInit {
   }
 
   getGraphdata() {
-    this.getService.getChampionshippoints(this.year)
-      .subscribe(
-        (points: Championshippoint[]) => {
-          this.ChPoints = points;
-          for (const point of this.ChPoints) {
-            this.allDriver[point.driver] = point.driverObj.firstname + ' ' + point.driverObj.lastname;
-            this.allCoDriver[point.codriver] = point.codriverObj.firstname + ' ' + point.codriverObj.lastname;
-            this.allRally[point.rallyObj.rallyID] = new Date(point.date).getTime();
-          }
-          this.allRally.sort();
-          this.onChangeChtype();
-        },
-      );
+    this.getService.getChampionshippoints(this.year).subscribe((points: Championshippoint[]) => {
+      this.ChPoints = points;
+      for (const point of this.ChPoints) {
+        this.allDriver[point.driver] = point.driverObj.firstname + ' ' + point.driverObj.lastname;
+        this.allCoDriver[point.codriver] = point.codriverObj.firstname + ' ' + point.codriverObj.lastname;
+        this.allRally[point.rallyObj.rallyID] = new Date(point.date).getTime();
+      }
+      this.allRally.sort();
+      this.onChangeChtype();
+    });
   }
 
   onChangeChtype() {
@@ -114,7 +112,7 @@ export class ChampionshippointsComponent implements OnInit {
     switch (this.chtype) {
       case 'driver':
         for (const key in this.allRally) {
-          const tmpCar = this.ChPoints.filter(car => car.rallyObj.rallyID === key)[0];
+          const tmpCar = this.ChPoints.filter((car) => car.rallyObj.rallyID === key)[0];
           tmpdata.labels.push(tmpCar.rallyObj.name);
         }
         for (const driver of this.selectedData) {
@@ -191,7 +189,7 @@ export class ChampionshippointsComponent implements OnInit {
         break;
       case 'codriver':
         for (const key in this.allRally) {
-          const tmpCar = this.ChPoints.filter(car => car.rallyObj.rallyID === key)[0];
+          const tmpCar = this.ChPoints.filter((car) => car.rallyObj.rallyID === key)[0];
           tmpdata.labels.push(tmpCar.rallyObj.name);
         }
         for (const driver of this.selectedData) {

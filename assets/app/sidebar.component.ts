@@ -8,7 +8,5 @@ import { AuthService } from './auth/auth.service';
 export class SidebarComponent {
   navMobileCollapse = true;
 
-  constructor(public authService: AuthService) {
-  }
-
+  constructor(public authService: AuthService) {}
 }

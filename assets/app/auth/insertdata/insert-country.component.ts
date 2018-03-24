@@ -15,24 +15,19 @@ export class InsertCountryComponent implements OnInit {
   countrys: Country[] = [];
   CountrytoEdit: Country = new Country('', '', '');
 
-  constructor(private insertService: InsertService, private notificationService: NotificationService, private getService: GetdataService) {
-  }
+  constructor(private insertService: InsertService, private notificationService: NotificationService, private getService: GetdataService) {}
 
   onSubmit() {
     if (this.CountrytoEdit.countryID === '') {
-      const country = new Country(
-        this.myForm.value.name,
-        this.myForm.value.shortname,
+      const country = new Country(this.myForm.value.name, this.myForm.value.shortname);
+      this.insertService.insertcountry(country).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getCountrys();
+          this.myForm.reset();
+        },
+        (error) => console.error(error),
       );
-      this.insertService.insertcountry(country)
-        .subscribe(
-          (data) => {
-            this.notificationService.handleError(data.notification);
-            this.getCountrys();
-            this.myForm.reset();
-          },
-          error => console.error(error),
-        );
     } else {
       this.CountrytoEdit.name = this.myForm.value.name;
       this.CountrytoEdit.shortname = this.myForm.value.shortname;
@@ -43,7 +38,7 @@ export class InsertCountryComponent implements OnInit {
           this.myForm.reset();
           this.CountrytoEdit = new Country('', '', '');
         },
-        error => console.error(error),
+        (error) => console.error(error),
       );
     }
   }
@@ -51,21 +46,15 @@ export class InsertCountryComponent implements OnInit {
   ngOnInit() {
     this.myForm = new FormGroup({
       name: new FormControl(null, Validators.required),
-      shortname: new FormControl(
-        null,
-        [Validators.required, Validators.minLength(2), Validators.maxLength(2), this.countryValidator],
-      ),
+      shortname: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(2), this.countryValidator]),
     });
     this.getCountrys();
   }
 
   getCountrys() {
-    this.getService.getCountrys()
-      .subscribe(
-        (countrys: Country[]) => {
-          this.countrys = countrys;
-        },
-      );
+    this.getService.getCountrys().subscribe((countrys: Country[]) => {
+      this.countrys = countrys;
+    });
   }
 
   editCountry(country: Country) {
@@ -82,7 +71,6 @@ export class InsertCountryComponent implements OnInit {
     this.CountrytoEdit = new Country('', '', '');
   }
 
-
   countryValidator(control: FormControl): { [s: string]: boolean } {
     let inArray = false;
     for (const item of AllCountrys) {
@@ -95,6 +83,4 @@ export class InsertCountryComponent implements OnInit {
     }
     return { noMatch: true };
   }
-
 }
-

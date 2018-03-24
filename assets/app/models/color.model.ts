@@ -1,6 +1,5 @@
 export class Colorcode {
-  constructor(public hexcode: string) {
-  }
+  constructor(public hexcode: string) {}
 }
 
 export const allcolors: Colorcode[] = [
@@ -41,5 +40,3 @@ export const allcolors: Colorcode[] = [
   { hexcode: '#74565a' },
   { hexcode: '#8c7f5e' },
 ];
-
-

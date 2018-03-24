@@ -19,11 +19,12 @@ export class InsertStageComponent implements OnInit {
   rallyselected = '';
   StagetoEdit: Stage = new Stage('', 0, '', false, false, 0, 0, '', '');
 
-  constructor(private confirmationService: ConfirmationService,
-              private insertService: InsertService,
-              private getService: GetdataService,
-              private notificationService: NotificationService) {
-  }
+  constructor(
+    private confirmationService: ConfirmationService,
+    private insertService: InsertService,
+    private getService: GetdataService,
+    private notificationService: NotificationService,
+  ) {}
 
   ngOnInit() {
     this.myForm = new FormGroup({
@@ -39,47 +40,40 @@ export class InsertStageComponent implements OnInit {
   }
 
   getRallys() {
-    this.getService.getRallys()
-      .subscribe(
-        (rallys: Rally[]) => {
-          this.rallys = rallys;
-          this.selrallys = [];
-          const options = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          };
-          for (const rally of this.rallys) {
-            const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
-            const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
-            this.selrallys.push({
-              label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
-              value: rally.rallyID,
-            });
-            this.rallyselected = rally.rallyID;
-          }
-          if (this.rallys.length > 0) {
-            this.getStages();
-          } else {
-            const msg = {
-              summary: 'No Rally created',
-              detail: 'Please create at first a Rally',
-              severity: 'error',
-            };
-            this.notificationService.handleError(msg);
-          }
-        },
-      );
+    this.getService.getRallys().subscribe((rallys: Rally[]) => {
+      this.rallys = rallys;
+      this.selrallys = [];
+      const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      for (const rally of this.rallys) {
+        const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
+        const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
+        this.selrallys.push({
+          label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
+          value: rally.rallyID,
+        });
+        this.rallyselected = rally.rallyID;
+      }
+      if (this.rallys.length > 0) {
+        this.getStages();
+      } else {
+        const msg = {
+          summary: 'No Rally created',
+          detail: 'Please create at first a Rally',
+          severity: 'error',
+        };
+        this.notificationService.handleError(msg);
+      }
+    });
   }
 
-
   getStages() {
-    this.getService.getRallyStages(this.rallyselected)
-      .subscribe(
-        (stages: Stage[]) => {
-          this.stages = stages;
-        },
-      );
+    this.getService.getRallyStages(this.rallyselected).subscribe((stages: Stage[]) => {
+      this.stages = stages;
+    });
   }
 
   editStage(stage: Stage) {
@@ -107,14 +101,13 @@ export class InsertStageComponent implements OnInit {
   }
 
   deleteStage(stage: Stage) {
-    this.insertService.deleteStage(stage)
-      .subscribe(
-        (data) => {
-          this.notificationService.handleError(data.notification);
-          this.getRallys();
-        },
-        error => console.error(error),
-      );
+    this.insertService.deleteStage(stage).subscribe(
+      (data) => {
+        this.notificationService.handleError(data.notification);
+        this.getRallys();
+      },
+      (error) => console.error(error),
+    );
   }
 
   onSubmit() {
@@ -129,17 +122,16 @@ export class InsertStageComponent implements OnInit {
         this.myForm.value.meter,
         this.rallyselected,
       );
-      this.insertService.insertstage(stage)
-        .subscribe(
-          (data) => {
-            this.notificationService.handleError(data.notification);
-            this.getRallys();
-            this.myForm.reset();
-            this.myForm.controls['cancelled'].setValue('0');
-            this.myForm.controls['powerstage'].setValue('0');
-          },
-          error => console.error(error),
-        );
+      this.insertService.insertstage(stage).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getRallys();
+          this.myForm.reset();
+          this.myForm.controls['cancelled'].setValue('0');
+          this.myForm.controls['powerstage'].setValue('0');
+        },
+        (error) => console.error(error),
+      );
     } else {
       this.StagetoEdit.name = this.myForm.value.name;
       this.StagetoEdit.day = this.myForm.value.day;
@@ -158,15 +150,13 @@ export class InsertStageComponent implements OnInit {
           this.myForm.controls['powerstage'].setValue('0');
           this.StagetoEdit = new Stage('', 0, '', false, false, 0, 0, '', '');
         },
-        error => console.error(error),
+        (error) => console.error(error),
       );
     }
   }
 
   getFlagCode(rallyid: string) {
-    const tmpRally = this.rallys.filter(rally => rally.rallyID === rallyid)[0];
+    const tmpRally = this.rallys.filter((rally) => rally.rallyID === rallyid)[0];
     return tmpRally.countryObj.shortname.toLowerCase();
   }
-
-
 }

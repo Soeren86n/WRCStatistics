@@ -5,12 +5,10 @@ import { SelectItem } from 'primeng/primeng';
 import { Rally } from '../models/rally.model';
 import { allcolors, Colorcode } from '../models/color.model';
 
-
 @Component({
   selector: 'app-stagewins',
   templateUrl: 'stagewins.component.html',
 })
-
 export class StagewinsComponent implements OnInit {
   driverdata: any;
   codriverdata: any;
@@ -61,7 +59,6 @@ export class StagewinsComponent implements OnInit {
     for (let i = 2017; i <= tmpYear; i = i + 1) {
       this.selyears.push({ label: i + '', value: i });
     }
-
   }
 
   ngOnInit() {
@@ -74,13 +71,10 @@ export class StagewinsComponent implements OnInit {
   }
 
   getStagewins() {
-    this.getService.getStagewins()
-      .subscribe(
-        (stages: Stagetime[]) => {
-          this.Stagetimes = stages;
-          this.orderPieData();
-        },
-      );
+    this.getService.getStagewins().subscribe((stages: Stagetime[]) => {
+      this.Stagetimes = stages;
+      this.orderPieData();
+    });
   }
 
   orderPieData() {
@@ -124,29 +118,25 @@ export class StagewinsComponent implements OnInit {
   }
 
   getRallys() {
-    this.getService.getRallys()
-      .subscribe(
-        (rallys: Rally[]) => {
-          this.rallys = rallys;
-          this.selrallys = [];
-          const options = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          };
-          for (const rally of this.rallys) {
-            const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
-            const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
-            this.selrallys.push({
-              label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
-              value: rally.rallyID,
-            });
-            this.rallyselected = rally.rallyID;
-          }
-        },
-      );
+    this.getService.getRallys().subscribe((rallys: Rally[]) => {
+      this.rallys = rallys;
+      this.selrallys = [];
+      const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      for (const rally of this.rallys) {
+        const tmpstartdate = new Date(rally.startdate).toLocaleDateString('en', options);
+        const tmpenddate = new Date(rally.enddate).toLocaleDateString('en', options);
+        this.selrallys.push({
+          label: rally.name + ' (' + tmpstartdate + ' - ' + tmpenddate + ')',
+          value: rally.rallyID,
+        });
+        this.rallyselected = rally.rallyID;
+      }
+    });
   }
-
 
   setPieData() {
     if (this.selectedPie === 'all') {
@@ -200,41 +190,47 @@ export class StagewinsComponent implements OnInit {
       }
       const tmpdriverdata = {
         labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: [],
-        }],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+          },
+        ],
       };
       const tmpcodriverdata = {
         labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: [],
-        }],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+          },
+        ],
       };
       const tmpmanufacturerdata = {
         labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: [],
-        }],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+          },
+        ],
       };
       for (const key in this.psdriver) {
-        const tmptime = this.Stagetimes.filter(time => time.carObj.driver === key)[0];
+        const tmptime = this.Stagetimes.filter((time) => time.carObj.driver === key)[0];
         tmpdriverdata.labels.push(tmptime.driverObj.firstname + ' ' + tmptime.driverObj.lastname);
         tmpdriverdata.datasets[0].data.push(this.psdriver[key]);
         tmpdriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
       }
       this.driverdata = tmpdriverdata;
       for (const key in this.pscodriver) {
-        const tmptime = this.Stagetimes.filter(time => time.carObj.codriver === key)[0];
+        const tmptime = this.Stagetimes.filter((time) => time.carObj.codriver === key)[0];
         tmpcodriverdata.labels.push(tmptime.codriverObj.firstname + ' ' + tmptime.codriverObj.lastname);
         tmpcodriverdata.datasets[0].data.push(this.pscodriver[key]);
         tmpcodriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
       }
       this.codriverdata = tmpcodriverdata;
       for (const key in this.psmanufacturer) {
-        const tmptime = this.Stagetimes.filter(time => time.carObj.manufacturer === key)[0];
+        const tmptime = this.Stagetimes.filter((time) => time.carObj.manufacturer === key)[0];
         tmpmanufacturerdata.labels.push(tmptime.manufacturerObj.name);
         tmpmanufacturerdata.datasets[0].data.push(this.psmanufacturer[key]);
         tmpmanufacturerdata.datasets[0].backgroundColor.push(this.getRandomColor());
@@ -277,41 +273,47 @@ export class StagewinsComponent implements OnInit {
       }
       const tmpdriverdata = {
         labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: [],
-        }],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+          },
+        ],
       };
       const tmpcodriverdata = {
         labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: [],
-        }],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+          },
+        ],
       };
       const tmpmanufacturerdata = {
         labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: [],
-        }],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+          },
+        ],
       };
       for (const key in this.rallydriver) {
-        const tmptime = this.Stagetimes.filter(time => time.carObj.driver === key)[0];
+        const tmptime = this.Stagetimes.filter((time) => time.carObj.driver === key)[0];
         tmpdriverdata.labels.push(tmptime.driverObj.firstname + ' ' + tmptime.driverObj.lastname);
         tmpdriverdata.datasets[0].data.push(this.rallydriver[key]);
         tmpdriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
       }
       this.driverdata = tmpdriverdata;
       for (const key in this.rallycodriver) {
-        const tmptime = this.Stagetimes.filter(time => time.carObj.codriver === key)[0];
+        const tmptime = this.Stagetimes.filter((time) => time.carObj.codriver === key)[0];
         tmpcodriverdata.labels.push(tmptime.codriverObj.firstname + ' ' + tmptime.codriverObj.lastname);
         tmpcodriverdata.datasets[0].data.push(this.rallycodriver[key]);
         tmpcodriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
       }
       this.codriverdata = tmpcodriverdata;
       for (const key in this.rallymanufacturer) {
-        const tmptime = this.Stagetimes.filter(time => time.carObj.manufacturer === key)[0];
+        const tmptime = this.Stagetimes.filter((time) => time.carObj.manufacturer === key)[0];
         tmpmanufacturerdata.labels.push(tmptime.manufacturerObj.name);
         tmpmanufacturerdata.datasets[0].data.push(this.rallymanufacturer[key]);
         tmpmanufacturerdata.datasets[0].backgroundColor.push(this.getRandomColor());
@@ -349,41 +351,47 @@ export class StagewinsComponent implements OnInit {
     }
     const tmpdriverdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     const tmpcodriverdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     const tmpmanufacturerdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     for (const key in this.rallydriver) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.driver === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.driver === key)[0];
       tmpdriverdata.labels.push(tmptime.driverObj.firstname + ' ' + tmptime.driverObj.lastname);
       tmpdriverdata.datasets[0].data.push(this.rallydriver[key]);
       tmpdriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
     }
     this.driverdata = tmpdriverdata;
     for (const key in this.rallycodriver) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.codriver === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.codriver === key)[0];
       tmpcodriverdata.labels.push(tmptime.codriverObj.firstname + ' ' + tmptime.codriverObj.lastname);
       tmpcodriverdata.datasets[0].data.push(this.rallycodriver[key]);
       tmpcodriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
     }
     this.codriverdata = tmpcodriverdata;
     for (const key in this.rallymanufacturer) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.manufacturer === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.manufacturer === key)[0];
       tmpmanufacturerdata.labels.push(tmptime.manufacturerObj.name);
       tmpmanufacturerdata.datasets[0].data.push(this.rallymanufacturer[key]);
       tmpmanufacturerdata.datasets[0].backgroundColor.push(this.getRandomColor());
@@ -398,41 +406,47 @@ export class StagewinsComponent implements OnInit {
     }
     const tmpdriverdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     const tmpcodriverdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     const tmpmanufacturerdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     for (const key in this.psdriver) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.driver === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.driver === key)[0];
       tmpdriverdata.labels.push(tmptime.driverObj.firstname + ' ' + tmptime.driverObj.lastname);
       tmpdriverdata.datasets[0].data.push(this.psdriver[key]);
       tmpdriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
     }
     this.driverdata = tmpdriverdata;
     for (const key in this.pscodriver) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.codriver === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.codriver === key)[0];
       tmpcodriverdata.labels.push(tmptime.codriverObj.firstname + ' ' + tmptime.codriverObj.lastname);
       tmpcodriverdata.datasets[0].data.push(this.pscodriver[key]);
       tmpcodriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
     }
     this.codriverdata = tmpcodriverdata;
     for (const key in this.psmanufacturer) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.manufacturer === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.manufacturer === key)[0];
       tmpmanufacturerdata.labels.push(tmptime.manufacturerObj.name);
       tmpmanufacturerdata.datasets[0].data.push(this.psmanufacturer[key]);
       tmpmanufacturerdata.datasets[0].backgroundColor.push(this.getRandomColor());
@@ -447,41 +461,47 @@ export class StagewinsComponent implements OnInit {
     }
     const tmpdriverdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     const tmpcodriverdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     const tmpmanufacturerdata = {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [],
-      }],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
     };
     for (const key in this.driver) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.driver === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.driver === key)[0];
       tmpdriverdata.labels.push(tmptime.driverObj.firstname + ' ' + tmptime.driverObj.lastname);
       tmpdriverdata.datasets[0].data.push(this.driver[key]);
       tmpdriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
     }
     this.driverdata = tmpdriverdata;
     for (const key in this.codriver) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.codriver === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.codriver === key)[0];
       tmpcodriverdata.labels.push(tmptime.codriverObj.firstname + ' ' + tmptime.codriverObj.lastname);
       tmpcodriverdata.datasets[0].data.push(this.codriver[key]);
       tmpcodriverdata.datasets[0].backgroundColor.push(this.getRandomColor());
     }
     this.codriverdata = tmpcodriverdata;
     for (const key in this.manufacturer) {
-      const tmptime = this.Stagetimes.filter(time => time.carObj.manufacturer === key)[0];
+      const tmptime = this.Stagetimes.filter((time) => time.carObj.manufacturer === key)[0];
       tmpmanufacturerdata.labels.push(tmptime.manufacturerObj.name);
       tmpmanufacturerdata.datasets[0].data.push(this.manufacturer[key]);
       tmpmanufacturerdata.datasets[0].backgroundColor.push(this.getRandomColor());
@@ -507,8 +527,7 @@ export class StagewinsComponent implements OnInit {
   }
 
   getFlagCode(rallyid: string) {
-    const tmpRally = this.rallys.filter(rally => rally.rallyID === rallyid)[0];
+    const tmpRally = this.rallys.filter((rally) => rally.rallyID === rallyid)[0];
     return tmpRally.countryObj.shortname.toLowerCase();
   }
-
 }

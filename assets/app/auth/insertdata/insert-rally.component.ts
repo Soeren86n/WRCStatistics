@@ -18,11 +18,12 @@ export class InsertRallyComponent implements OnInit {
   selcountrys: SelectItem[] = [];
   RallytoEdit: Rally = new Rally('', '', '', '', '');
 
-  constructor(private confirmationService: ConfirmationService,
-              private insertService: InsertService,
-              private getService: GetdataService,
-              private notificationService: NotificationService) {
-  }
+  constructor(
+    private confirmationService: ConfirmationService,
+    private insertService: InsertService,
+    private getService: GetdataService,
+    private notificationService: NotificationService,
+  ) {}
 
   ngOnInit() {
     this.myForm = new FormGroup({
@@ -36,34 +37,28 @@ export class InsertRallyComponent implements OnInit {
   }
 
   getCountrys() {
-    this.getService.getCountrys()
-      .subscribe(
-        (countrys: Country[]) => {
-          this.countrys = countrys;
-          this.selcountrys = [];
-          for (const country of this.countrys) {
-            this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
-          }
-          this.myForm.controls['country'].setValue(this.selcountrys[0].value);
-          if (this.countrys.length < 1) {
-            const msg = {
-              summary: 'No Country created',
-              detail: 'Please create at first a Country',
-              severity: 'error',
-            };
-            this.notificationService.handleError(msg);
-          }
-        },
-      );
+    this.getService.getCountrys().subscribe((countrys: Country[]) => {
+      this.countrys = countrys;
+      this.selcountrys = [];
+      for (const country of this.countrys) {
+        this.selcountrys.push({ label: country.name + ' (' + country.shortname + ')', value: country.countryID });
+      }
+      this.myForm.controls['country'].setValue(this.selcountrys[0].value);
+      if (this.countrys.length < 1) {
+        const msg = {
+          summary: 'No Country created',
+          detail: 'Please create at first a Country',
+          severity: 'error',
+        };
+        this.notificationService.handleError(msg);
+      }
+    });
   }
 
   getRallys() {
-    this.getService.getRallys()
-      .subscribe(
-        (rallys: Rally[]) => {
-          this.rallys = rallys;
-        },
-      );
+    this.getService.getRallys().subscribe((rallys: Rally[]) => {
+      this.rallys = rallys;
+    });
   }
 
   editRally(rally: Rally) {
@@ -87,35 +82,28 @@ export class InsertRallyComponent implements OnInit {
   }
 
   deleteRally(rally: Rally) {
-    this.insertService.deleteRally(rally)
-      .subscribe(
-        (data) => {
-          this.notificationService.handleError(data.notification);
-          this.getCountrys();
-          this.getRallys();
-        },
-        error => console.error(error),
-      );
+    this.insertService.deleteRally(rally).subscribe(
+      (data) => {
+        this.notificationService.handleError(data.notification);
+        this.getCountrys();
+        this.getRallys();
+      },
+      (error) => console.error(error),
+    );
   }
 
   onSubmit() {
     if (this.RallytoEdit.rallyID === '') {
-      const rally = new Rally(
-        this.myForm.value.name,
-        this.myForm.value.country,
-        this.myForm.value.startdate,
-        this.myForm.value.enddate,
+      const rally = new Rally(this.myForm.value.name, this.myForm.value.country, this.myForm.value.startdate, this.myForm.value.enddate);
+      this.insertService.insertrally(rally).subscribe(
+        (data) => {
+          this.notificationService.handleError(data.notification);
+          this.getRallys();
+          this.getCountrys();
+          this.myForm.reset();
+        },
+        (error) => console.error(error),
       );
-      this.insertService.insertrally(rally)
-        .subscribe(
-          (data) => {
-            this.notificationService.handleError(data.notification);
-            this.getRallys();
-            this.getCountrys();
-            this.myForm.reset();
-          },
-          error => console.error(error),
-        );
     } else {
       this.RallytoEdit.name = this.myForm.value.name;
       this.RallytoEdit.startdate = this.myForm.value.startdate;
@@ -129,7 +117,7 @@ export class InsertRallyComponent implements OnInit {
           this.myForm.reset();
           this.RallytoEdit = new Rally('', '', '', '');
         },
-        error => console.error(error),
+        (error) => console.error(error),
       );
     }
   }
@@ -140,7 +128,7 @@ export class InsertRallyComponent implements OnInit {
     //     return country.shortname.toLowerCase();
     //   }
     // }
-    const tmpCountry = this.countrys.filter(country => country.countryID === countryid)[0];
+    const tmpCountry = this.countrys.filter((country) => country.countryID === countryid)[0];
     return tmpCountry.shortname.toLowerCase();
   }
 
@@ -148,7 +136,4 @@ export class InsertRallyComponent implements OnInit {
     this.myForm.reset();
     this.RallytoEdit = new Rally('', '', '', '');
   }
-
-
 }
-
